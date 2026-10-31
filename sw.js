@@ -1,6 +1,6 @@
 /* 노리보카 offline support: the app shell is cached so it opens without a connection.
    Account calls (Firebase) always go to the network. Bump CACHE when the shell changes. */
-const CACHE = 'norivoka-v15';
+const CACHE = 'norivoka-v16';
 const CORE = ['./', './index.html', './manifest.webmanifest', './icon-192.png', './icon-512.png', './apple-touch-icon.png', './nori-happy.png'];
 self.addEventListener('install', e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(CORE)).then(() => self.skipWaiting()));
@@ -20,7 +20,7 @@ self.addEventListener('fetch', e => {
     return;
   }
   // icons and the pinned Firebase SDK files: cache first
-  if (url.origin === self.location.origin || url.hostname === 'www.gstatic.com'){
+  if (url.origin === self.location.origin || (url.hostname === 'www.gstatic.com' && url.pathname.startsWith('/firebasejs/'))){
     e.respondWith(caches.match(req).then(hit => hit || fetch(req).then(r => {
       if (r.ok || r.type === 'opaque'){ const copy = r.clone(); caches.open(CACHE).then(c => c.put(req, copy)); }
       return r;
