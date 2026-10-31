@@ -1203,7 +1203,7 @@ async function enterAccount(user){
   const prov = ((user.providerData || [])[0] || {}).providerId || '';
   const social = !idUser && !phoneUser;
   account = { uid: user.uid, id: idUser ? email.split('@')[0] : phoneUser ? maskPh(user.phoneNumber) : (user.displayName || email.split('@')[0] || '사용자'), google: social, phone: phoneUser,
-    via: idUser ? '로그인 아이디' : phoneUser ? '휴대폰 번호' : prov === 'facebook.com' ? '페이스북 계정' : prov.startsWith('oidc.kakao') ? '카카오 계정' : '구글 계정' };
+    via: idUser ? '로그인 아이디' : phoneUser ? '휴대폰 번호' : user.uid.startsWith('naver:') ? '네이버 계정' : prov === 'facebook.com' ? '페이스북 계정' : prov.startsWith('oidc.kakao') ? '카카오 계정' : '구글 계정' };
   lkey = LKEY + ':' + user.uid;
   state = loadLocal();
   sync.ref = fbRef(user.uid); setSync('pending');
@@ -2662,7 +2662,7 @@ $('lg-naver').onclick = () => {
   $('lg-err').textContent = '';
   window.location.assign(NAVER_ORIGIN + '/api/naver/start');
 };
-(async function finishNaverLogin() {
+async function finishNaverLogin() {
   const url = new URL(window.location.href);
   const complete = url.searchParams.has('naver_complete');
   const error = url.searchParams.get('naver_error');
@@ -2685,7 +2685,7 @@ $('lg-naver').onclick = () => {
   } catch {
     $('lg-err').textContent = '네이버 로그인에 실패했어요. 다시 눌러 주세요';
   } finally { window.noriAuthPending = false; }
-})();
+}
 $('lg-fb').onclick = async () => {
   const err = $('lg-err'); err.textContent = '';
   if (!fbAuth || !window.firebase || !firebase.auth.FacebookAuthProvider){ err.textContent = '서버에 연결하지 못했어요'; return; }
@@ -2705,7 +2705,7 @@ $('ph-back').onclick = () => { clearInterval(phTick); phoneMode(false); };
 $('ph-again').onclick = () => { phConf = null; $('ph-code').value = ''; phSend(); };
 $('ph-num').addEventListener('input', e => { const d = e.target.value.replace(/\D/g, '').slice(0, 11); e.target.value = d.length > 7 ? d.slice(0, 3) + '-' + d.slice(3, d.length - 4) + '-' + d.slice(-4) : d.length > 3 ? d.slice(0, 3) + '-' + d.slice(3) : d; });
 $('ph-form').addEventListener('submit', e => { e.preventDefault(); if (phConf) phConfirm(); else phSend(); });
-if (FB) bootFirebase();
+if (FB) { bootFirebase(); finishNaverLogin(); }
 else { $('home').classList.add('enter'); goHome(); initSync(); }
 })();
 </script>
