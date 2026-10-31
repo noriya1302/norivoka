@@ -1003,21 +1003,70 @@ function statusOf(n){
 
 /* ---------- screens ---------- */
 let current = 'home';
-/* phone back button: every screen change adds a history entry, so back walks the app instead of closing it */
-let navDepth = 0, navQuiet = false, ignorePop = false, exitArm = false, sentinel = false;
+/* ---------- phone back button ----------
+   Every step into the app (a screen, the settings sheet) is one level on navStack. A level is backed by a
+   CloseWatcher where the browser has one (Android installed apps route the back gesture there), otherwise by a
+   history entry. Levels are only ever created inside a tap, one per tap, because browsers skip back over
+   anything added without one. Home gets one spare level too, so the first back there only warns. */
+const USE_CW = typeof window.CloseWatcher === 'function';
+let navStack = [], navQuiet = false, ignorePop = 0, homeTrap = null;
 let toastT = null;
 function toast(t){ const el = $('toast'); el.textContent = t; el.classList.add('on'); clearTimeout(toastT); toastT = setTimeout(() => el.classList.remove('on'), 2000); }
-/* one spare entry under the app, added on the first tap (browsers ignore entries added without a tap) */
-addEventListener('click', () => { if (sentinel) return; sentinel = true; try { history.pushState({ d: 0, s: 1 }, ''); } catch (e) {} }, true);
+function quietly(fn){ navQuiet = true; try { fn(); } finally { navQuiet = false; } }
+function navPush(from, back, ov){
+  const e = { from, back, ov: ov || null, dead: false };
+  try {
+    if (USE_CW){
+      e.w = new CloseWatcher();
+      e.w.onclose = () => { if (e.dead) return; e.dead = true; const i = navStack.indexOf(e); if (i >= 0) navStack.splice(i); quietly(back); };
+    } else history.pushState({ lv: navStack.length + 1 }, '');
+  } catch (x) {}
+  navStack.push(e);
+}
+function navDropTo(k){
+  if (navStack.length <= k) return;
+  const gone = navStack.splice(k);
+  if (USE_CW) gone.forEach(e => { e.dead = true; try { e.w && e.w.destroy(); } catch (x) {} });
+  else { ignorePop++; try { history.go(-gone.length); } catch (x) { ignorePop--; } }
+}
+function navBackFor(id){
+  if (id === 'study') return () => $('s-back').onclick();
+  if (id === 'list') return () => $('l-back').onclick();
+  if (id === 'stats') return () => $('a-back').onclick();
+  return () => goHome();
+}
 function navTrack(id){
   if (navQuiet || current === id) return;
-  try {
-    if (id === 'login'){ navDepth = 0; }
-    else if (id === 'home'){ if (navDepth > 0){ const n = navDepth; navDepth = 0; ignorePop = true; history.go(-n); } }
-    else if (current === 'study' && id === 'done') history.replaceState({ d: navDepth }, '');
-    else { navDepth++; history.pushState({ d: navDepth }, ''); }
-  } catch (e) {}
+  if (id === 'login'){ navDropTo(0); if (homeTrap){ homeTrap.dead = true; try { homeTrap.w && homeTrap.w.destroy(); } catch (x) {} homeTrap = null; } return; }
+  if (current === 'study' && id === 'done') return; // done takes the place of the study level
+  // going back to a screen that is already underneath: unwind to it
+  for (let j = navStack.length - 1; j >= 0; j--) if (navStack[j].from === id){ navDropTo(j); return; }
+  if (id === 'home'){ navDropTo(0); return; }
+  navPush(current, navBackFor(id));
 }
+function navOverlay(name, close){ if (!navQuiet) navPush(current, close, name); }
+function navOverlayClosed(name){
+  if (navQuiet) return;
+  const top = navStack[navStack.length - 1];
+  if (top && top.ov === name) navDropTo(navStack.length - 1);
+}
+function navArmHome(){
+  if (homeTrap || navStack.length || current !== 'home') return;
+  const t = { dead: false };
+  try {
+    if (USE_CW){ t.w = new CloseWatcher(); t.w.onclose = () => { if (t.dead) return; t.dead = true; if (homeTrap === t) homeTrap = null; toast('한 번 더 누르면 앱이 종료돼요'); }; }
+    else history.pushState({ lv: 0, home: 1 }, '');
+  } catch (x) { return; }
+  homeTrap = t;
+}
+/* the spare home level is added after the tap's own work, and only if that tap stayed on home */
+addEventListener('click', () => setTimeout(navArmHome, 0), true);
+if (!USE_CW) addEventListener('popstate', () => {
+  if (ignorePop > 0){ ignorePop--; return; }
+  const e = navStack.pop();
+  if (e){ quietly(e.back); return; }
+  if (homeTrap){ homeTrap = null; toast('한 번 더 누르면 앱이 종료돼요'); }
+});
 function show(id){
   navTrack(id);
   for (const s of ['login', 'home', 'study', 'done', 'list', 'stats']) $(s).hidden = s !== id;
@@ -1805,9 +1854,10 @@ function openSettings(){
   $('o-nick').value = state.settings.nick || '';
   document.querySelectorAll('#o-new button').forEach(b => b.setAttribute('aria-pressed', String(+b.dataset.v === state.settings.newPerDay)));
   $('o-confirm').hidden = true; $('o-reset').hidden = false;
+  if ($('sheet').hidden) navOverlay('sheet', closeSettings);
   $('sheet').hidden = false;
 }
-function closeSettings(){ saveNick(); $('sheet').hidden = true; if (current === 'home') renderHome(); if (current === 'study'){ const u = unsolved()[0]; if (u) u.focus({ preventScroll: true }); } }
+function closeSettings(){ if ($('sheet').hidden) return; saveNick(); $('sheet').hidden = true; navOverlayClosed('sheet'); if (current === 'home') renderHome(); if (current === 'study'){ const u = unsolved()[0]; if (u) u.focus({ preventScroll: true }); } }
 
 /* ---------- wiring ---------- */
 function leaveStudy(){ clearTimeout(advTimer); closeDict(); if (state.sess.cur && state.sess.cur.solved){ finishCard(); pickNext(); save(); } busy = false; }
@@ -1836,25 +1886,6 @@ $('c-en').addEventListener('keydown', e => {
 });
 document.addEventListener('keydown', e => { if (e.defaultPrevented) return; if (e.key === 'Enter' && current === 'study' && state.sess.cur && state.sess.cur.solved && !e.isComposing){ e.preventDefault(); advance(); } });
 $('d-home').onclick = goHome;
-addEventListener('popstate', () => {
-  if (ignorePop){ ignorePop = false; return; }
-  const keep = () => { try { history.pushState({ d: navDepth }, ''); } catch (e) {} };
-  if (!$('sheet').hidden){ closeSettings(); keep(); return; }
-  if (!$('inst').hidden){ $('inst').hidden = true; keep(); return; }
-  if (!$('c-dict').hidden){ closeDict(); keep(); return; }
-  if (navDepth <= 0){
-    // home: first back asks, a second one within 2 seconds leaves the app
-    if (exitArm){ exitArm = false; history.back(); return; }
-    exitArm = true; keep(); toast('한 번 더 누르면 앱이 종료돼요'); setTimeout(() => { exitArm = false; }, 2200); return;
-  }
-  navDepth--; navQuiet = true;
-  try {
-    if (current === 'study') $('s-back').onclick();
-    else if (current === 'list') $('l-back').onclick();
-    else if (current === 'stats') $('a-back').onclick();
-    else goHome();
-  } finally { navQuiet = false; }
-});
 $('d-more').onclick = () => { if (addMore(10)){ pickNext(); save(); openStudy(); } };
 $('l-back').onclick = () => { const from = listFrom; srcFilter = null; if (from === 'done'){ show('done'); renderDone(); } else if (from === 'stats'){ show('stats'); renderStats(); } else goHome(); };
 $('l-seg').onclick = e => { const b = e.target.closest('button'); if (!b) return; setFilter(b.dataset.f); renderList(); };
@@ -1881,10 +1912,10 @@ $('o-kb').onchange = e => {
 buildKb();
 $('o-reset').onclick = () => { $('o-confirm').hidden = false; $('o-reset').hidden = true; };
 $('o-no').onclick = () => { $('o-confirm').hidden = true; $('o-reset').hidden = false; };
-$('o-yes').onclick = () => { const keep = state.settings; state = blankState(); state.settings = keep; save(); $('sheet').hidden = true; goHome(); };
+$('o-yes').onclick = () => { const keep = state.settings; state = blankState(); state.settings = keep; save(); $('sheet').hidden = true; navOverlayClosed('sheet'); goHome(); };
 $('o-close').onclick = closeSettings;
 $('sheet').onclick = e => { if (e.target === $('sheet')) closeSettings(); };
-document.addEventListener('keydown', e => { if (e.key === 'Escape'){ if (!$('sheet').hidden) closeSettings(); else closeDict(); } });
+document.addEventListener('keydown', e => { if (e.key === 'Escape' && !USE_CW){ if (!$('sheet').hidden) closeSettings(); else closeDict(); } });
 
 /* keep the hint bar right above the on-screen keyboard */
 if (window.visualViewport){
@@ -1909,11 +1940,13 @@ async function doInstall(){
   const steps = ios ? ['브라우저의 공유 버튼을 누르세요', '홈 화면에 추가를 누르세요', '오른쪽 위 추가를 누르면 끝']
     : ['브라우저 메뉴(⋮)를 누르세요', '홈 화면에 추가나 앱 설치를 누르세요', '추가를 누르면 끝'];
   const ol = $('inst-steps'); ol.replaceChildren(...steps.map(t => mk('li', null, t)));
+  if ($('inst').hidden) navOverlay('inst', closeInst);
   $('inst').hidden = false;
 }
+function closeInst(){ if ($('inst').hidden) return; $('inst').hidden = true; navOverlayClosed('inst'); }
 $('h-install').onclick = doInstall; $('lg-install').onclick = doInstall;
-$('inst-close').onclick = () => { $('inst').hidden = true; };
-$('inst').onclick = e => { if (e.target === $('inst')) $('inst').hidden = true; };
+$('inst-close').onclick = closeInst;
+$('inst').onclick = e => { if (e.target === $('inst')) closeInst(); };
 paintInstall();
 /* KakaoTalk's in-app browser can't log in or install: hand the link to the phone's own browser */
 if (FB && /KAKAOTALK/i.test(navigator.userAgent)) location.href = 'kakaotalk://web/openExternal?url=' + encodeURIComponent(location.href);
