@@ -1,4 +1,4 @@
-/* Non-invasive semantics and keyboard access; no authentication or learning data changes. */
+/* Accessibility helpers. No authentication, validation or learning-data changes. */
 (()=>{'use strict';
 const app=document.getElementById('app');if(!app)return;
 app.setAttribute('role','main');app.setAttribute('tabindex','-1');
@@ -8,11 +8,13 @@ Object.entries(names).forEach(([id,name])=>{const el=document.getElementById(id)
 const labels={'adm-rules':'단어 자료 가져오기 규칙','adm-file':'가져올 단어 자료 파일','adm-title':'학습 자료 제목','o-nick':'닉네임'};
 Object.entries(labels).forEach(([id,label])=>{const el=document.getElementById(id);if(el&&!el.labels?.length)el.setAttribute('aria-label',label)});
 const nav=document.querySelector('.tabbar');if(nav)nav.setAttribute('aria-label','주요 화면');
-const note=document.getElementById('lg-note');const uid=document.getElementById('lg-id');if(note&&uid)uid.setAttribute('aria-describedby','lg-note lg-err');
-for(const id of ['lg-pw','lg-pw2']){const el=document.getElementById(id);if(el)el.setAttribute('aria-describedby','lg-note lg-err')}
-// These controls are toggle buttons, not ARIA tabs: keep existing aria-pressed state.
+// Keep account rules hidden, including unsolicited screen-reader descriptions.
+const note=document.getElementById('lg-note');if(note){note.hidden=true;note.setAttribute('aria-hidden','true')}
+for(const id of ['lg-id','lg-pw','lg-pw2']){const el=document.getElementById(id);if(el)el.setAttribute('aria-describedby','lg-err')}
 const tabs=document.querySelector('.login-tabs');if(tabs){tabs.setAttribute('role','group');tabs.setAttribute('aria-label','로그인 또는 회원가입')}
-const status=document.getElementById('fb-wrap')||document.querySelector('.fb-wrap');if(status){status.setAttribute('aria-live','polite');status.setAttribute('aria-atomic','true')}
+const status=document.querySelector('.fb-wrap');if(status){status.setAttribute('aria-live','polite');status.setAttribute('aria-atomic','true')}
+// Full-screen blocking dialogs are modal. The inline dictionary deliberately is not.
+for(const id of ['cheer','stk','fpw','ask']){const d=document.getElementById(id);if(d)d.setAttribute('aria-modal','true')}
 const dialogs=[...document.querySelectorAll('[role="dialog"]')];
 const visible=el=>el.isConnected&&!el.closest('[hidden]')&&el.getClientRects().length>0&&getComputedStyle(el).visibility!=='hidden';
 const focusables=el=>[...el.querySelectorAll('button:not(:disabled),a[href],input:not(:disabled),select:not(:disabled),textarea:not(:disabled),[tabindex]:not([tabindex="-1"])')].filter(visible);
