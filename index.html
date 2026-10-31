@@ -472,6 +472,31 @@ details.panel:not([open]){gap:0}
 .stk.big .go{background:linear-gradient(135deg,#ffd54a,#ff9f1a);color:#3a2410;-webkit-text-fill-color:#3a2410}
 .fw{position:absolute;width:6px;height:6px;border-radius:50%;animation:fw 1.4s cubic-bezier(.1,.7,.3,1) infinite;opacity:0}
 @keyframes fw{0%{transform:translate(0,0) scale(1);opacity:1}100%{transform:translate(var(--dx),var(--dy)) scale(.4);opacity:0}}
+/* ===== settings page ===== */
+.set-page{display:flex;flex-direction:column;gap:8px;padding-block:4px 30px}
+.set-cap{font-size:13px;font-weight:800;color:var(--white);margin:12px 6px 0;text-shadow:0 1px 2px rgba(30,80,150,.25)}
+.set-card{background:var(--card);border-radius:20px;box-shadow:var(--shadow);padding:0 16px}
+.set-card .set-row{min-height:58px;padding:8px 0;box-sizing:border-box}
+.set-card .set-row+.set-row{border-top:1px solid var(--line)}
+.set-card .set-row[hidden]{display:none}
+.set-card label,.set-card .lab{font-size:15.5px;font-weight:600;display:flex;flex-direction:column;gap:2px}
+.set-card label small,.set-card .lab small{font-size:12px;color:var(--muted);font-weight:500;margin:0}
+.set-card label small:empty{display:none}
+.set-card .lab span{font-weight:700}
+.set-card .opts button{min-width:40px;height:36px}
+.set-card .nick-in{width:140px;text-align:right;background:var(--soft);border-color:transparent}
+.text-btn{border:none;background:var(--soft);color:var(--ink-2);font-weight:700;font-size:14px;border-radius:10px;height:36px;padding:0 14px}
+.reset-link{align-self:center;margin-top:18px;border:none;background:none;color:var(--red);font-weight:700;font-size:14.5px;padding:10px 16px;opacity:.85}
+/* ===== notification ask ===== */
+.ask{position:absolute;inset:0;z-index:32;display:flex;align-items:flex-end;background:rgba(15,30,55,.42);animation:fade .25s ease both}
+.ask[hidden]{display:none}
+.ask-card{width:100%;background:var(--card);border-radius:28px 28px 0 0;padding:26px 22px calc(22px + env(safe-area-inset-bottom,0px));box-sizing:border-box;display:flex;flex-direction:column;align-items:center;text-align:center;gap:8px;animation:sheetUp .4s var(--ease) both}
+.ask-nori{width:120px;height:120px;margin-top:-70px;border-radius:36px;background:var(--ko-bg);display:grid;place-items:center;box-shadow:0 10px 24px rgba(40,95,160,.18);animation:hop 1.2s cubic-bezier(.3,.7,.4,1) infinite}
+.ask-nori .nori-svg{width:104px;height:104px}
+.ask h3{margin:8px 0 0;font-size:23px;font-weight:900;letter-spacing:-.035em;word-break:keep-all}
+.ask p{margin:0;font-size:15.5px;color:var(--ink-2);line-height:1.55;word-break:keep-all}
+.ask .go{width:100%;margin-top:14px}
+.ask .later{border:none;background:none;color:var(--muted);font-weight:700;font-size:14.5px;padding:10px}
 /* ===== dictionary popup (after a card is solved) ===== */
 .blank.ok{cursor:pointer}
 #card.solved .blank.ok,.blank.ok.shown{box-shadow:inset 0 -2px 0 rgba(44,108,180,.28)}
@@ -727,6 +752,17 @@ details.panel:not([open]){gap:0}
     </div>
   </div>
 
+  <!-- ASK FOR NOTIFICATIONS -->
+  <div class="ask" id="ask" hidden role="dialog" aria-labelledby="ask-t">
+    <div class="ask-card">
+      <div class="ask-nori" id="ask-nori"></div>
+      <h3 id="ask-t">노리가 매일 찾아가도 될까요?</h3>
+      <p>저녁 8시에 노리가 공부하자고 조를게요.<br>안 오면 노리가 아파요 🥺</p>
+      <button class="go" id="ask-yes" type="button">알림 받기</button>
+      <button class="later" id="ask-no" type="button">나중에</button>
+    </div>
+  </div>
+
   <!-- ANALYSIS BY SOURCE -->
   <section class="screen" id="stats" hidden>
     <div class="list-top gutter">
@@ -764,58 +800,57 @@ details.panel:not([open]){gap:0}
   </div>
 
   <!-- SETTINGS -->
-  <div class="overlay" id="sheet" hidden>
-    <div class="sheet gutter" role="dialog" aria-modal="true" aria-labelledby="set-title">
-      <h3 id="set-title">설정</h3>
-      <div class="set-sec">계정</div>
-      <div class="set-row">
-        <label for="o-nick">닉네임</label>
-        <input class="nick-in" id="o-nick" maxlength="10" placeholder="이름을 적어 주세요" autocomplete="nickname">
-      </div>
-      <div class="acct" id="o-acct" hidden><div><small id="o-acct-label">로그인 아이디</small><b id="o-acct-id"></b></div><button type="button" id="o-logout">로그아웃</button></div>
-      <div class="set-sec">학습</div>
-      <div class="set-row">
-        <div class="lab">하루 새 단어</div>
-        <div class="opts" id="o-new">
-          <button data-v="10">10</button><button data-v="20">20</button><button data-v="30">30</button><button data-v="40">40</button>
-        </div>
-      </div>
-      <div class="set-row">
-        <label for="o-hint">힌트 쓰면 오답 처리</label>
-        <input type="checkbox" class="switch" id="o-hint">
-      </div>
-      <div class="set-row">
-        <label for="o-auto">맞히면 자동으로 넘어가기</label>
-        <input type="checkbox" class="switch" id="o-auto">
-      </div>
-      <div id="o-push-wrap" hidden>
-        <div class="set-row">
-          <label for="o-push">매일 저녁 8시 노리 알림</label>
-          <input type="checkbox" class="switch" id="o-push">
-        </div>
-        <div class="set-note" id="o-push-note"></div>
-      </div>
-      <div class="set-sec">입력과 소리</div>
-      <div class="set-row">
-        <label for="o-kb">앱 키보드 사용</label>
-        <input type="checkbox" class="switch" id="o-kb">
-      </div>
-      <div class="set-row">
-        <label for="o-keysnd">키보드 소리</label>
-        <input type="checkbox" class="switch" id="o-keysnd">
-      </div>
-      <div class="set-row">
-        <label for="o-sfx">맞혔을 때 효과음</label>
-        <input type="checkbox" class="switch" id="o-sfx">
-      </div>
-      <button class="danger" id="o-reset">기록 초기화</button>
-      <div class="confirm" id="o-confirm" hidden>
-        <div>모든 기록이 지워져요.</div>
-        <div class="btns"><button class="no" id="o-no">취소</button><button class="yes" id="o-yes">지우기</button></div>
-      </div>
-      <button class="go" id="o-close">닫기</button>
+  <section class="screen" id="settings" hidden>
+    <div class="list-top gutter">
+      <button class="icon-btn" id="o-back" aria-label="뒤로"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M15 4.5 7.5 12l7.5 7.5"/></svg></button>
+      <div class="list-title" id="set-title">설정</div>
     </div>
-  </div>
+    <div class="scroll gutter">
+      <div class="set-page">
+        <div class="set-cap">내 정보</div>
+        <div class="set-card">
+          <div class="set-row">
+            <label for="o-nick">닉네임</label>
+            <input class="nick-in" id="o-nick" maxlength="10" placeholder="이름 적기" autocomplete="nickname">
+          </div>
+          <div class="set-row" id="o-acct" hidden>
+            <div class="lab"><small id="o-acct-label">로그인 아이디</small><span id="o-acct-id"></span></div>
+            <button type="button" class="text-btn" id="o-logout">로그아웃</button>
+          </div>
+        </div>
+
+        <div class="set-cap">학습</div>
+        <div class="set-card">
+          <div class="set-row">
+            <div class="lab">하루 새 단어</div>
+            <div class="opts" id="o-new"><button data-v="10">10</button><button data-v="20">20</button><button data-v="30">30</button><button data-v="40">40</button></div>
+          </div>
+          <div class="set-row"><label for="o-hint">힌트 쓰면 오답 처리</label><input type="checkbox" class="switch" id="o-hint"></div>
+          <div class="set-row"><label for="o-auto">맞히면 자동으로 넘어가기</label><input type="checkbox" class="switch" id="o-auto"></div>
+        </div>
+
+        <div id="o-push-wrap" hidden>
+          <div class="set-cap">알림</div>
+          <div class="set-card">
+            <div class="set-row"><label for="o-push">매일 저녁 8시 노리 알림<small id="o-push-note"></small></label><input type="checkbox" class="switch" id="o-push"></div>
+          </div>
+        </div>
+
+        <div class="set-cap">입력과 소리</div>
+        <div class="set-card">
+          <div class="set-row"><label for="o-kb">앱 키보드</label><input type="checkbox" class="switch" id="o-kb"></div>
+          <div class="set-row"><label for="o-keysnd">키보드 소리</label><input type="checkbox" class="switch" id="o-keysnd"></div>
+          <div class="set-row"><label for="o-sfx">효과음</label><input type="checkbox" class="switch" id="o-sfx"></div>
+        </div>
+
+        <button class="reset-link" id="o-reset" type="button">기록 초기화</button>
+        <div class="confirm" id="o-confirm" hidden>
+          <div>모든 학습 기록이 지워져요. 되돌릴 수 없어요.</div>
+          <div class="btns"><button class="no" id="o-no">취소</button><button class="yes" id="o-yes">지우기</button></div>
+        </div>
+      </div>
+    </div>
+  </section>
 </div>
 
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script><script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script><script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script><script>
@@ -991,12 +1026,12 @@ async function enterAccount(user){
   const nick = pendingNick || (account.google ? (user.displayName || '') : '');
   pendingNick = '';
   if (nick && !state.settings.nick){ state.settings.nick = nick.slice(0, 10); save(); if (current === 'home') renderHome(); }
+  setTimeout(maybeAskPush, 900);
 }
 async function logout(){
   if (sync.timer || sync.writing) await flush();
   if (pushOn()) await disablePush();
   sync.ref = null; account = null; lkey = LKEY; state = blankState();
-  $('sheet').hidden = true;
   try { await fbAuth.signOut(); } catch (e) {}
 }
 function bootFirebase(){
@@ -1154,6 +1189,7 @@ function navBackFor(id){
   if (id === 'study') return () => $('s-back').onclick();
   if (id === 'list') return () => $('l-back').onclick();
   if (id === 'stats') return () => $('a-back').onclick();
+  if (id === 'settings') return () => closeSettings();
   return () => goHome();
 }
 function navTrack(id){
@@ -1190,7 +1226,7 @@ if (!USE_CW) addEventListener('popstate', () => {
 });
 function show(id){
   navTrack(id);
-  for (const s of ['login', 'home', 'study', 'done', 'list', 'stats']) $(s).hidden = s !== id;
+  for (const s of ['login', 'home', 'study', 'done', 'list', 'stats', 'settings']) $(s).hidden = s !== id;
   if (id !== 'study') closeDict();
   if (current !== id){ const el = $(id); el.classList.remove('enter'); void el.offsetWidth; el.classList.add('enter'); }
   current = id;
@@ -1200,6 +1236,7 @@ function rerender(){
   else if (current === 'done') renderDone();
   else if (current === 'list') renderList();
   else if (current === 'stats') renderStats();
+  else if (current === 'settings') paintSettings();
   else renderHome();
 }
 
@@ -2017,6 +2054,18 @@ function showStreak(){
 }
 function closeStreak(){ if ($('stk').hidden) return; $('stk').hidden = true; navOverlayClosed('stk'); }
 
+/* notifications are the default: on entry, Nori asks once (the phone only shows its permission prompt after a tap) */
+const askLS = () => 'norivoka:ask:' + (account ? account.uid : '');
+function maybeAskPush(){
+  if (!PUSH_OK || !account || pushOn() || current !== 'home' || !$('ask').hidden) return;
+  try { if (Notification.permission === 'denied') return; } catch (e) { return; }
+  let last = 0; try { last = +localStorage.getItem(askLS()) || 0; } catch (e) {}
+  if (last && Date.now() - last < 3 * 864e5) return; // after a "later", ask again in 3 days
+  $('ask-nori').innerHTML = nori('wait');
+  $('ask').hidden = false;
+}
+function closeAsk(){ $('ask').hidden = true; try { localStorage.setItem(askLS(), String(Date.now())); } catch (e) {} }
+
 /* ---------- analysis by source ---------- */
 const GROUPS = ['수능특강', '모의고사', '생각의 지도', '기타'];
 function grp(d){ return /^수특/.test(d.src) ? '수능특강' : /모의고사/.test(d.src) ? '모의고사' : d.src === '생각의 지도' ? '생각의 지도' : '기타'; }
@@ -2161,7 +2210,7 @@ function openList(src, f){
 }
 
 /* settings */
-function openSettings(){
+function paintSettings(){
   $('o-acct').hidden = !account;
   if (account){ $('o-acct-id').textContent = account.id; $('o-acct-label').textContent = account.google ? '구글 계정' : '로그인 아이디'; }
   $('o-hint').checked = !!state.settings.hintIsWrong;
@@ -2169,14 +2218,23 @@ function openSettings(){
   $('o-kb').checked = !!state.settings.ownKb;
   $('o-keysnd').checked = !!state.settings.keySound;
   $('o-sfx').checked = !!state.settings.sfx;
-  $('o-nick').value = state.settings.nick || '';
+  if (document.activeElement !== $('o-nick')) $('o-nick').value = state.settings.nick || '';
   paintPush();
   document.querySelectorAll('#o-new button').forEach(b => b.setAttribute('aria-pressed', String(+b.dataset.v === state.settings.newPerDay)));
-  $('o-confirm').hidden = true; $('o-reset').hidden = false;
-  if ($('sheet').hidden) navOverlay('sheet', closeSettings);
-  $('sheet').hidden = false;
 }
-function closeSettings(){ if ($('sheet').hidden) return; saveNick(); $('sheet').hidden = true; navOverlayClosed('sheet'); if (current === 'home') renderHome(); if (current === 'study'){ const u = unsolved()[0]; if (u) u.focus({ preventScroll: true }); } }
+let settingsFrom = 'home';
+function openSettings(){
+  if (current === 'settings') return;
+  settingsFrom = current; paintSettings();
+  $('o-confirm').hidden = true; $('o-reset').hidden = false;
+  show('settings'); $('settings').querySelector('.scroll').scrollTop = 0;
+}
+function closeSettings(){
+  if (current !== 'settings') return;
+  saveNick();
+  const to = settingsFrom === 'settings' || settingsFrom === 'login' ? 'home' : settingsFrom;
+  if (to === 'home') goHome(); else { show(to); rerender(); }
+}
 
 /* ---------- wiring ---------- */
 function leaveStudy(){ clearTimeout(advTimer); closeDict(); if (state.sess.cur && state.sess.cur.solved){ finishCard(); pickNext(); save(); } busy = false; }
@@ -2213,7 +2271,7 @@ $('o-new').onclick = e => {
   const b = e.target.closest('button'); if (!b) return;
   state.settings.newPerDay = +b.dataset.v;
   if (untouched(state.sess)) buildSession(today());
-  save(); openSettings();
+  save(); paintSettings();
 };
 $('o-hint').onchange = e => { state.settings.hintIsWrong = e.target.checked; save(); };
 $('o-auto').onchange = e => { state.settings.autoNext = e.target.checked; save(); };
@@ -2223,6 +2281,7 @@ const saveNick = () => { const v = $('o-nick').value.trim().slice(0, 10); if (v 
 $('o-nick').addEventListener('change', saveNick);
 $('o-nick').addEventListener('keydown', e => { if (e.key === 'Enter' && !e.isComposing){ e.preventDefault(); $('o-nick').blur(); } });
 $('h-nick').onclick = () => { openSettings(); setTimeout(() => $('o-nick').focus(), 350); };
+$('o-back').onclick = closeSettings;
 $('o-kb').onchange = e => {
   state.settings.ownKb = e.target.checked; save();
   inputs().forEach(i => i.setAttribute('inputmode', state.settings.ownKb ? 'none' : 'text'));
@@ -2232,10 +2291,12 @@ buildKb();
 $('brand-nori').innerHTML = nori('happy'); $('lg-nori').innerHTML = nori('happy');
 $('o-reset').onclick = () => { $('o-confirm').hidden = false; $('o-reset').hidden = true; };
 $('o-no').onclick = () => { $('o-confirm').hidden = true; $('o-reset').hidden = false; };
-$('o-yes').onclick = () => { const keep = state.settings; state = blankState(); state.settings = keep; save(); $('sheet').hidden = true; navOverlayClosed('sheet'); goHome(); };
-$('o-close').onclick = closeSettings;
+$('o-yes').onclick = () => { const keep = state.settings; state = blankState(); state.settings = keep; save(); goHome(); };
 $('cheer-ok').onclick = () => { closeCheer(); showStreak(); };
 $('stk-ok').onclick = closeStreak;
+$('ask-yes').onclick = async () => { closeAsk(); if (await enablePush()) toast('매일 저녁 8시에 노리가 찾아갈게요'); paintPush(); if (current === 'home') renderHome(); };
+$('ask-no').onclick = closeAsk;
+$('ask').onclick = e => { if (e.target === $('ask')) closeAsk(); };
 $('o-push').onchange = async e => {
   const want = e.target.checked; e.target.disabled = true;
   if (want){ const ok = await enablePush(); if (ok) toast('매일 저녁 8시에 노리가 찾아갈게요'); }
@@ -2244,8 +2305,7 @@ $('o-push').onchange = async e => {
 };
 $('h-bell').onclick = async () => { if (await enablePush()){ toast('매일 저녁 8시에 노리가 찾아갈게요'); } paintPush(); };
 $('h-fire').onclick = () => { const sk = streak(), on = state.days[today()]; toast(on ? sk + '일 연속 학습 중이에요 🔥' : sk ? '오늘 분량을 끝내면 ' + (sk + 1) + '일 연속!' : '오늘 분량을 끝내면 연속 기록이 시작돼요'); };
-$('sheet').onclick = e => { if (e.target === $('sheet')) closeSettings(); };
-document.addEventListener('keydown', e => { if (e.key === 'Escape' && !USE_CW){ if (!$('sheet').hidden) closeSettings(); else closeDict(); } });
+document.addEventListener('keydown', e => { if (e.key === 'Escape' && !USE_CW){ if (current === 'settings') closeSettings(); else closeDict(); } });
 
 /* keep the hint bar right above the on-screen keyboard */
 if (window.visualViewport){
