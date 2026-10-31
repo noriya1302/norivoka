@@ -1264,22 +1264,24 @@ function buildSession(t){
   const { W, R, OK, NEW } = buckets(t);
   const k = W.length ? Math.min(OK.length, Math.max(2, Math.ceil(W.length * 0.3))) : Math.min(OK.length, 3);
   const mix = shuffle(OK.slice()).slice(0, k);
-  const fresh = NEW.slice(0, state.settings.newPerDay);
+  // new words come from all sources completely at random
+  const fresh = shuffle(NEW.slice()).slice(0, state.settings.newPerDay);
   const kinds = {};
   W.forEach(n => kinds[n] = 'ng'); R.forEach(n => kinds[n] = 'due'); mix.forEach(n => kinds[n] = 'mix'); fresh.forEach(n => kinds[n] = 'new');
   const queue = shuffle(W.concat(R, mix)).concat(shuffle(fresh.slice()));
-  state.sess = { day: t, queue, kinds, retry: [], cur: null, last: null, total: queue.length, done: 0, firstOk: 0, firstNg: 0, cleared: 0,
+  state.sess = { v: 2, day: t, queue, kinds, retry: [], cur: null, last: null, total: queue.length, done: 0, firstOk: 0, firstNg: 0, cleared: 0,
     counts: { ng: W.length, due: R.length, mix: mix.length, new: fresh.length }, completed: queue.length === 0 };
 }
 function untouched(s){ return s && s.done === 0 && !s.cur && s.retry.length === 0; }
 function ensureSession(){
   const t = today();
   /* building today's list is not a learner change: keep the clock so a newer copy from another device still wins */
-  if (!state.sess || state.sess.day !== t){ buildSession(t); persistLocal(); }
+  if (!state.sess || state.sess.day !== t || (state.sess.v !== 2 && untouched(state.sess))){ buildSession(t); persistLocal(); }
 }
 function addMore(k){
   const s = state.sess; const add = [];
-  for (const d of DATA){ if (add.length >= k) break; if (!state.w[d.n] && !(d.n in s.kinds)) add.push(d.n); }
+  const pool = shuffle(DATA.filter(d => !state.w[d.n] && !(d.n in s.kinds)).map(d => d.n));
+  pool.slice(0, k).forEach(n => add.push(n));
   add.forEach(n => { s.kinds[n] = 'new'; s.queue.push(n); });
   s.total += add.length; s.counts.new += add.length;
   if (add.length) s.completed = false;
@@ -2382,7 +2384,7 @@ function groupStats(){
     g.rp += r.rp || 0; g.wr += r.wr || 0;
     if (r.f === 'ng') g.ng++; else if (r.s >= 4) g.long++; else g.learn++;
   }
-  G.forEach(g => { g.seen = g.n - g.unseen; g.acc = g.rp ? (g.rp - g.wr) / g.rp : null; g.days = g.rank ? Math.ceil(g.rank / per) : 0; });
+  G.forEach(g => { g.seen = g.n - g.unseen; g.acc = g.rp ? (g.rp - g.wr) / g.rp : null; g.days = g.rank ? Math.ceil(rank / per) : 0; });
   return { G, rank, per, days: rank ? Math.ceil(rank / per) : 0 };
 }
 const pct = v => Math.round(v * 100) + '%';
