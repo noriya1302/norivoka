@@ -1481,12 +1481,17 @@ let fbReturn = null;
   const q = new URLSearchParams(h.replace(/^#/, '')); let saved = null;
   try { saved = JSON.parse(localStorage.getItem(FB_ST) || 'null'); localStorage.removeItem(FB_ST); } catch (e) {}
   try { history.replaceState(null, '', location.pathname + location.search); } catch (e) {}
-  if (!saved || q.get('state') !== saved.st || Date.now() - saved.at > 15 * 60e3) return;
-  fbReturn = { token: q.get('access_token'), link: saved.link, error: q.get('error') || q.get('error_reason') };
+  if (!saved || q.get('state') !== saved.st || Date.now() - saved.at > 15 * 60e3){ fbReturn = { token: null, error: 'state', link: false }; return; }
+  fbReturn = { token: q.get('access_token'), link: saved.link, error: q.get('error_description') || q.get('error_reason') || q.get('error') };
 })();
 async function finishFb(user){
   const r = fbReturn; fbReturn = null;
-  if (!r || !r.token) return false;
+  if (!r) return false;
+  if (!r.token){
+    const why = r.error === 'state' ? '로그인 확인 정보가 사라졌어요. 노리보카를 연 같은 창에서 다시 시도해 주세요' : /denied|cancel/i.test(r.error || '') ? '페이스북 로그인이 취소됐어요' : '페이스북이 로그인을 거절했어요 (' + String(r.error || '이유 없음').replace(/\+/g, ' ').slice(0, 80) + ')';
+    setTimeout(() => { if (user) toast(why, 5000); else $('lg-err').textContent = why; }, 300);
+    return false;
+  }
   const cred = firebase.auth.FacebookAuthProvider.credential(r.token);
   try {
     if (r.link && user){ await user.linkWithCredential(cred); setTimeout(() => toast('Facebook 계정을 연결했어요'), 800); return false; }
