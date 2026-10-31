@@ -1417,6 +1417,7 @@ function lkForm(kind){
   return f;
 }
 async function lkPopup(d){
+  if (d.pid === 'facebook.com' && MOBILE_WEB){ fbDirect(true); return; }
   try { await lkUser().linkWithPopup(d.make()); toast(d.name + ' 계정을 연결했어요'); renderLinks(); }
   catch (x) { const c = x && x.code; if (c === 'auth/popup-closed-by-user' || c === 'auth/cancelled-popup-request') return; toast(LINK_MSG[c] || (c && /operation-not-allowed|invalid-provider|configuration/.test(c) ? d.name + ' 연결은 준비 중이에요' : '연결하지 못했어요')); }
 }
@@ -1464,6 +1465,40 @@ async function logout(){
   phoneMode(false); forgetSession();
   try { await fbAuth.signOut(); } catch (e) {}
 }
+/* ---------- Facebook on phones: our own redirect, so it survives the Facebook app taking over the login ---------- */
+const FB_APP_ID = '1106200502325973';
+const FB_ST = 'norivoka:fbst';
+const MOBILE_WEB = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+function fbDirect(link){
+  const st = Math.random().toString(36).slice(2) + Date.now().toString(36);
+  try { localStorage.setItem(FB_ST, JSON.stringify({ st, link: !!link, at: Date.now() })); } catch (e) {}
+  const redirect = new URL('./', location.href).href;
+  location.href = 'https://www.facebook.com/dialog/oauth?client_id=' + FB_APP_ID + '&redirect_uri=' + encodeURIComponent(redirect) + '&response_type=token&scope=email,public_profile&state=' + encodeURIComponent(st);
+}
+let fbReturn = null;
+(function(){
+  const h = location.hash || ''; if (!/access_token=|error/.test(h)) return;
+  const q = new URLSearchParams(h.replace(/^#/, '')); let saved = null;
+  try { saved = JSON.parse(localStorage.getItem(FB_ST) || 'null'); localStorage.removeItem(FB_ST); } catch (e) {}
+  try { history.replaceState(null, '', location.pathname + location.search); } catch (e) {}
+  if (!saved || q.get('state') !== saved.st || Date.now() - saved.at > 15 * 60e3) return;
+  fbReturn = { token: q.get('access_token'), link: saved.link, error: q.get('error') || q.get('error_reason') };
+})();
+async function finishFb(user){
+  const r = fbReturn; fbReturn = null;
+  if (!r || !r.token) return false;
+  const cred = firebase.auth.FacebookAuthProvider.credential(r.token);
+  try {
+    if (r.link && user){ await user.linkWithCredential(cred); setTimeout(() => toast('Facebook 계정을 연결했어요'), 800); return false; }
+    if (!user){ loginWait(true, '페이스북으로 로그인하는 중'); await fbAuth.signInWithCredential(cred); return true; }
+  } catch (x) {
+    const c = x && x.code;
+    const msg = c === 'auth/account-exists-with-different-credential' ? '이 페이스북 이메일로 이미 다른 방법으로 가입했어요. 그 방법으로 로그인한 뒤 설정에서 페이스북을 연결해 주세요'
+      : (LINK_MSG[c] || G_MSG[c] || '페이스북 로그인에 실패했어요');
+    if (user) setTimeout(() => toast(msg, 4500), 800); else { loginWait(false); $('lg-err').textContent = msg; }
+  }
+  return false;
+}
 /* the last signed-in account is remembered on this device, so the app opens straight onto home
    from local data while Firebase restores the sign-in in the background */
 const SESS_LS = 'norivoka:session';
@@ -1478,7 +1513,8 @@ function bootFirebase(){
   if (!window.firebase || !firebase.initializeApp){ loginWait(true, '서버에 연결하지 못했어요. 인터넷 연결을 확인해 주세요'); $('lg-wait').classList.add('off'); return; }
   try { firebase.initializeApp(FB); fbAuth = firebase.auth(); }
   catch (e) { loginWait(true, '서버 설정에 문제가 있어요'); return; }
-  fbAuth.onAuthStateChanged(user => {
+  fbAuth.onAuthStateChanged(async user => {
+    if (fbReturn && await finishFb(user)) return;
     if (user){ const warm = !!(cached && cached.uid === user.uid); cached = null; enterAccount(user, warm); }
     else { cached = null; forgetSession(); account = null; show('login'); loginWait(false); setLoginMode('in'); $('lg-pw').value = ''; $('lg-pw2').value = ''; }
   });
@@ -3161,6 +3197,7 @@ $('lg-naver').onclick = () => { $('lg-err').textContent = '네이버 로그인�
 $('lg-fb').onclick = async () => {
   const err = $('lg-err'); err.textContent = '';
   if (!fbAuth || !window.firebase || !firebase.auth.FacebookAuthProvider){ err.textContent = '서버에 연결하지 못했어요'; return; }
+  if (MOBILE_WEB){ fbDirect(false); return; }
   try { const prov = new firebase.auth.FacebookAuthProvider(); await fbAuth.signInWithPopup(prov); }
   catch (x) { const c = x && x.code; if (c === 'auth/popup-closed-by-user' || c === 'auth/cancelled-popup-request') return; err.textContent = snsFail('페이스북', c) || (G_MSG[c] || '페이스북 로그인에 실패했어요. 다른 방법으로 로그인해 주세요').replace('구글', '페이스북'); }
 };
