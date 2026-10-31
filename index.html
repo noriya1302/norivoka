@@ -639,6 +639,9 @@ details.panel:not([open]){gap:0}
 .adm-v small{font-size:12px;color:var(--muted)}
 .adm-pubbar{position:sticky;bottom:0;display:flex;flex-direction:column;gap:6px;background:linear-gradient(transparent,var(--sky-2) 30%);padding:16px 0 8px}
 .adm-pubbar[hidden]{display:none}
+.err-tip{background:var(--red-soft);border-radius:14px;padding:11px 13px;display:flex;flex-direction:column;gap:3px;word-break:keep-all}
+.err-tip b{color:var(--red);font-size:15px}
+.err-tip span{font-size:13px;color:var(--red-ink);line-height:1.5}
 /* ===== dictionary popup (after a card is solved) ===== */
 .blank.ok{cursor:pointer}
 #card.solved .blank.ok,.blank.ok.shown{box-shadow:inset 0 -2px 0 rgba(44,108,180,.28)}
@@ -930,10 +933,11 @@ details.panel:not([open]){gap:0}
   <section class="screen" id="stats" hidden>
     <div class="list-top gutter">
       <button class="icon-btn" id="a-back" aria-label="뒤로"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M15 4.5 7.5 12l7.5 7.5"/></svg></button>
-      <div class="list-title">분야별 분석</div>
+      <div class="list-title">분석</div>
     </div>
     <div class="scroll gutter">
       <div class="hstack">
+        <div class="panel" id="an-err"></div>
         <div class="panel an-hero" id="an-hero"></div>
         <div class="panel">
           <div class="pp-head"><h2>정답률</h2><b id="an-acc">-</b></div>
@@ -1105,7 +1109,7 @@ function norm(s){ return String(s).toLowerCase().replace(/[‘’ʼ`´]/g, "'").
 function hit(v, alts){ const nv = norm(v); return nv.length > 0 && alts.some(a => norm(a) === nv); }
 
 /* ---------- state ---------- */
-function blankState(){ return { v: 1, updatedAt: 0, settings: { newPerDay: 20, hintIsWrong: true, autoNext: false, ownKb: true, keySound: true, sfx: true, nick: '', rank: true, streakGoal: 10 }, w: {}, sess: null, days: {}, cnt: {} }; }
+function blankState(){ return { v: 1, updatedAt: 0, settings: { newPerDay: 20, hintIsWrong: true, autoNext: false, ownKb: true, keySound: true, sfx: true, nick: '', rank: true, streakGoal: 10 }, w: {}, sess: null, days: {}, cnt: {}, err: {} }; }
 function clean(s){
   const f = blankState();
   if (!s || typeof s !== 'object') return f;
@@ -1113,6 +1117,7 @@ function clean(s){
   if (!s.w || typeof s.w !== 'object') s.w = {};
   if (!s.days || typeof s.days !== 'object') s.days = {};
   if (!s.cnt || typeof s.cnt !== 'object') s.cnt = {};
+  if (!s.err || typeof s.err !== 'object') s.err = {};
   if (s.sess && (!Array.isArray(s.sess.queue) || !Array.isArray(s.sess.retry))) s.sess = null;
   return s;
 }
@@ -2070,6 +2075,7 @@ function submit(){
   });
   if (!firstBad){ solved(false); return; }
   if (counts) cur.wrongs++;
+  fb.forEach(c => logErr(c.kind === 'syn' ? (c.trap ? 'trap' : 'syn') : c.kind === 'form' ? 'form' : (c.kind === 'near' || c.kind === 'left' || c.kind === 'oneword') ? 'spell' : 'wrong'));
   cur.fb = fb; save();
   wobble();
   showFeedback(fb, true);
@@ -2141,7 +2147,7 @@ function hint(){
   let p = 0; while (p < v.length && p < ans.length && v[p].toLowerCase() === ans[p].toLowerCase()) p++;
   target.value = ans.slice(0, Math.min(ans.length, p + 1));
   target.classList.remove('bad', 'near'); fit(target);
-  if (!cur.hint){ cur.hint = true; save(); }
+  if (!cur.hint){ cur.hint = true; logErr('hint'); save(); }
   target.focus({ preventScroll: true });
   try { target.setSelectionRange(target.value.length, target.value.length); } catch (e) {}
   if (hit(target.value, answerOf(target))){ accept(target); const rest = unsolved(); if (rest.length) rest[0].focus({ preventScroll: true }); else { solved(false); return; } }
@@ -2185,7 +2191,7 @@ function jingle(){
 function reveal(){
   const cur = state.sess && state.sess.cur; if (!cur || cur.solved || busy) return;
   clearTimeout(liveT);
-  cur.wrongs++; cur.revealed = true;
+  cur.wrongs++; cur.revealed = true; logErr('reveal');
   save();
   solved(false);
 }
@@ -2877,6 +2883,36 @@ async function renderAdmUsers(){
   } catch (e) { box.replaceChildren(mk('p', 'adm-empty', '불러오지 못했어요')); }
 }
 
+/* ---------- what kind of mistakes: counted per answer the learner submits ---------- */
+const ERR = {
+  spell: ['철자', '거의 맞았는데 글자가 틀려요', '단어를 소리 내어 읽으며 한 글자씩 써 보세요'],
+  form: ['형태', '단어는 아는데 형태(시제·복수·품사)가 달라요', '빈칸 앞뒤를 보고 동사인지 명사인지, 시제가 무엇인지 먼저 정하세요'],
+  syn: ['유의어', '뜻은 맞는데 배운 표현 대신 비슷한 말을 써요', '정답을 맞힌 뒤 사전 팝업에서 목표 단어를 한 번 더 보세요'],
+  trap: ['혼동·반대말', '헷갈리는 단어나 반대 뜻을 골라요', '한국어 문장의 초록 글씨 뜻을 먼저 확인하고 답하세요'],
+  wrong: ['기억 안 남', '전혀 다른 단어를 써요', '틀린 단어는 단어장 오답 목록에서 예문과 함께 다시 보세요'],
+  hint: ['힌트 사용', '힌트를 보고 풀어요', '힌트 전에 첫 글자라도 먼저 떠올려 보세요'],
+  reveal: ['정답 보기', '정답을 바로 봐요', '모르겠어도 한 번은 써 보고 정답을 확인하세요']
+};
+function logErr(k){ if (!state.err) state.err = {}; state.err[k] = (state.err[k] || 0) + 1; }
+function renderErr(){
+  const box = $('an-err'); box.replaceChildren();
+  const e = state.err || {}, tot = Object.values(e).reduce((a, b) => a + b, 0), MIN = 10;
+  const head = mk('div', 'pp-head'); head.append(mk('h2', null, '자주 하는 실수'), mk('b', null, tot ? tot + '번' : '-')); box.appendChild(head);
+  if (tot < MIN){ box.appendChild(mk('p', 'an-note', '틀린 기록이 ' + MIN + '번 쌓이면 철자, 형태, 유의어 중 무엇을 자주 틀리는지 알려 드릴게요' + (tot ? ' (지금 ' + tot + '번)' : ''))); return; }
+  const rows = Object.keys(ERR).map(k => [k, e[k] || 0]).filter(r => r[1] > 0).sort((a, b) => b[1] - a[1]);
+  const top = ERR[rows[0][0]];
+  const tip = mk('div', 'err-tip'); tip.append(mk('b', null, top[0] + ' 실수가 가장 많아요'), mk('span', null, top[1] + '. ' + top[2] + '.')); box.appendChild(tip);
+  const list = mk('div', 'an-rows');
+  rows.forEach(([k, v], i) => {
+    const r = mk('div', 'an-row'); const t = mk('div', 'an-top');
+    const nm = mk('div', 'an-name'); nm.append(ERR[k][0]); const val = mk('div', 'an-val', Math.round(v / tot * 100) + '%'); val.appendChild(mk('small', null, v + '번'));
+    t.append(nm, val); r.appendChild(t);
+    const bar = mk('div', 'an-bar one' + (i === 0 ? ' weak' : '')); const f = mk('i'); f.dataset.w = v / rows[0][1] * 100; bar.appendChild(f); r.appendChild(bar);
+    list.appendChild(r);
+  });
+  box.appendChild(list);
+}
+
 /* ---------- analysis by source ---------- */
 const GROUPS = ['수능특강', '모의고사', '생각의 지도', '기타'];
 function grp(d){ return /^수특/.test(d.src) ? '수능특강' : /모의고사/.test(d.src) ? '모의고사' : d.src === '생각의 지도' ? '생각의 지도' : '기타'; }
@@ -2906,6 +2942,7 @@ function anRow(g, onTop, barKids, barCls){
   return b;
 }
 function renderStats(){
+  renderErr();
   const { G, per, days } = groupStats();
   const MIN = 5;
   const rated = G.filter(g => g.rp >= MIN);
