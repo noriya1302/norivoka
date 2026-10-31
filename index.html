@@ -1661,7 +1661,7 @@ function finishCard(){
     if (ok){
       s.firstOk++;
       if (s.kinds[n] === 'mix'){ r.f = 'ok'; }
-      else { r.s = (!r.s || r.f === 'ng') ? 2 : Math.min(r.s + 1, MAXS); r.f = 'ok'; r.due = t + IV[r.s]; }
+      else { r.s = !r.s ? 1 : r.f === 'ng' ? 2 : Math.min(r.s + 1, MAXS); r.f = 'ok'; r.due = t + IV[r.s]; }
     } else { s.firstNg++; markWrong(r, t); s.retry.push({ n, wait: gap }); }
   } else {
     if (ok) s.cleared++;
@@ -1676,7 +1676,7 @@ function nextLabel(){
   if (cur.mode === 'retry') return '내일 복습';
   let days;
   if (kind === 'mix') days = r ? Math.max(1, r.due - today()) : 1;
-  else days = IV[(!r || !r.s || r.f === 'ng') ? 2 : Math.min(r.s + 1, MAXS)];
+  else days = IV[(!r || !r.s) ? 1 : r.f === 'ng' ? 2 : Math.min(r.s + 1, MAXS)];
   return days === 1 ? '내일 복습' : days + '일 뒤 복습';
 }
 function logDay(){
