@@ -1,0 +1,45 @@
+/* Preserve Nori branding; improve legibility and interaction consistency. */
+:root{--muted:#59687c;--violet:#5545ce;--violet-2:#6654df;--green:#137a44;--red:#c52b40;--teal:#176675;--shadow:0 6px 20px rgba(40,75,120,.09);--ui-radius:20px}
+*,*::before,*::after{box-sizing:border-box}
+body{line-height:1.5}
+button,input,select,textarea{touch-action:manipulation}
+button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible,summary:focus-visible,[tabindex]:focus-visible{outline:3px solid #5545ce;outline-offset:3px}
+.blank:focus-visible{outline:3px solid #5545ce;outline-offset:3px}
+button:disabled{cursor:not-allowed}
+.scroll{overscroll-behavior-y:contain;scroll-padding-block:16px 112px}
+.icon-btn{width:44px;height:44px;color:#263e61;background:rgba(255,255,255,.55)}
+.icon-btn svg{filter:none}
+.list-title,.hello,.hello-date,.hello-title,.login-brand,.set-help{color:#263e61;text-shadow:none}
+.hello-title{line-height:1.4}.set-sec{color:#344660}
+.lv-tab{color:#263e61;background:#d8e8f9}.lv-tab .q{color:#263e61}
+.prog-label{color:#263e61;text-shadow:none}
+.src,.item-side small,.rk-t span,.rk-v small,.mini small,.set-row small,.st small,.mx small,.wd,.fcol small,.redo small,.or-line{color:var(--muted)}
+.mx.zero{opacity:1}.chip.green{color:#106537}.chip.red{color:#a82135}
+.go.big,.next-btn{background:linear-gradient(135deg,#6654df,#5545ce);box-shadow:0 5px 14px rgba(85,69,206,.18);border-radius:18px}
+.next-btn{height:60px;font-size:19px}
+.panel,.mini,.adm-card{border-radius:var(--ui-radius)}
+.item,.rk,.adm-item{border:1px solid rgba(49,75,110,.09);box-shadow:0 2px 8px rgba(40,75,120,.04)}
+.item{gap:8px}.item-mean{line-height:1.6}
+.seg{gap:8px;scroll-padding-inline:16px}.seg button{min-height:44px;padding:10px 14px}
+.search,.nick-in,.adm-title,.lk-form input{min-height:46px;font-size:16px}
+.opts button,.confirm button,.rank-me .ghost,.text-btn,.ask .later,.forgot,.nick-cta,.ph-links button{min-height:44px}
+.forgot{padding:10px 2px;margin-top:0;color:#5545ce}.nick-cta{margin-top:12px}
+.set-row{min-height:56px;padding-block:6px}.set-row .lab{min-width:0}.set-row small{line-height:1.55;overflow-wrap:anywhere}
+.switch{width:52px;height:32px;border:1px solid #76859b;background:#d5dde8}
+.switch::after{top:3px;left:3px;width:24px;height:24px}.switch:checked::after{transform:translateX(20px)}
+.tabbar{background:rgba(255,255,255,.97);border:1px solid #dce5f0;box-shadow:0 5px 18px rgba(35,60,100,.12);backdrop-filter:none;-webkit-backdrop-filter:none;border-radius:22px}
+.tabbar::before{display:none}.tab-pill{background:#efedff;box-shadow:none;border-radius:16px}
+.tab{min-height:52px;color:#526176;font-size:12px;gap:3px}.tab[aria-current="page"]{color:#5545ce}
+#app.has-tabs .scroll{padding-bottom:112px}
+.sheet{max-height:90%;overscroll-behavior:contain}
+/* Product requirement: account rules stay hidden. Validation errors are unchanged. */
+#lg-note{display:none!important}
+.login-wrap{gap:18px}.login-brand b{text-shadow:none}
+.ui-sr-only{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap;border:0}
+.ui-skip{position:fixed;top:8px;left:50%;transform:translate(-50%,-160%);z-index:1000;padding:12px 20px;background:#fff;color:#5545ce;border:2px solid #5545ce;border-radius:12px}
+.ui-skip:focus{transform:translate(-50%,0)}
+@media(max-width:360px){.gutter{padding-left:max(12px,env(safe-area-inset-left,0px));padding-right:max(12px,env(safe-area-inset-right,0px))}.set-row{flex-wrap:wrap;gap:8px}.set-row>.lab,.set-row>label{flex:1 1 140px}.opts{flex-wrap:wrap}.tabbar{left:8px;right:8px}.en{font-size:22px}.blank{font-size:22px}.ko-sec{padding:24px 18px}.en-sec{padding:24px 18px 16px}}
+@media(max-height:650px){.stage{padding-block:12px}.ko-sec{padding-block:20px}.en-sec{padding-top:20px;gap:14px}.login-wrap{padding-block:16px;gap:16px}.login-brand .brand-mark{width:56px;height:56px}}
+@media(hover:hover){.item:hover,.seg button:hover,.opts button:hover{box-shadow:0 0 0 2px rgba(85,69,206,.22)}.icon-btn:hover{background:#fff}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-delay:0ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}.prog-fill{animation:none!important}.login-brand .brand-mark{animation:none!important}.fld.step.show{transform:none}.screen.enter .hstack>*{opacity:1;transform:none}}
+@media(forced-colors:active){button,input,.tabbar,.item{border:1px solid ButtonText}.tab[aria-current="page"]{outline:2px solid Highlight}.switch{appearance:auto}.switch::after{display:none}}
