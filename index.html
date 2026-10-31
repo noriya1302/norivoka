@@ -2680,4 +2680,4 @@ if (FB) bootFirebase();
 else { $('home').classList.add('enter'); goHome(); initSync(); }
 })();
 </script>
-<script>if("serviceWorker" in navigator && location.protocol === "https:")addEventListener("load", function(){ navigator.serviceWorker.register("sw.js").catch(function(){}); });</script></body></html>
+<script>if("serviceWorker" in navigator && location.protocol === "https:")addEventListener("load", function(){ var had = !!navigator.serviceWorker.controller, done = false;navigator.serviceWorker.addEventListener("controllerchange", function(){ if (had && !done){ done = true; location.reload(); } });navigator.serviceWorker.register("sw.js", { updateViaCache: "none" }).then(function(r){ r.update(); }).catch(function(){}); });</script></body></html>
