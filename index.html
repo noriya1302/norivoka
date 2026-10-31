@@ -556,6 +556,30 @@ details.panel:not([open]){gap:0}
 .rk-v{font-size:17px;font-weight:900;font-variant-numeric:tabular-nums;white-space:nowrap}
 .rk-v small{font-size:12px;font-weight:700;color:var(--muted);margin-left:2px}
 .rk-v.fire{color:#ff8a00}
+/* ===== login: steps and motion ===== */
+.fld.step{max-height:0;opacity:0;overflow:hidden;margin-top:-14px;transform:translateY(-10px) scale(.98);transition:max-height .5s var(--ease),opacity .35s ease,transform .5s var(--ease),margin-top .5s var(--ease);pointer-events:none}
+.fld.step.show{max-height:96px;opacity:1;margin-top:0;transform:none;pointer-events:auto}
+.fld input{transition:border-color .2s,background .2s,box-shadow .25s}
+.fld input:focus{box-shadow:0 0 0 4px rgba(108,93,245,.12)}
+.fld.ok-id input{border-color:var(--green-line)}
+.login-brand .brand-mark{animation:brandIn .9s cubic-bezier(.2,1.5,.4,1) both,floaty 3.4s ease-in-out 1s infinite}
+@keyframes brandIn{0%{transform:translateY(-40px) scale(.4) rotate(-12deg);opacity:0}60%{transform:translateY(6px) scale(1.08) rotate(4deg);opacity:1}100%{transform:none}}
+@keyframes floaty{0%,100%{transform:translateY(0) rotate(0)}50%{transform:translateY(-6px) rotate(-3deg)}}
+.login-brand b{animation:rise .6s var(--ease) both .25s}
+#lg-box{animation:rise .7s var(--ease) both .35s}
+.login-card .go.big{transition:transform .15s var(--ease),filter .2s,background .3s}
+#lg-go-t{display:inline-block}
+#lg-go-t.swap{animation:swapIn .35s var(--ease)}
+@keyframes swapIn{from{transform:translateY(8px);opacity:0}to{transform:none;opacity:1}}
+.sns-b{animation:snsPop .5s cubic-bezier(.2,1.6,.4,1) both}
+.sns-b:nth-child(1){animation-delay:.55s}.sns-b:nth-child(2){animation-delay:.62s}.sns-b:nth-child(3){animation-delay:.69s}.sns-b:nth-child(4){animation-delay:.76s}
+@keyframes snsPop{from{transform:scale(.3);opacity:0}to{transform:none;opacity:1}}
+.login-card.swap{animation:cardSwap .4s var(--ease)}
+@keyframes cardSwap{0%{transform:translateY(0)}35%{transform:translateY(6px) scale(.99);opacity:.6}100%{transform:none;opacity:1}}
+.login-card.shake{animation:cardShake .45s ease}
+@keyframes cardShake{0%,100%{transform:translateX(0)}20%{transform:translateX(-9px)}40%{transform:translateX(8px)}60%{transform:translateX(-5px)}80%{transform:translateX(3px)}}
+.lg-err:not(:empty){animation:rise .3s var(--ease)}
+.ph-card:not([hidden]){animation:rise .45s var(--ease)}
 /* ===== dictionary popup (after a card is solved) ===== */
 .blank.ok{cursor:pointer}
 #card.solved .blank.ok,.blank.ok.shown{box-shadow:inset 0 -2px 0 rgba(44,108,180,.28)}
@@ -629,11 +653,11 @@ details.panel:not([open]){gap:0}
           </div>
           <form class="card login-card" id="lg-form" novalidate>
             <label class="fld"><span>아이디</span><input id="lg-id" name="username" autocomplete="username" autocapitalize="none" autocorrect="off" spellcheck="false" maxlength="16"></label>
-            <label class="fld"><span>비밀번호</span><input id="lg-pw" name="password" type="password" autocomplete="current-password"></label>
-            <label class="fld" id="lg-pw2-row" hidden><span>비밀번호 확인</span><input id="lg-pw2" type="password" autocomplete="new-password"></label>
-            <label class="fld" id="lg-nick-row" hidden><span>닉네임</span><input id="lg-nick" maxlength="10" autocomplete="nickname"></label>
+            <label class="fld step" id="lg-pw-row"><span>비밀번호</span><input id="lg-pw" name="password" type="password" autocomplete="current-password"></label>
+            <label class="fld step" id="lg-pw2-row"><span>비밀번호 확인</span><input id="lg-pw2" type="password" autocomplete="new-password"></label>
+            <label class="fld step" id="lg-nick-row"><span>닉네임</span><input id="lg-nick" maxlength="10" autocomplete="nickname"></label>
             <p class="lg-err" id="lg-err" role="alert"></p>
-            <button class="go big" id="lg-go" type="submit">로그인</button>
+            <button class="go big" id="lg-go" type="submit"><span id="lg-go-t">다음</span></button>
             <div class="or-line" id="lg-or" hidden>또는</div>
             <div class="sns" id="lg-sns" hidden><button type="button" class="sns-b g" id="lg-google" aria-label="Google로 로그인"><svg viewBox="0 0 48 48" aria-hidden="true"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg></button><button type="button" class="sns-b f" id="lg-fb" aria-label="Facebook으로 로그인"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#1877F2"/><path d="M13.4 21.9v-7.1h2.4l.4-2.8h-2.8v-1.8c0-.8.2-1.4 1.4-1.4h1.5V6.3c-.3 0-1.1-.1-2.1-.1-2.1 0-3.6 1.3-3.6 3.7v2.1H8.2v2.8h2.4v7.1c.9.1 1.9.1 2.8 0z" fill="#fff"/></svg></button><button type="button" class="sns-b k" id="lg-kakao" aria-label="카카오로 로그인"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4.2c-4.9 0-8.8 3.1-8.8 6.9 0 2.5 1.6 4.6 4.1 5.8l-.9 3.3c-.1.3.2.5.5.4l3.9-2.6c.4 0 .8.1 1.2.1 4.9 0 8.8-3.1 8.8-6.9S16.9 4.2 12 4.2z" fill="#191919"/></svg></button><button type="button" class="sns-b n" id="lg-naver" aria-label="네이버로 로그인"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14.3 12.4 9.5 5.5H5.6v13h4.1v-6.9l4.8 6.9h3.9v-13h-4.1z" fill="#fff"/></svg></button></div>
             <button class="g-btn" id="lg-phone" type="button" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="6.5" y="2.5" width="11" height="19" rx="2.5"/><path d="M10.5 18.2h3"/></svg>휴대폰 번호로 계속하기</button>
@@ -1061,8 +1085,9 @@ function loginWait(on, text){ $('lg-wait').hidden = !on; if (text) $('lg-wait').
 function setLoginMode(m){
   loginMode = m;
   document.querySelectorAll('.login-tabs .lv-tab').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.m === m)));
-  $('lg-pw2-row').hidden = m !== 'up'; $('lg-nick-row').hidden = m !== 'up'; $('lg-note').hidden = m !== 'up';
-  $('lg-go').textContent = m === 'up' ? '가입하고 시작' : '로그인';
+  $('lg-note').hidden = m !== 'up';
+  const card = $('lg-form'); card.classList.remove('swap'); void card.offsetWidth; card.classList.add('swap');
+  lgSteps(false);
   $('lg-pw').setAttribute('autocomplete', m === 'up' ? 'new-password' : 'current-password');
   $('lg-err').textContent = '';
 }
@@ -1077,18 +1102,46 @@ const AUTH_MSG = {
   'auth/network-request-failed': '인터넷 연결을 확인해 주세요',
   'auth/operation-not-allowed': '아직 가입을 받을 수 없어요. 관리자에게 알려 주세요'
 };
+
+/* the form opens one field at a time: id, then password (then confirm and nickname when signing up) */
+let lgStage = 0;
+function lgLabel(){
+  const t = lgStage < 1 ? '다음' : loginMode === 'up' ? (lgStage < 3 ? '다음' : '가입하고 시작') : '로그인';
+  const el = $('lg-go-t'); if (el.textContent === t) return;
+  el.textContent = t; el.classList.remove('swap'); void el.offsetWidth; el.classList.add('swap');
+}
+function lgSteps(keep){
+  if (!keep) lgStage = ID_RE.test($('lg-id').value.trim().toLowerCase()) ? 1 : 0;
+  $('lg-pw-row').classList.toggle('show', lgStage >= 1);
+  $('lg-pw2-row').classList.toggle('show', loginMode === 'up' && lgStage >= 2);
+  $('lg-nick-row').classList.toggle('show', loginMode === 'up' && lgStage >= 3);
+  $('lg-id').closest('.fld').classList.toggle('ok-id', lgStage >= 1);
+  lgLabel();
+}
+function lgOpen(stage, focusId){ if (lgStage < stage){ lgStage = stage; lgSteps(true); } if (focusId) setTimeout(() => $(focusId).focus(), 180); }
+let lgIdT = null;
+$('lg-id').addEventListener('input', () => {
+  clearTimeout(lgIdT); $('lg-err').textContent = '';
+  if (ID_RE.test($('lg-id').value.trim().toLowerCase())) lgIdT = setTimeout(() => lgOpen(1), 380);
+});
+$('lg-pw').addEventListener('input', () => { $('lg-err').textContent = ''; if (loginMode === 'up' && $('lg-pw').value.length >= 6) lgOpen(2); });
+$('lg-pw2').addEventListener('input', () => { $('lg-err').textContent = ''; if (loginMode === 'up' && $('lg-pw2').value === $('lg-pw').value) lgOpen(3); });
+function lgShake(msg){ $('lg-err').textContent = msg; const c = $('lg-form'); c.classList.remove('shake'); void c.offsetWidth; c.classList.add('shake'); }
 async function submitLogin(e){
   e.preventDefault();
   const id = $('lg-id').value.trim().toLowerCase(), pw = $('lg-pw').value, err = $('lg-err');
-  if (!ID_RE.test(id)){ err.textContent = '아이디는 영문 소문자와 숫자 3~16자예요'; return; }
-  if (pw.length < 6){ err.textContent = '비밀번호는 6자 이상이에요'; return; }
-  if (loginMode === 'up' && pw !== $('lg-pw2').value){ err.textContent = '비밀번호가 서로 달라요'; return; }
+  if (!ID_RE.test(id)){ lgShake('아이디는 영문 소문자와 숫자 3~16자예요'); $('lg-id').focus(); return; }
+  if (lgStage < 1){ lgOpen(1, 'lg-pw'); return; }
+  if (pw.length < 6){ if (!pw){ $('lg-pw').focus(); return; } lgShake('비밀번호는 6자 이상이에요'); return; }
+  if (loginMode === 'up' && lgStage < 2){ lgOpen(2, 'lg-pw2'); return; }
+  if (loginMode === 'up' && pw !== $('lg-pw2').value){ if (!$('lg-pw2').value){ $('lg-pw2').focus(); return; } lgShake('비밀번호가 서로 달라요'); return; }
+  if (loginMode === 'up' && lgStage < 3){ lgOpen(3, 'lg-nick'); return; }
   err.textContent = ''; $('lg-go').disabled = true;
   pendingNick = loginMode === 'up' ? $('lg-nick').value.trim().slice(0, 10) : '';
   try {
     if (loginMode === 'up') await fbAuth.createUserWithEmailAndPassword(idMail(id), pw);
     else await fbAuth.signInWithEmailAndPassword(idMail(id), pw);
-  } catch (x) { err.textContent = AUTH_MSG[x && x.code] || '로그인하지 못했어요. 다시 해 주세요'; }
+  } catch (x) { lgShake(AUTH_MSG[x && x.code] || '로그인하지 못했어요. 다시 해 주세요'); }
   $('lg-go').disabled = false;
 }
 
