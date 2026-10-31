@@ -613,6 +613,8 @@ details.panel:not([open]){gap:0}
 .adm-card{background:var(--card);border-radius:20px;box-shadow:var(--shadow);padding:16px;display:flex;flex-direction:column;gap:10px}
 .adm-card[hidden]{display:none}
 .adm-file{font:inherit;font-size:14px}
+.adm-rules{width:100%;box-sizing:border-box;font:12px/1.5 ui-monospace,Menlo,monospace;border:1.5px solid var(--line);border-radius:12px;padding:10px;background:var(--soft);resize:vertical}
+#adm-setup b{font-size:16px}
 .adm-title{height:42px;border-radius:12px;border:1.5px solid var(--line);background:var(--soft);padding:0 12px;font:inherit;font-size:15px;outline:none}
 .adm-empty{margin:4px 2px;font-size:13.5px;color:var(--ink-2);line-height:1.55;word-break:keep-all}
 .adm-count{font-size:13px;font-weight:700;color:var(--violet)}
@@ -959,6 +961,12 @@ details.panel:not([open]){gap:0}
     </div>
     <div class="gutter"><div class="seg" id="adm-seg" role="group" aria-label="관리 메뉴"><button data-t="add" aria-pressed="true">단어 추가</button><button data-t="list" aria-pressed="false">추가한 단어</button><button data-t="users" aria-pressed="false">사용자</button></div></div>
     <div class="scroll gutter"><div class="adm-wrap">
+      <div class="adm-card" id="adm-setup" hidden>
+        <b>게시 권한 켜기</b>
+        <p class="adm-empty">아래 규칙에는 공주님 계정만 단어를 게시할 수 있게 하는 줄이 들어 있어요. 복사해서 파이어베이스 Firestore 규칙에 통째로 붙여 넣고 게시한 뒤, 이 화면을 다시 열어 주세요.</p>
+        <textarea class="adm-rules" id="adm-rules" readonly rows="8"></textarea>
+        <button class="go" id="adm-copy" type="button">규칙 복사</button>
+      </div>
       <div id="adm-add">
         <div class="adm-card">
           <input class="adm-file" id="adm-file" type="file" accept=".xlsx,.xls">
@@ -2635,21 +2643,50 @@ async function loadExtra(){
 }
 
 /* ---------- admin ---------- */
-const ADMIN_HASH = '553605c625f2413c35e3e744ad531164bde08418544fbffd85b27a87558341ea';
-let isAdmin = false;
+/* admin = whoever the Firestore rules let read admin/probe; until the rules name someone,
+   tapping the account row 5 times opens the admin screen in setup mode */
+let isAdmin = false, admSetup = false;
 async function checkAdmin(){
   isAdmin = false;
-  const u = fbAuth && fbAuth.currentUser; if (!u || !window.crypto || !crypto.subtle) return;
-  const mails = [u.email].concat((u.providerData || []).map(p => p.email)).filter(Boolean).map(m => m.toLowerCase());
-  for (const m of mails){
-    const h = Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256', new TextEncoder().encode(m)))).map(b => b.toString(16).padStart(2, '0')).join('');
-    if (h === ADMIN_HASH){ isAdmin = true; break; }
+  const u = fbAuth && fbAuth.currentUser; if (!u) return;
+  try { await firebase.firestore().collection('admin').doc('probe').get(); isAdmin = true; } catch (e) { isAdmin = false; }
+  $('o-admin-row').hidden = !(isAdmin || admSetup);
+}
+function adminRules(uid){
+  return `rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /users/{uid} {
+      allow read, write: if request.auth != null && request.auth.uid == uid;
+    }
+    match /push/{uid} {
+      allow read, write: if request.auth != null && request.auth.uid == uid;
+      allow read, update: if request.auth != null && request.auth.token.email == 'nori-bot-8d62d47188e6@norivoka.app';
+    }
+    match /board/{uid} {
+      allow read: if request.auth != null;
+      allow write: if request.auth != null && request.auth.uid == uid;
+    }
+    match /words/{id} {
+      allow read: if request.auth != null;
+      allow write: if request.auth != null && request.auth.uid == '${uid}';
+    }
+    match /admin/{id} {
+      allow read: if request.auth != null && request.auth.uid == '${uid}';
+    }
   }
-  $('o-admin-row').hidden = !isAdmin;
+}`;
+}
+let acctTaps = 0, acctTapT = null;
+function acctTap(){
+  acctTaps++; clearTimeout(acctTapT); acctTapT = setTimeout(() => { acctTaps = 0; }, 1500);
+  if (acctTaps >= 5 && !isAdmin){ acctTaps = 0; admSetup = true; $('o-admin-row').hidden = false; toast('관리자 설정을 열었어요'); }
 }
 let admTab = 'add', admDraft = null;
-function openAdmin(){ show('admin'); $('admin').querySelector('.scroll').scrollTop = 0; renderAdmin(); }
+async function openAdmin(){ await checkAdmin(); show('admin'); $('admin').querySelector('.scroll').scrollTop = 0; renderAdmin(); }
 function renderAdmin(){
+  const setup = $('adm-setup'); setup.hidden = isAdmin;
+  if (!isAdmin){ const u = fbAuth && fbAuth.currentUser; $('adm-rules').value = u ? adminRules(u.uid) : ''; }
   document.querySelectorAll('#adm-seg button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.t === admTab)));
   ['add', 'list', 'users'].forEach(t => { $('adm-' + t).hidden = t !== admTab; });
   if (admTab === 'add') renderAdmAdd(); else if (admTab === 'list') renderAdmList(); else renderAdmUsers();
@@ -3025,6 +3062,8 @@ $('adm-back').onclick = () => { show('settings'); paintSettings(); };
 $('adm-seg').onclick = e => { const b = e.target.closest('button'); if (!b) return; admTab = b.dataset.t; renderAdmin(); };
 $('adm-file').onchange = async e => { const f = e.target.files && e.target.files[0]; if (!f) return; $('adm-count').textContent = '읽는 중'; try { admDraft = await admParse(f); $('adm-title').value = admDraft.title; } catch (x) { admDraft = null; $('adm-count').textContent = (x && x.message) || '파일을 읽지 못했어요'; } renderAdmAdd(); };
 $('adm-go').onclick = admPublish;
+$('adm-copy').onclick = async () => { const t = $('adm-rules'); try { await navigator.clipboard.writeText(t.value); } catch (e) { t.select(); try { document.execCommand('copy'); } catch (x) {} } toast('규칙을 복사했어요'); };
+$('o-acct').addEventListener('click', e => { if (!e.target.closest('button')) acctTap(); });
 $('o-rank').onchange = async e => {
   state.settings.rank = e.target.checked; save();
   if (!e.target.checked && FB && account){ rankSent = ''; try { await rankDoc().delete(); } catch (x) {} toast('순위표에서 빠졌어요'); }
