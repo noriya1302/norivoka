@@ -15,17 +15,17 @@ const pick = (arr, seed) => arr[Math.abs(seed) % arr.length];
 export function message(gap, streak, nick, seed){
   const who = nick ? nick + '님, ' : '';
   if (gap === 0) return null;
-  if (gap == null) return { mood: 'wait', title: '노리가 첫 산책을 기다려요 🐶', body: who + '오늘 분량만 끝내면 노리가 꼬리를 흔들 거예요' };
+  if (gap == null) return { mood: 'wait', title: '🐶 노리가 기다려요', body: who + '첫 산책 언제 가요? 오늘 분량이면 충분해요' };
   if (gap === 1){
-    if (streak >= 2) return { mood: 'wait', title: `🔥 ${streak}일 연속이 오늘 밤 끊겨요`, body: who + pick(['노리가 목줄을 물고 현관에서 기다려요. 단어 몇 개면 지킬 수 있어요', '노리가 연속 기록을 지키는 중이에요. 지금 들어오면 아직 안 늦었어요'], seed) };
-    return { mood: 'wait', title: '노리가 산책 가자고 낑낑대요', body: who + '오늘 분량 끝내고 같이 놀아요' };
+    if (streak >= 2) return { mood: 'wait', title: `🔥 ${streak}일 연속, 오늘 밤 끊겨요!`, body: pick(['노리가 목줄 물고 기다리는 중... 지금 하면 지켜요', '노리가 현관에서 꼬리 흔드는 중! 5분이면 돼요'], seed) };
+    return { mood: 'wait', title: '🐶 노리가 낑낑대요', body: who + '오늘 분량 끝내고 산책 가요!' };
   }
-  if (gap === 2) return { mood: 'sad', title: '노리가 삐졌어요 😤', body: who + pick(['어제 안 와서 밥그릇을 엎었대요. 오늘은 와 줄 거죠?', '노리가 등 돌리고 누워 있어요. 단어로 달래 주세요'], seed) };
-  if (gap === 3) return { mood: 'sick', title: '노리가 아파요 🤒', body: who + pick(['수의사 말로는 영어 단어가 약이래요. 오늘 꼭 먹여 주세요', '노리가 열이 나요. 오늘 분량이 해열제래요'], seed) };
-  if (gap <= 5) return { mood: 'hospital', title: '노리가 입원했어요 🏥', body: who + `면회는 노리보카에서만 돼요. ${7 - gap}일 안에 와야 노리가 버텨요` };
-  if (gap === 6) return { mood: 'hospital', title: '노리가 위독해요 🚨', body: who + '오늘이 마지막 기회예요. 내일이면 노리가 무지개다리를 건너요' };
-  if (gap === 7) return { mood: 'ghost', title: '노리가 무지개다리를 건넜어요 🌈', body: who + '너무 늦었나요... 오늘 분량을 끝내면 다시 살아날지도 몰라요' };
-  if ([10, 14, 21, 30].includes(gap)) return { mood: 'ghost', title: '노리 유령이 나타났어요 👻', body: who + '밤마다 단어장을 넘기고 있대요. 들어와서 살려 주세요' };
+  if (gap === 2) return { mood: 'sad', title: '😤 노리 삐짐', body: pick(['어제 안 와서 밥그릇 엎었대요. 오늘은 와요?', '노리가 등 돌리고 누웠어요. 단어로 달래 주세요'], seed) };
+  if (gap <= 4) return { mood: 'sick', title: '🤒 노리가 아파요', body: pick(['약은 영어 단어뿐이래요... 빨리 와 주세요', '열이 펄펄 나요. 오늘 분량이 해열제래요'], seed) };
+  if (gap <= 6) return { mood: 'hospital', title: '🏥 노리 입원', body: '면회는 노리보카에서만 돼요. 얼른 와 주세요' };
+  if (gap <= 9) return { mood: 'hospital', title: '😭 노리가 죽어가고 있어요..', body: 10 - gap === 1 ? '정말 안 오실 건가요? 오늘이 마지막이에요' : `정말 안 오실 건가요? ${10 - gap}일 남았어요` };
+  if (gap === 10) return { mood: 'dead', title: '🪦 노리가 죽었어요', body: '기다리다 지쳐서요... 지금 오면 살릴 수 있을지도' };
+  if ([13, 17, 24, 30].includes(gap)) return { mood: 'dead', title: '👻 노리 유령 등장', body: '밤마다 단어장을 넘긴대요. 와서 살려 주세요' };
   return null;
 }
 

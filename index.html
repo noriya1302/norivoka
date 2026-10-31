@@ -402,8 +402,8 @@ details.panel:not([open]){gap:0}
 .nori.m-happy .n-ear{animation:ear .8s ease-in-out infinite;transform-box:fill-box;transform-origin:50% 0}
 .nori.m-happy .n-ear.r{animation-delay:.4s}
 .nori.m-sad .nori-svg,.nori.m-sick .nori-svg,.nori.m-hospital .nori-svg{animation:droop 3s ease-in-out infinite;transform-origin:50% 90%}
-.nori.m-ghost{background:#f1f4f9}
-.nori.m-ghost .nori-svg{animation:float 3s ease-in-out infinite;opacity:.9}
+.nori.m-dead{background:#f1f4f9}
+.nori.m-dead .nori-svg{animation:float 3s ease-in-out infinite;opacity:.9}
 @keyframes wag{0%,100%{transform:rotate(-5deg)}50%{transform:rotate(5deg)}}
 @keyframes ear{0%,100%{transform:rotate(0)}50%{transform:rotate(-10deg)}}
 @keyframes droop{0%,100%{transform:translateY(0) rotate(0)}50%{transform:translateY(2px) rotate(-2deg)}}
@@ -429,6 +429,24 @@ details.panel:not([open]){gap:0}
 @keyframes streakIn{from{transform:scale(.3);opacity:0}to{transform:none;opacity:1}}
 .set-note{font-size:12px;color:var(--muted);margin-top:6px;word-break:keep-all;line-height:1.5}
 .set-note:empty{display:none}
+/* ===== day-complete celebration ===== */
+.cheer{position:absolute;inset:0;z-index:30;display:grid;place-items:center;background:radial-gradient(circle at 50% 40%,#ffffff,#d6ecfc);animation:fade .3s ease both;overflow:hidden}
+.cheer[hidden]{display:none}
+.cheer-box{display:flex;flex-direction:column;align-items:center;gap:12px;text-align:center;padding:0 24px;position:relative;z-index:2}
+.cheer-nori{width:168px;height:168px;position:relative;animation:hop .9s cubic-bezier(.3,.7,.4,1) infinite}
+.cheer-nori .nori-svg{width:100%;height:100%}
+.cheer-nori .n-ear{animation:ear .45s ease-in-out infinite;transform-box:fill-box;transform-origin:50% 0}
+.cheer-nori .n-ear.r{animation-delay:.22s}
+.cheer-shadow{width:110px;height:14px;border-radius:50%;background:rgba(40,95,160,.16);margin-top:-14px;animation:shadow .9s cubic-bezier(.3,.7,.4,1) infinite}
+@keyframes hop{0%,100%{transform:translateY(0) scale(1.06,.94)}15%{transform:translateY(0) scale(1)}50%{transform:translateY(-34px) rotate(-4deg)}80%{transform:translateY(0) scale(1)}}
+@keyframes shadow{0%,100%{transform:scale(1)}50%{transform:scale(.6);opacity:.6}}
+.cheer h2{margin:6px 0 0;font-size:40px;font-weight:900;letter-spacing:-.04em;color:var(--violet);animation:streakIn .7s cubic-bezier(.2,1.5,.4,1) both .15s}
+.cheer p{margin:0;font-size:17px;font-weight:700;color:var(--ink-2);word-break:keep-all;line-height:1.5;animation:rise .5s var(--ease) both .3s}
+.cheer .go{margin-top:12px;min-width:220px;animation:rise .5s var(--ease) both .5s}
+.heart{position:absolute;font-size:22px;bottom:60%;animation:heartUp 1.6s ease-out infinite;opacity:0}
+@keyframes heartUp{0%{transform:translateY(0) scale(.6);opacity:0}20%{opacity:1}100%{transform:translateY(-90px) scale(1.1);opacity:0}}
+.cf{position:absolute;top:-20px;width:9px;height:14px;border-radius:3px;animation:cfall linear forwards}
+@keyframes cfall{to{transform:translateY(110vh) rotate(720deg)}}
 /* ===== dictionary popup (after a card is solved) ===== */
 .blank.ok{cursor:pointer}
 #card.solved .blank.ok,.blank.ok.shown{box-shadow:inset 0 -2px 0 rgba(44,108,180,.28)}
@@ -659,6 +677,18 @@ details.panel:not([open]){gap:0}
     </div>
     <div class="scroll gutter"><div class="list" id="l-list"></div></div>
   </section>
+
+  <!-- DAY COMPLETE -->
+  <div class="cheer" id="cheer" hidden role="dialog" aria-labelledby="cheer-t">
+    <div class="cheer-box">
+      <div class="cheer-nori" id="cheer-nori"></div>
+      <div class="cheer-shadow"></div>
+      <h2 id="cheer-t">잘했어요!</h2>
+      <p id="cheer-sub"></p>
+      <div class="streak-pop" id="cheer-streak"></div>
+      <button class="go" id="cheer-ok" type="button">노리랑 하이파이브</button>
+    </div>
+  </div>
 
   <!-- ANALYSIS BY SOURCE -->
   <section class="screen" id="stats" hidden>
@@ -1736,7 +1766,7 @@ async function advance(){
   finishCard();
   const nx = pickNext();
   save();
-  if (!nx){ moving = false; busy = false; show('done'); renderDone(); return; }
+  if (!nx){ moving = false; busy = false; show('done'); renderDone(); cheer(); return; }
   const wrap = $('card-wrap');
   $('b-chip').classList.remove('show');
   await anim(wrap, [{ transform: 'none', opacity: 1 }, { transform: 'translateX(-56px) scale(.97)', opacity: 0 }], { duration: 230, easing: 'cubic-bezier(.4,0,.9,.6)', fill: 'forwards' });
@@ -1750,7 +1780,7 @@ async function advance(){
 function renderDone(){
   const s = state.sess;
   const t = today(), doneToday = !!state.days[t], sk = streak();
-  const prev = lastDay(t - 1), revived = doneToday && prev != null && t - prev >= 7;
+  const prev = lastDay(t - 1), revived = doneToday && prev != null && t - prev >= 10;
   paintNori($('d-nori'), doneToday ? 'happy' : noriState().mood);
   $('d-streak').hidden = !(doneToday && sk > 0);
   $('d-streak-n').textContent = sk + '일 연속!';
@@ -1766,54 +1796,58 @@ function renderDone(){
 }
 
 
-// Nori, the golden retriever. One face, moods change eyes, mouth and props.
+// Nori, a chibi golden retriever (squinty smile, big nose, long tongue). Moods change eyes, mouth and props.
 function nori(mood){
-  const G = '#e7ad55', G2 = '#cf8f37', C = '#f8e2b8', INK = '#3b2a20';
-  let eyes, mouth, extra = '', top = '', brows = '';
-  const eye = (x) => `<ellipse cx="${x}" cy="58" rx="5.2" ry="6.2" fill="${INK}"/><circle cx="${x + 1.8}" cy="55.6" r="1.9" fill="#fff"/>`;
+  const dead = mood === 'dead';
+  const FUR = dead ? '#dde3ec' : '#f2b765', FUR2 = dead ? '#c9d1dd' : '#e09a45', FACE = dead ? '#f7f9fc' : '#fde6bf', INK = dead ? '#7b8494' : '#3d2a22';
+  const NOSE = dead ? '#9aa3b1' : '#4b3229';
+  const blush = (c, o) => `<ellipse cx="33" cy="76" rx="7" ry="4.5" fill="${c}" opacity="${o}"/><ellipse cx="87" cy="76" rx="7" ry="4.5" fill="${c}" opacity="${o}"/>`;
+  const shiny = (x, y, r) => `<circle cx="${x}" cy="${y}" r="${r}" fill="${INK}"/><circle cx="${x + r * .35}" cy="${y - r * .4}" r="${r * .42}" fill="#fff"/><circle cx="${x - r * .4}" cy="${y + r * .35}" r="${r * .18}" fill="#fff"/>`;
+  const tongue = (h) => `<path d="M51 86q9 4 18 0v${h}q0 9-9 9t-9-9z" fill="#ff8fa3"/><path d="M60 88v${h - 2}" stroke="#e46a83" stroke-width="1.6" stroke-linecap="round"/>`;
+  let eyes = '', mouth = '', top = '', extra = '', ears = 0;
   if (mood === 'happy'){
-    eyes = `<path d="M40 59q6-8 12 0M68 59q6-8 12 0" stroke="${INK}" stroke-width="4" fill="none" stroke-linecap="round"/>`;
-    mouth = `<path d="M50 80q10 12 20 0z" fill="#8a3b33"/><path d="M54 84q6 12 12 0q-6-3-12 0z" fill="#f2828b"/>`;
-    extra = `<circle cx="38" cy="72" r="5" fill="#f5a3a3" opacity=".6"/><circle cx="82" cy="72" r="5" fill="#f5a3a3" opacity=".6"/>`;
+    eyes = `<path d="M34 64q7-9 14 0M72 64q7-9 14 0" stroke="${INK}" stroke-width="4.8" fill="none" stroke-linecap="round"/>`;
+    mouth = `<path d="M44 82q8 6 16 1q8 5 16-1q-2 15-16 15t-16-15z" fill="#6e3029"/>` + tongue(11);
+    extra = blush('#ff9aa8', .55);
   } else if (mood === 'wait'){
-    eyes = eye(46) + eye(74);
-    mouth = `<path d="M52 80q8 6 16 0" stroke="${INK}" stroke-width="3" fill="none" stroke-linecap="round"/>`;
-    extra = `<circle cx="38" cy="72" r="5" fill="#f5a3a3" opacity=".45"/><circle cx="82" cy="72" r="5" fill="#f5a3a3" opacity=".45"/>`;
+    eyes = shiny(40, 62, 6.4) + shiny(80, 62, 6.4);
+    mouth = `<path d="M47 83q7 4 13 0q6 4 13 0q-1 11-13 11t-13-11z" fill="#6e3029"/>` + tongue(6);
+    extra = blush('#ff9aa8', .45);
   } else if (mood === 'sad'){
-    eyes = eye(46) + eye(74);
-    brows = `<path d="M39 47l12 4M81 47l-12 4" stroke="${G2}" stroke-width="3.4" stroke-linecap="round"/>`;
-    mouth = `<path d="M52 85q8-6 16 0" stroke="${INK}" stroke-width="3" fill="none" stroke-linecap="round"/>`;
-    extra = `<path d="M41 66q-3 6 0 9q3-3 0-9z" fill="#7cc4f2"/>`;
+    eyes = shiny(40, 63, 6.6) + shiny(80, 63, 6.6) + `<path d="M31 52l12 4M89 52l-12 4" stroke="${FUR2}" stroke-width="3.6" stroke-linecap="round"/>`;
+    mouth = `<path d="M52 86q8-6 16 0" stroke="${INK}" stroke-width="3.2" fill="none" stroke-linecap="round"/>`;
+    extra = blush('#ff9aa8', .35) + `<path d="M35 70q-4 7 0 10q4-3 0-10z" fill="#7cc4f2"/><path d="M86 70q-4 7 0 10q4-3 0-10z" fill="#7cc4f2"/>`;
+    ears = 6;
   } else if (mood === 'sick'){
-    eyes = `<path d="M40 59h11M69 59h11" stroke="${INK}" stroke-width="3.6" stroke-linecap="round"/><path d="M40 55q5.5 3 11 0M69 55q5.5 3 11 0" stroke="${G2}" stroke-width="2.6" fill="none" stroke-linecap="round"/>`;
-    mouth = `<path d="M53 83q7-4 14 0" stroke="${INK}" stroke-width="3" fill="none" stroke-linecap="round"/><rect x="62" y="80" width="26" height="5" rx="2.5" transform="rotate(14 62 82)" fill="#fff" stroke="#9aa4b2" stroke-width="1.2"/><circle cx="87" cy="89" r="3.2" fill="#f04a5d"/>`;
-    top = `<rect x="42" y="18" width="36" height="16" rx="8" fill="#9fd3f7" stroke="#6fb6ea" stroke-width="2"/>`;
-    extra = `<circle cx="38" cy="72" r="5" fill="#b9d98a" opacity=".55"/><circle cx="82" cy="72" r="5" fill="#b9d98a" opacity=".55"/>`;
+    eyes = `<path d="M33 63q7 5 14 0M73 63q7 5 14 0" stroke="${INK}" stroke-width="4" fill="none" stroke-linecap="round"/>`;
+    mouth = `<path d="M53 85q7-4 14 0" stroke="${INK}" stroke-width="3" fill="none" stroke-linecap="round"/><g transform="rotate(16 66 84)"><rect x="64" y="81" width="27" height="6" rx="3" fill="#fff" stroke="#b8c2cf" stroke-width="1.3"/><circle cx="90" cy="84" r="3.6" fill="#f04a5d"/></g>`;
+    top = `<rect x="41" y="16" width="38" height="17" rx="8.5" fill="#a9dbfb" stroke="#78bdea" stroke-width="2"/>`;
+    extra = blush('#a6d07d', .55);
+    ears = 4;
   } else if (mood === 'hospital'){
-    eyes = `<path d="M41 55l9 8M50 55l-9 8M70 55l9 8M79 55l-9 8" stroke="${INK}" stroke-width="3.4" stroke-linecap="round"/>`;
-    mouth = `<path d="M53 84q7-5 14 0" stroke="${INK}" stroke-width="3" fill="none" stroke-linecap="round"/>`;
-    top = `<path d="M24 40q36-22 72 0v9q-36-20-72 0z" fill="#fff" stroke="#d5dde8" stroke-width="1.5"/><path d="M57 31h6v4h4v6h-4v4h-6v-4h-4v-6h4z" fill="#f04a5d"/>`;
-    extra = `<rect x="76" y="68" width="14" height="10" rx="2" fill="#fff" stroke="#d5dde8" stroke-width="1.4" transform="rotate(-18 83 73)"/>`;
-  } else { // ghost
-    eyes = `<path d="M40 60q6 5 12 0M68 60q6 5 12 0" stroke="${INK}" stroke-width="3.4" fill="none" stroke-linecap="round"/>`;
-    mouth = `<path d="M53 81q7 4 14 0" stroke="${INK}" stroke-width="3" fill="none" stroke-linecap="round"/>`;
-    top = `<ellipse cx="60" cy="14" rx="22" ry="6.5" fill="none" stroke="#f5c84b" stroke-width="4.5"/>`;
+    eyes = `<path d="M33 64q7 4 14 0M73 64q7 4 14 0" stroke="${INK}" stroke-width="4" fill="none" stroke-linecap="round"/><path d="M33 58l8 2M87 58l-8 2" stroke="${FUR2}" stroke-width="3" stroke-linecap="round"/>`;
+    mouth = `<path d="M54 86q6-3 12 0" stroke="${INK}" stroke-width="3" fill="none" stroke-linecap="round"/>`;
+    top = `<path d="M22 44q38-26 76 0l-2 10q-36-22-72 0z" fill="#fff" stroke="#d6dde7" stroke-width="1.6"/><path d="M56 30h8v5h5v8h-5v5h-8v-5h-5v-8h5z" fill="#f04a5d"/>`;
+    extra = `<path d="M92 50q-3 6 0 8q3-2 0-8z" fill="#7cc4f2"/><rect x="25" y="72" width="15" height="10" rx="2.5" fill="#fff" stroke="#d6dde7" stroke-width="1.4" transform="rotate(14 32 77)"/>`;
+    ears = 7;
+  } else { // dead
+    eyes = `<path d="M34 57l11 11M45 57l-11 11M75 57l11 11M86 57l-11 11" stroke="${INK}" stroke-width="3.8" stroke-linecap="round"/>`;
+    mouth = `<path d="M50 84q10 5 20 0" stroke="${INK}" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M62 85v6q0 6 5 6t5-6v-7q-5 3-10 1z" fill="#ffc2cd"/>`;
+    top = `<ellipse cx="60" cy="10" rx="21" ry="6" fill="none" stroke="#f6c945" stroke-width="4.5"/>`;
+    extra = `<path d="M14 74q-14-12-8-28q10 7 16 18zM106 74q14-12 8-28q-10 7-16 18z" fill="#fff" stroke="#dce2ea" stroke-width="1.5"/>`;
+    ears = 3;
   }
-  const ghost = mood === 'ghost';
-  const g = ghost ? '#e9edf3' : G, g2 = ghost ? '#cdd5e0' : G2, c = ghost ? '#ffffff' : C;
-  const wings = ghost ? `<path d="M18 70q-16-10-12-26q10 6 18 16zM102 70q16-10 12-26q-10 6-18 16z" fill="#fff" stroke="#dbe2ec" stroke-width="1.5"/>` : '';
-  return `<svg class="nori-svg" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">${wings}
-<g class="n-ear l"><path d="M30 38q-20 4-18 34q2 16 14 18q8-2 10-20z" fill="${g2}"/></g>
-<g class="n-ear r"><path d="M90 38q20 4 18 34q-2 16-14 18q-8-2-10-20z" fill="${g2}"/></g>
-<ellipse cx="60" cy="62" rx="36" ry="35" fill="${g}"/>
-<path d="M60 30q-6 14 0 26q6-12 0-26z" fill="${c}" opacity=".55"/>
-<ellipse cx="60" cy="80" rx="22" ry="16" fill="${c}"/>
-${brows}${eyes}${extra}
-<ellipse cx="60" cy="71" rx="7.5" ry="5.4" fill="${INK}"/><ellipse cx="58" cy="69.4" rx="2.4" ry="1.4" fill="#fff" opacity=".55"/>
-<path d="M60 76v3" stroke="${INK}" stroke-width="2.6" stroke-linecap="round"/>
+  return `<svg class="nori-svg" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">${dead ? extra : ''}
+<g class="n-ear l"><path d="M24 ${46 + ears}q-18 0-17 26q1 17 13 18q11-2 13-19z" fill="${FUR2}"/></g>
+<g class="n-ear r"><path d="M96 ${46 + ears}q18 0 17 26q-1 17-13 18q-11-2-13-19z" fill="${FUR2}"/></g>
+<path d="M60 28c-24 0-40 14-40 36c0 9 2 16 6 21q-4 4 1 7q2 4 7 2q10 8 26 8t26-8q5 2 7-2q5-3 1-7c4-5 6-12 6-21c0-22-16-36-40-36z" fill="${FUR}"/>
+<path d="M49 30q3-9 10-4q4-8 11 2q4-4 7 2q-14-5-28 0z" fill="${FUR}"/>
+<path d="M60 46c-17 0-31 10-31 27c0 15 13 24 31 24s31-9 31-24c0-17-14-27-31-27z" fill="${FACE}"/>
+<path d="M60 34q-6 10 0 20q6-10 0-20z" fill="${FACE}" opacity=".85"/>
+${eyes}${dead ? '' : extra}
+<path d="M49 69q11-8 22 0q1 9-11 12q-12-3-11-12z" fill="${NOSE}"/><ellipse cx="55" cy="70" rx="4" ry="2" fill="#fff" opacity=".5"/><path d="M60 80v3" stroke="${NOSE}" stroke-width="2.4" stroke-linecap="round"/>
 ${mouth}${top}</svg>`;
 }
-
 /* ---------- Nori: how the dog feels depends on the last finished day ---------- */
 function lastDay(before){ const lim = before == null ? today() : before; let m = null; for (const k in state.days){ const d = +k; if (d <= lim && (m == null || d > m)) m = d; } return m; }
 function noriState(){
@@ -1821,17 +1855,18 @@ function noriState(){
   if (L === t) return { mood: 'happy', gap: 0 };
   if (L == null) return { mood: 'wait', gap: null };
   const g = t - L;
-  return { gap: g, mood: g <= 1 ? 'wait' : g === 2 ? 'sad' : g === 3 ? 'sick' : g <= 6 ? 'hospital' : 'ghost' };
+  return { gap: g, mood: g <= 1 ? 'wait' : g === 2 ? 'sad' : g <= 4 ? 'sick' : g <= 9 ? 'hospital' : 'dead' };
 }
 function noriLines(ns, sk){
   const g = ns.gap;
-  if (ns.mood === 'happy') return ['노리가 꼬리를 흔들어요', '오늘 학습 끝! 내일 또 놀아 줘요'];
-  if (g == null) return ['노리가 첫 산책을 기다려요', '오늘 분량을 끝내면 연속 기록이 시작돼요'];
-  if (g === 1) return ['노리가 현관에서 기다려요', sk ? '오늘 끝내면 ' + (sk + 1) + '일 연속이에요' : '오늘 끝내면 연속 기록이 시작돼요'];
-  if (g === 2) return ['노리가 삐졌어요', '어제 안 와서 밥도 안 먹었대요'];
-  if (g === 3) return ['노리가 아파요', '수의사 말로는 영어 단어가 약이래요'];
-  if (g <= 6) return ['노리가 입원했어요', 7 - g === 1 ? '오늘이 마지막 기회예요' : (7 - g) + '일 안에 와야 살 수 있어요'];
-  return ['노리가 무지개다리를 건넜어요', '오늘 분량을 끝내면 다시 살아나요'];
+  if (ns.mood === 'happy') return ['노리가 꼬리를 흔들어요', '오늘 끝! 내일 또 놀아 줘요'];
+  if (g == null) return ['노리가 첫 산책을 기다려요', '오늘 분량 끝내면 연속 기록 시작'];
+  if (g === 1) return ['노리가 현관에서 기다려요', sk ? '오늘 끝내면 ' + (sk + 1) + '일 연속!' : '오늘 끝내면 연속 기록 시작'];
+  if (g === 2) return ['노리가 삐졌어요', '어제 안 와서 밥그릇을 엎었대요'];
+  if (g <= 4) return ['노리가 아파요', '약은 영어 단어뿐이래요'];
+  if (g <= 6) return ['노리가 입원했어요', '면회는 노리보카에서만 돼요'];
+  if (g <= 9) return ['노리가 죽어가고 있어요', 10 - g === 1 ? '오늘 안 오면 노리가 죽어요' : (10 - g) + '일 뒤면 노리가 죽어요'];
+  return ['노리가 죽었어요', '오늘 분량을 끝내면 다시 살아나요'];
 }
 function paintNori(el, mood){ if (el.dataset.mood === mood) return; el.dataset.mood = mood; el.className = 'nori m-' + mood; el.innerHTML = nori(mood); }
 
@@ -1882,6 +1917,37 @@ function paintPush(){
   $('o-push-note').textContent = PUSH_OK ? (on ? '공부를 빼먹을수록 노리 상태가 나빠져요' : '')
     : (IOS_WEB ? '홈 화면에 추가한 앱에서 켤 수 있어요' : '이 브라우저는 알림을 지원하지 않아요');
 }
+
+/* the day's set is finished: Nori hops, hearts float, confetti falls */
+function fanfare(){
+  if (!state.settings.sfx) return;
+  const c = audio(); if (!c) return;
+  const t0 = c.currentTime + 0.02, out = c.createGain(); out.gain.value = 0.2; out.connect(c.destination);
+  [[523.25, 0], [659.25, .11], [783.99, .22], [1046.5, .33], [1318.5, .5], [1568, .5]].forEach(([f, at]) => {
+    const o = c.createOscillator(), g = c.createGain(); o.type = 'triangle'; o.frequency.value = f;
+    const len = at >= .5 ? .9 : .22;
+    g.gain.setValueAtTime(0.0001, t0 + at); g.gain.exponentialRampToValueAtTime(.5, t0 + at + .015); g.gain.exponentialRampToValueAtTime(0.0001, t0 + at + len);
+    o.connect(g); g.connect(out); o.start(t0 + at); o.stop(t0 + at + len + .05);
+  });
+}
+function cheer(){
+  const t = today(); if (!state.days[t] || state.sess.cheered) return;
+  state.sess.cheered = true; persistLocal();
+  const sk = streak(), prev = lastDay(t - 1), revived = prev != null && t - prev >= 10;
+  $('cheer-nori').innerHTML = nori('happy');
+  ['💛', '🐾', '💛', '✨'].forEach((h, i) => { const e = mk('span', 'heart', h); e.style.left = (8 + i * 26) + '%'; e.style.animationDelay = (i * .35) + 's'; $('cheer-nori').appendChild(e); });
+  $('cheer-t').textContent = revived ? '노리가 살아났어요!' : '잘했어요!';
+  $('cheer-sub').textContent = revived ? '다시는 떠나지 마요 🥹' : sk >= 2 ? '노리가 신나서 뛰어다녀요' : '오늘 분량 완료! 노리가 꼬리를 흔들어요';
+  $('cheer-streak').replaceChildren(); $('cheer-streak').insertAdjacentHTML('beforeend', $('h-fire').querySelector('svg').outerHTML); $('cheer-streak').append(sk + '일 연속!');
+  const box = $('cheer');
+  box.querySelectorAll('.cf').forEach(e => e.remove());
+  const cols = ['#6c5df5', '#ff8a00', '#18a058', '#f04a5d', '#4f9cf0', '#ffd54a'];
+  if (!reduced) for (let i = 0; i < 46; i++){ const e = mk('i', 'cf'); e.style.left = Math.random() * 100 + '%'; e.style.background = cols[i % cols.length]; e.style.animationDuration = (2.2 + Math.random() * 2) + 's'; e.style.animationDelay = (Math.random() * .8) + 's'; box.appendChild(e); }
+  box.hidden = false;
+  fanfare();
+  if (!navQuiet) navPush(current, closeCheer, 'cheer');
+}
+function closeCheer(){ if ($('cheer').hidden) return; $('cheer').hidden = true; navOverlayClosed('cheer'); }
 
 /* ---------- analysis by source ---------- */
 const GROUPS = ['수능특강', '모의고사', '생각의 지도', '기타'];
@@ -2100,6 +2166,7 @@ $('o-reset').onclick = () => { $('o-confirm').hidden = false; $('o-reset').hidde
 $('o-no').onclick = () => { $('o-confirm').hidden = true; $('o-reset').hidden = false; };
 $('o-yes').onclick = () => { const keep = state.settings; state = blankState(); state.settings = keep; save(); $('sheet').hidden = true; navOverlayClosed('sheet'); goHome(); };
 $('o-close').onclick = closeSettings;
+$('cheer-ok').onclick = closeCheer;
 $('o-push').onchange = async e => {
   const want = e.target.checked; e.target.disabled = true;
   if (want){ const ok = await enablePush(); if (ok) toast('매일 저녁 8시에 노리가 찾아갈게요'); }
