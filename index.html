@@ -88,6 +88,7 @@ button:focus-visible,input:focus-visible,summary:focus-visible{outline:2px solid
 .en{margin:0;font-size:24px;line-height:1.75;font-weight:500;letter-spacing:-.01em;color:var(--ink);overflow-wrap:anywhere}
 .blank{box-sizing:border-box;font:inherit;font-size:24px;font-weight:500;color:var(--blank-ink);background:var(--blank);border:none;border-radius:10px;height:1.5em;padding:0 9px;margin:0 3px;vertical-align:baseline;caret-color:var(--caret);max-width:calc(100% - 6px);outline:none;transition:width .14s ease-out,background-color .25s,color .25s}
 .blank:focus-visible{outline:none}
+.blank.ok.shown{color:var(--red)}
 .blank.ok{color:var(--green)}
 .blank.bad{background:var(--red-soft);color:var(--red)}
 .blank.near{background:var(--green-soft);color:var(--green-ink)}
@@ -169,6 +170,8 @@ button:focus-visible,input:focus-visible,summary:focus-visible{outline:2px solid
 .go{background:var(--violet);color:var(--white);border:none;border-radius:16px;height:54px;font-weight:800;font-size:17px;padding:0 24px;transition:transform .15s var(--ease),filter .15s;box-shadow:0 6px 16px rgba(108,93,245,.28)}
 .go:active{transform:scale(.97)}
 .go:disabled{filter:grayscale(.6) opacity(.6);box-shadow:none}
+/* keep button labels white on every phone browser */
+.go,.go span,.next-btn{-webkit-appearance:none;appearance:none;color:#ffffff;-webkit-text-fill-color:#ffffff}
 .ghost{background:var(--violet-tint);color:var(--violet);border:none;border-radius:16px;height:48px;font-weight:700;padding:0 18px;transition:transform .15s var(--ease)}
 .ghost:active{transform:scale(.97)}
 .progress-line{display:flex;justify-content:space-between;font-size:13px;color:var(--ink-2)}
@@ -506,7 +509,7 @@ details.panel:not([open]){gap:0}
     <div class="bbar gutter" id="bbar">
       <div class="side l"><button class="hint-btn" id="a-hint" type="button"><span class="ic">?</span>힌트 보기</button></div>
       <div class="chip-slot"><button class="typed" id="b-chip" type="button" aria-label="입력한 답 제출"></button></div>
-      <div class="side r"></div>
+      <div class="side r"><button class="hint-btn" id="a-reveal" type="button"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" style="width:17px;height:17px"><path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12z"/><circle cx="12" cy="12" r="3"/></svg></span>정답 보기</button></div>
     </div>
     <div class="kb" id="kb" hidden><div class="kb-pop" id="kb-pop" hidden></div></div>
   </section>
@@ -1366,18 +1369,26 @@ function jingle(){
     });
   });
 }
+/* show the answer right away; the word is recorded as wrong and comes back as a retry */
+function reveal(){
+  const cur = state.sess && state.sess.cur; if (!cur || cur.solved || busy) return;
+  clearTimeout(liveT);
+  cur.wrongs++; cur.revealed = true;
+  save();
+  solved(false);
+}
 function solved(restored){
   clearTimeout(liveT);
-  if (!restored) jingle();
   const s = state.sess, cur = s.cur;
-  inputs().forEach(i => { if (!i.classList.contains('ok')){ i.value = i.dataset.v = answerOf(i)[0]; i.classList.add('ok'); fit(i); } });
+  if (!restored && !cur.revealed) jingle();
+  inputs().forEach(i => { if (!i.classList.contains('ok')){ i.value = i.dataset.v = answerOf(i)[0]; i.classList.remove('bad', 'near'); i.classList.add('ok'); if (cur.revealed) i.classList.add('shown'); fit(i); } });
   if (!cur.solved){ cur.solved = true; save(); }
   busy = true;
   hideFeedback();
-  $('card').classList.add('solved');
   setTag('teal', nextLabel(), !restored);
-  const stamp = $('c-stamp'); stamp.hidden = false;
-  if (restored) stamp.classList.add('still'); else { stamp.classList.remove('stamped'); void stamp.offsetWidth; stamp.classList.add('stamped'); }
+  const stamp = $('c-stamp'); stamp.hidden = !!cur.revealed;
+  if (!cur.revealed){ if (restored) stamp.classList.add('still'); else { stamp.classList.remove('stamped'); void stamp.offsetWidth; stamp.classList.add('stamped'); } }
+  $('card').classList.toggle('solved', !cur.revealed);
   renderTop();
   updateChip();
   if (state.settings.autoNext){ advTimer = setTimeout(advance, restored ? 600 : (isClean(cur) ? 1100 : 1500)); return; }
@@ -1538,10 +1549,11 @@ $('s-back').onclick = () => { leaveStudy(); goHome(); };
 $('s-set').onclick = openSettings;
 $('c-lv').onclick = () => { $('c-pop').hidden = !$('c-pop').hidden; };
 $('a-hint').onclick = hint;
+$('a-reveal').onclick = reveal;
 $('b-chip').onclick = submit;
 /* focus the kept blank inside the tap itself so a phone keyboard comes back for the next card */
 $('b-next').onclick = () => { $('blank-0').focus({ preventScroll: true }); advance(); };
-['a-hint', 'b-chip'].forEach(id => $(id).addEventListener('mousedown', e => e.preventDefault()));
+['a-hint', 'a-reveal', 'b-chip'].forEach(id => $(id).addEventListener('mousedown', e => e.preventDefault()));
 $('c-en').addEventListener('input', onInput);
 $('c-en').addEventListener('focusin', updateChip);
 $('c-en').addEventListener('keydown', e => {
