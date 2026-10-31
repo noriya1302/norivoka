@@ -387,6 +387,8 @@ details.panel:not([open]){gap:0}
   .bbar{padding-block:4px 6px}
   .hint-btn .ic{width:26px;height:26px;font-size:16px}
 }
+.toast{position:fixed;left:50%;bottom:calc(env(safe-area-inset-bottom,0px) + 90px);transform:translate(-50%,12px);background:rgba(22,26,34,.88);color:#fff;font-size:14px;font-weight:700;padding:11px 18px;border-radius:999px;opacity:0;pointer-events:none;transition:opacity .25s,transform .25s var(--ease);z-index:50;white-space:nowrap}
+.toast.on{opacity:1;transform:translate(-50%,0)}
 /* ===== dictionary popup (after a card is solved) ===== */
 .blank.ok{cursor:pointer}
 #card.solved .blank.ok,.blank.ok.shown{box-shadow:inset 0 -2px 0 rgba(44,108,180,.28)}
@@ -445,6 +447,7 @@ details.panel:not([open]){gap:0}
 @media (max-width:360px){.split{grid-template-columns:repeat(2,minmax(0,1fr))}.en,.blank{font-size:21px}.ko{font-size:17px}}
 </style>
 
+<div class="toast" id="toast" role="status"></div>
 <div id="app">
   <!-- LOGIN (site build only) -->
   <section class="screen" id="login" hidden>
@@ -1001,7 +1004,11 @@ function statusOf(n){
 /* ---------- screens ---------- */
 let current = 'home';
 /* phone back button: every screen change adds a history entry, so back walks the app instead of closing it */
-let navDepth = 0, navQuiet = false, ignorePop = false;
+let navDepth = 0, navQuiet = false, ignorePop = false, exitArm = false, sentinel = false;
+let toastT = null;
+function toast(t){ const el = $('toast'); el.textContent = t; el.classList.add('on'); clearTimeout(toastT); toastT = setTimeout(() => el.classList.remove('on'), 2000); }
+/* one spare entry under the app, added on the first tap (browsers ignore entries added without a tap) */
+addEventListener('click', () => { if (sentinel) return; sentinel = true; try { history.pushState({ d: 0, s: 1 }, ''); } catch (e) {} }, true);
 function navTrack(id){
   if (navQuiet || current === id) return;
   try {
@@ -1835,7 +1842,11 @@ addEventListener('popstate', () => {
   if (!$('sheet').hidden){ closeSettings(); keep(); return; }
   if (!$('inst').hidden){ $('inst').hidden = true; keep(); return; }
   if (!$('c-dict').hidden){ closeDict(); keep(); return; }
-  if (navDepth <= 0) return;
+  if (navDepth <= 0){
+    // home: first back asks, a second one within 2 seconds leaves the app
+    if (exitArm){ exitArm = false; history.back(); return; }
+    exitArm = true; keep(); toast('한 번 더 누르면 앱이 종료돼요'); setTimeout(() => { exitArm = false; }, 2200); return;
+  }
   navDepth--; navQuiet = true;
   try {
     if (current === 'study') $('s-back').onclick();
