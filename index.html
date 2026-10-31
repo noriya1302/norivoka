@@ -1000,7 +1000,19 @@ function statusOf(n){
 
 /* ---------- screens ---------- */
 let current = 'home';
+/* phone back button: every screen change adds a history entry, so back walks the app instead of closing it */
+let navDepth = 0, navQuiet = false, ignorePop = false;
+function navTrack(id){
+  if (navQuiet || current === id) return;
+  try {
+    if (id === 'login'){ navDepth = 0; }
+    else if (id === 'home'){ if (navDepth > 0){ const n = navDepth; navDepth = 0; ignorePop = true; history.go(-n); } }
+    else if (current === 'study' && id === 'done') history.replaceState({ d: navDepth }, '');
+    else { navDepth++; history.pushState({ d: navDepth }, ''); }
+  } catch (e) {}
+}
 function show(id){
+  navTrack(id);
   for (const s of ['login', 'home', 'study', 'done', 'list', 'stats']) $(s).hidden = s !== id;
   if (id !== 'study') closeDict();
   if (current !== id){ const el = $(id); el.classList.remove('enter'); void el.offsetWidth; el.classList.add('enter'); }
@@ -1817,6 +1829,21 @@ $('c-en').addEventListener('keydown', e => {
 });
 document.addEventListener('keydown', e => { if (e.defaultPrevented) return; if (e.key === 'Enter' && current === 'study' && state.sess.cur && state.sess.cur.solved && !e.isComposing){ e.preventDefault(); advance(); } });
 $('d-home').onclick = goHome;
+addEventListener('popstate', () => {
+  if (ignorePop){ ignorePop = false; return; }
+  const keep = () => { try { history.pushState({ d: navDepth }, ''); } catch (e) {} };
+  if (!$('sheet').hidden){ closeSettings(); keep(); return; }
+  if (!$('inst').hidden){ $('inst').hidden = true; keep(); return; }
+  if (!$('c-dict').hidden){ closeDict(); keep(); return; }
+  if (navDepth <= 0) return;
+  navDepth--; navQuiet = true;
+  try {
+    if (current === 'study') $('s-back').onclick();
+    else if (current === 'list') $('l-back').onclick();
+    else if (current === 'stats') $('a-back').onclick();
+    else goHome();
+  } finally { navQuiet = false; }
+});
 $('d-more').onclick = () => { if (addMore(10)){ pickNext(); save(); openStudy(); } };
 $('l-back').onclick = () => { const from = listFrom; srcFilter = null; if (from === 'done'){ show('done'); renderDone(); } else if (from === 'stats'){ show('stats'); renderStats(); } else goHome(); };
 $('l-seg').onclick = e => { const b = e.target.closest('button'); if (!b) return; setFilter(b.dataset.f); renderList(); };
