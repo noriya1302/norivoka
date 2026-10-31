@@ -2657,7 +2657,35 @@ $('lg-kakao').onclick = async () => {
   catch (x) { const c = x && x.code || ''; if (c === 'auth/popup-closed-by-user' || c === 'auth/cancelled-popup-request') return;
     err.textContent = /operation-not-allowed|invalid-provider|configuration|argument-error|internal-error/.test(c) ? '카카오 로그인은 준비 중이에요' : (G_MSG[c] || '카카오 로그인에 실패했어요').replace('구글', '카카오'); }
 };
-$('lg-naver').onclick = () => { $('lg-err').textContent = '네이버 로그인은 준비 중이에요'; };
+const NAVER_ORIGIN = 'https://norivoka-alpha.vercel.app';
+$('lg-naver').onclick = () => {
+  $('lg-err').textContent = '';
+  window.location.assign(NAVER_ORIGIN + '/api/naver/start');
+};
+(async function finishNaverLogin() {
+  const url = new URL(window.location.href);
+  const complete = url.searchParams.has('naver_complete');
+  const error = url.searchParams.get('naver_error');
+  if (!complete && !error) return;
+  url.searchParams.delete('naver_complete');
+  url.searchParams.delete('naver_error');
+  window.history.replaceState(null, '', url.pathname + url.search + url.hash);
+  if (error) {
+    const messages = {cancelled:'네이버 로그인을 취소했어요',state:'로그인 시간이 지났어요. 다시 눌러 주세요',configuration:'네이버 로그인 설정을 마무리하고 있어요'};
+    $('lg-err').textContent = messages[error] || '네이버 로그인에 실패했어요. 다시 눌러 주세요';
+    return;
+  }
+  if (window.location.origin !== NAVER_ORIGIN || !fbAuth) return;
+  window.noriAuthPending = true;
+  try {
+    const response = await fetch('/api/naver/exchange', {method:'POST',credentials:'same-origin',cache:'no-store'});
+    if (!response.ok) throw new Error('exchange');
+    const result = await response.json();
+    await fbAuth.signInWithCustomToken(result.token);
+  } catch {
+    $('lg-err').textContent = '네이버 로그인에 실패했어요. 다시 눌러 주세요';
+  } finally { window.noriAuthPending = false; }
+})();
 $('lg-fb').onclick = async () => {
   const err = $('lg-err'); err.textContent = '';
   if (!fbAuth || !window.firebase || !firebase.auth.FacebookAuthProvider){ err.textContent = '서버에 연결하지 못했어요'; return; }
@@ -2681,4 +2709,4 @@ if (FB) bootFirebase();
 else { $('home').classList.add('enter'); goHome(); initSync(); }
 })();
 </script>
-<script>if("serviceWorker" in navigator && location.protocol === "https:")addEventListener("load", function(){ var had = !!navigator.serviceWorker.controller, done = false;navigator.serviceWorker.addEventListener("controllerchange", function(){ if (had && !done){ done = true; location.reload(); } });navigator.serviceWorker.register("sw.js", { updateViaCache: "none" }).then(function(r){ r.update(); }).catch(function(){}); });</script></body></html>
+<script>if("serviceWorker" in navigator && location.protocol === "https:")addEventListener("load", function(){ var had = !!navigator.serviceWorker.controller, done = false;navigator.serviceWorker.addEventListener("controllerchange", function(){ if (had && !done && !window.noriAuthPending){ done = true; location.reload(); } });navigator.serviceWorker.register("sw.js", { updateViaCache: "none" }).then(function(r){ r.update(); }).catch(function(){}); });</script></body></html>
