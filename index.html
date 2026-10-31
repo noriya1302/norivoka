@@ -1196,20 +1196,20 @@ async function phConfirm(){
 }
 /* each account keeps its own copy on this device, so two people on one phone never mix */
 let pendingNick = '';
-async function enterAccount(user){
+async function enterAccount(user, warm){
   const email = user.email || '', idUser = email.endsWith('@binkanvoca.app');
   const phoneUser = !idUser && !email && !!user.phoneNumber;
   const maskPh = p => { const d = String(p).replace(/^\+82/, '0').replace(/\D/g, ''); return d.length >= 10 ? d.slice(0, 3) + '-••••-' + d.slice(-4) : d; };
   const prov = ((user.providerData || [])[0] || {}).providerId || '';
   const social = !idUser && !phoneUser;
   account = { uid: user.uid, id: idUser ? email.split('@')[0] : phoneUser ? maskPh(user.phoneNumber) : (user.displayName || email.split('@')[0] || '사용자'), google: social, phone: phoneUser,
-    via: idUser ? '로그인 아이디' : phoneUser ? '휴대폰 번호' : user.uid.startsWith('naver:') ? '네이버 계정' : prov === 'facebook.com' ? '페이스북 계정' : prov.startsWith('oidc.kakao') ? '카카오 계정' : '구글 계정' };
-  lkey = LKEY + ':' + user.uid;
-  state = loadLocal();
+    via: idUser ? '로그인 아이디' : phoneUser ? '휴대폰 번호' : prov === 'facebook.com' ? '페이스북 계정' : prov.startsWith('oidc.kakao') ? '카카오 계정' : '구글 계정' };
+  rememberSession();
+  if (!warm){ lkey = LKEY + ':' + user.uid; state = loadLocal(); }
   sync.ref = fbRef(user.uid); setSync('pending');
   $('h-date').dataset.who = account.id;
-  goHome();
-  await pullRemote(false);
+  if (!warm) goHome();
+  await pullRemote(!!warm);
   // a nickname typed at sign-up, or the Google profile name, fills an empty one
   const nick = pendingNick || (account.google ? (user.displayName || '') : '');
   pendingNick = '';
@@ -1220,17 +1220,26 @@ async function logout(){
   if (sync.timer || sync.writing) await flush();
   if (pushOn()) await disablePush();
   sync.ref = null; account = null; lkey = LKEY; state = blankState();
-  phoneMode(false);
+  phoneMode(false); forgetSession();
   try { await fbAuth.signOut(); } catch (e) {}
 }
+/* the last signed-in account is remembered on this device, so the app opens straight onto home
+   from local data while Firebase restores the sign-in in the background */
+const SESS_LS = 'norivoka:session';
+function rememberSession(){ try { localStorage.setItem(SESS_LS, JSON.stringify(account)); } catch (e) {} }
+function forgetSession(){ try { localStorage.removeItem(SESS_LS); } catch (e) {} }
 function bootFirebase(){
-  show('login'); loginWait(true, '불러오는 중');
+  let cached = null; try { cached = JSON.parse(localStorage.getItem(SESS_LS) || 'null'); } catch (e) {}
+  if (cached && cached.uid){
+    account = cached; lkey = LKEY + ':' + cached.uid; state = loadLocal(); setSync('pending');
+    $('h-date').dataset.who = account.id; goHome();
+  } else { show('login'); loginWait(true, '불러오는 중'); }
   if (!window.firebase || !firebase.initializeApp){ loginWait(true, '서버에 연결하지 못했어요. 인터넷 연결을 확인해 주세요'); $('lg-wait').classList.add('off'); return; }
   try { firebase.initializeApp(FB); fbAuth = firebase.auth(); }
   catch (e) { loginWait(true, '서버 설정에 문제가 있어요'); return; }
   fbAuth.onAuthStateChanged(user => {
-    if (user){ enterAccount(user); }
-    else { account = null; show('login'); loginWait(false); setLoginMode('in'); $('lg-pw').value = ''; $('lg-pw2').value = ''; }
+    if (user){ const warm = !!(cached && cached.uid === user.uid); cached = null; enterAccount(user, warm); }
+    else { cached = null; forgetSession(); account = null; show('login'); loginWait(false); setLoginMode('in'); $('lg-pw').value = ''; $('lg-pw2').value = ''; }
   });
 }
 
@@ -2296,7 +2305,10 @@ function moodFor(last){
 const rankDoc = () => firebase.firestore().collection('board').doc(account.uid);
 const rankInfo = () => ({ nick: (state.settings.nick || '').slice(0, 10), wk: weekStart(today()), wc: weekCount(), streak: streak(), last: lastDay(), seen: Object.keys(state.w).length });
 let rankSent = '';
-function rankSync(){
+let rankT = null;
+function rankSync(){ clearTimeout(rankT); rankT = setTimeout(rankSyncNow, 3000); }
+function rankSyncNow(){
+  clearTimeout(rankT);
   if (!FB || !account || state.settings.rank === false) return;
   const i = rankInfo(), sig = JSON.stringify(i);
   if (sig === rankSent) return;
@@ -2306,7 +2318,7 @@ function rankSync(){
 let rankMode = 'week', rankRows = null, rankErr = '';
 async function loadRank(){
   if (!FB || !account){ rankRows = []; return; }
-  rankSync();
+  rankSyncNow();
   try {
     const snap = await firebase.firestore().collection('board').limit(300).get();
     const rows = []; snap.forEach(d => rows.push(Object.assign({ uid: d.id }, d.data())));
@@ -2657,35 +2669,7 @@ $('lg-kakao').onclick = async () => {
   catch (x) { const c = x && x.code || ''; if (c === 'auth/popup-closed-by-user' || c === 'auth/cancelled-popup-request') return;
     err.textContent = /operation-not-allowed|invalid-provider|configuration|argument-error|internal-error/.test(c) ? '카카오 로그인은 준비 중이에요' : (G_MSG[c] || '카카오 로그인에 실패했어요').replace('구글', '카카오'); }
 };
-const NAVER_ORIGIN = 'https://norivoka-alpha.vercel.app';
-$('lg-naver').onclick = () => {
-  $('lg-err').textContent = '';
-  window.location.assign(NAVER_ORIGIN + '/api/naver/start');
-};
-async function finishNaverLogin() {
-  const url = new URL(window.location.href);
-  const complete = url.searchParams.has('naver_complete');
-  const error = url.searchParams.get('naver_error');
-  if (!complete && !error) return;
-  url.searchParams.delete('naver_complete');
-  url.searchParams.delete('naver_error');
-  window.history.replaceState(null, '', url.pathname + url.search + url.hash);
-  if (error) {
-    const messages = {cancelled:'네이버 로그인을 취소했어요',state:'로그인 시간이 지났어요. 다시 눌러 주세요',configuration:'네이버 로그인 설정을 마무리하고 있어요'};
-    $('lg-err').textContent = messages[error] || '네이버 로그인에 실패했어요. 다시 눌러 주세요';
-    return;
-  }
-  if (window.location.origin !== NAVER_ORIGIN || !fbAuth) return;
-  window.noriAuthPending = true;
-  try {
-    const response = await fetch('/api/naver/exchange', {method:'POST',credentials:'same-origin',cache:'no-store'});
-    if (!response.ok) throw new Error('exchange');
-    const result = await response.json();
-    await fbAuth.signInWithCustomToken(result.token);
-  } catch {
-    $('lg-err').textContent = '네이버 로그인에 실패했어요. 다시 눌러 주세요';
-  } finally { window.noriAuthPending = false; }
-}
+$('lg-naver').onclick = () => { $('lg-err').textContent = '네이버 로그인은 준비 중이에요'; };
 $('lg-fb').onclick = async () => {
   const err = $('lg-err'); err.textContent = '';
   if (!fbAuth || !window.firebase || !firebase.auth.FacebookAuthProvider){ err.textContent = '서버에 연결하지 못했어요'; return; }
@@ -2705,8 +2689,8 @@ $('ph-back').onclick = () => { clearInterval(phTick); phoneMode(false); };
 $('ph-again').onclick = () => { phConf = null; $('ph-code').value = ''; phSend(); };
 $('ph-num').addEventListener('input', e => { const d = e.target.value.replace(/\D/g, '').slice(0, 11); e.target.value = d.length > 7 ? d.slice(0, 3) + '-' + d.slice(3, d.length - 4) + '-' + d.slice(-4) : d.length > 3 ? d.slice(0, 3) + '-' + d.slice(3) : d; });
 $('ph-form').addEventListener('submit', e => { e.preventDefault(); if (phConf) phConfirm(); else phSend(); });
-if (FB) { bootFirebase(); finishNaverLogin(); }
+if (FB) bootFirebase();
 else { $('home').classList.add('enter'); goHome(); initSync(); }
 })();
 </script>
-<script>if("serviceWorker" in navigator && location.protocol === "https:")addEventListener("load", function(){ var had = !!navigator.serviceWorker.controller, done = false;navigator.serviceWorker.addEventListener("controllerchange", function(){ if (had && !done && !window.noriAuthPending){ done = true; location.reload(); } });navigator.serviceWorker.register("sw.js", { updateViaCache: "none" }).then(function(r){ r.update(); }).catch(function(){}); });</script></body></html>
+<script>if("serviceWorker" in navigator && location.protocol === "https:")addEventListener("load", function(){ var had = !!navigator.serviceWorker.controller, done = false;navigator.serviceWorker.addEventListener("controllerchange", function(){ if (had && !done){ done = true; location.reload(); } });navigator.serviceWorker.register("sw.js", { updateViaCache: "none" }).then(function(r){ r.update(); }).catch(function(){}); });</script></body></html>

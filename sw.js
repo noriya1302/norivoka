@@ -1,6 +1,6 @@
 /* 노리보카 offline support: the app shell is cached so it opens without a connection.
    Account calls (Firebase) always go to the network. Bump CACHE when the shell changes. */
-const CACHE = 'norivoka-v22-naver';
+const CACHE = 'norivoka-v22';
 const CORE = ['./', './index.html', './manifest.webmanifest', './icon-192.png', './icon-512.png', './apple-touch-icon.png', './nori-happy.png'];
 self.addEventListener('install', e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(CORE)).then(() => self.skipWaiting()));
@@ -12,14 +12,13 @@ self.addEventListener('fetch', e => {
   const req = e.request;
   if (req.method !== 'GET') return;
   const url = new URL(req.url);
-  // Authentication responses must never enter the offline cache.
-  if (url.pathname.startsWith('/api/') || url.searchParams.has('naver_complete') || url.searchParams.has('naver_error')) return;
   if (url.hostname.endsWith('googleapis.com') || url.hostname.endsWith('firebaseapp.com')) return;
   // the page itself: newest from the network, cached copy when offline (new words arrive on the next open)
   if (req.mode === 'navigate'){
-    // skip the browser's own 10-minute page cache so a new version shows up on the next open
-    e.respondWith(fetch(new Request(req.url, { cache: 'no-cache', credentials: 'same-origin' })).then(r => { const copy = r.clone(); caches.open(CACHE).then(c => c.put('./index.html', copy)); return r; })
-      .catch(() => caches.match('./index.html')));
+    // newest page from the network, but never keep the person waiting more than 2.5s on a slow line
+    const net = fetch(new Request(req.url, { cache: 'no-cache', credentials: 'same-origin' })).then(r => { if (r.ok){ const copy = r.clone(); caches.open(CACHE).then(c => c.put('./index.html', copy)); } return r; });
+    const slow = new Promise(res => setTimeout(res, 2500)).then(() => caches.match('./index.html')).then(hit => hit || net);
+    e.respondWith(Promise.race([net.catch(() => caches.match('./index.html')), slow]));
     return;
   }
   // icons and the pinned Firebase SDK files: cache first
