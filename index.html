@@ -144,7 +144,7 @@ button:focus-visible,input:focus-visible,summary:focus-visible{outline:2px solid
 /* ===== home ===== */
 .home-top{display:flex;align-items:center;justify-content:space-between;padding-block:16px 10px}
 .brand{font-weight:800;font-size:21px;letter-spacing:-.03em;color:var(--white);display:flex;align-items:center;gap:8px;text-shadow:0 1px 2px rgba(30,80,150,.25)}
-.brand-mark{width:30px;height:30px;border-radius:10px;background:var(--violet);color:var(--white);display:grid;place-items:center;font-size:15px;font-weight:900;text-shadow:none}
+.brand-mark{width:32px;height:32px;border-radius:11px;background:#fff;overflow:hidden;box-shadow:0 2px 6px rgba(40,95,160,.18);color:var(--white);display:grid;place-items:center;font-size:15px;font-weight:900;text-shadow:none}
 .home-top .right{display:flex;align-items:center;gap:2px}
 .date{font-size:13.5px;color:var(--white);font-weight:600;margin-right:4px;text-shadow:0 1px 2px rgba(30,80,150,.25)}
 .stack{display:flex;flex-direction:column;gap:12px;padding-block:4px 22px}
@@ -192,6 +192,7 @@ details.panel:not([open]){gap:0}
 @keyframes badge{from{transform:scale(.4);opacity:0}to{transform:none;opacity:1}}
 .done-badge svg{width:36px;height:36px}
 .done-title{text-align:center;font-size:22px;font-weight:800;margin:0;letter-spacing:-.02em}
+.panel .done-title{font-size:23px;color:var(--ink);font-weight:800}
 .done-sub{word-break:keep-all;text-align:center;font-size:14px;color:var(--ink-2);margin:0;line-height:1.6}
 
 /* ===== list ===== */
@@ -344,7 +345,8 @@ details.panel:not([open]){gap:0}
 /* ===== login ===== */
 .login-wrap{min-height:100%;display:flex;flex-direction:column;justify-content:center;gap:22px;padding-block:28px}
 .login-brand{display:flex;flex-direction:column;align-items:center;gap:12px;color:var(--white)}
-.login-brand .brand-mark{width:64px;height:64px;border-radius:20px;font-size:30px;box-shadow:0 10px 24px rgba(108,93,245,.35)}
+.login-brand .brand-mark{width:72px;height:72px;border-radius:22px;font-size:30px;box-shadow:0 10px 24px rgba(40,95,160,.25)}
+.brand-mark .nori-svg{width:88%;height:88%;margin-top:6%}
 .login-brand b{font-size:28px;font-weight:800;letter-spacing:-.03em;text-shadow:0 1px 3px rgba(30,80,150,.25)}
 .login-tabs{position:absolute;left:0;top:0;display:flex;gap:4px}
 .login-tabs .lv-tab{position:static;border-radius:16px 16px 0 0;padding:0 16px;cursor:pointer;opacity:.85}
@@ -389,6 +391,44 @@ details.panel:not([open]){gap:0}
 }
 .toast{position:fixed;left:50%;bottom:calc(env(safe-area-inset-bottom,0px) + 90px);transform:translate(-50%,12px);background:rgba(22,26,34,.88);color:#fff;font-size:14px;font-weight:700;padding:11px 18px;border-radius:999px;opacity:0;pointer-events:none;transition:opacity .25s,transform .25s var(--ease);z-index:50;white-space:nowrap}
 .toast.on{opacity:1;transform:translate(-50%,0)}
+/* ===== Nori + streak ===== */
+.flame-chip{display:inline-flex;align-items:center;gap:3px;height:34px;padding:0 10px 0 7px;border-radius:999px;background:rgba(255,255,255,.55);font-weight:800;font-size:15px;color:#9fb0c4;font-variant-numeric:tabular-nums;margin-right:4px;border:none}
+.flame-chip svg{width:20px;height:20px}
+.flame-chip.on{color:#ff8a00;background:#fff}
+.nori-row{display:flex;align-items:center;gap:12px}
+.nori{width:78px;height:78px;flex:none;border-radius:24px;background:var(--ko-bg);display:grid;place-items:center}
+.nori .nori-svg{width:70px;height:70px;overflow:visible}
+.nori.m-happy .nori-svg{animation:wag 1.6s ease-in-out infinite;transform-origin:50% 80%}
+.nori.m-happy .n-ear{animation:ear .8s ease-in-out infinite;transform-box:fill-box;transform-origin:50% 0}
+.nori.m-happy .n-ear.r{animation-delay:.4s}
+.nori.m-sad .nori-svg,.nori.m-sick .nori-svg,.nori.m-hospital .nori-svg{animation:droop 3s ease-in-out infinite;transform-origin:50% 90%}
+.nori.m-ghost{background:#f1f4f9}
+.nori.m-ghost .nori-svg{animation:float 3s ease-in-out infinite;opacity:.9}
+@keyframes wag{0%,100%{transform:rotate(-5deg)}50%{transform:rotate(5deg)}}
+@keyframes ear{0%,100%{transform:rotate(0)}50%{transform:rotate(-10deg)}}
+@keyframes droop{0%,100%{transform:translateY(0) rotate(0)}50%{transform:translateY(2px) rotate(-2deg)}}
+@keyframes float{0%,100%{transform:translateY(2px)}50%{transform:translateY(-5px)}}
+.nori-txt{flex:1;min-width:0;display:flex;flex-direction:column;gap:3px;word-break:keep-all}
+.nori-txt b{font-size:16.5px;font-weight:800;letter-spacing:-.02em}
+.nori-txt span{font-size:13px;color:var(--ink-2);line-height:1.45}
+.nori-txt.warn b{color:var(--red)}
+.bell{align-self:flex-start;margin-top:5px;border:none;background:var(--violet-tint);color:var(--violet);font-weight:800;font-size:12.5px;border-radius:999px;height:30px;padding:0 12px;display:inline-flex;align-items:center;gap:5px}
+.bell svg{width:14px;height:14px}
+.flame-big{flex:none;display:flex;flex-direction:column;align-items:center;min-width:52px;color:#ff8a00}
+.flame-big svg{width:34px;height:34px}
+.flame-big b{font-size:22px;font-weight:900;line-height:1;color:#ff8a00;font-variant-numeric:tabular-nums}
+.flame-big small{font-size:11px;font-weight:700;color:var(--muted);margin-top:2px}
+.flame-big.off{color:#c5cfdb}
+.flame-big.off b{color:#9fb0c4}
+.done-nori{display:flex;flex-direction:column;align-items:center;gap:12px;margin-top:4px}
+.done-nori .nori{width:104px;height:104px;border-radius:32px;animation:badge .6s var(--ease) both .1s}
+.done-nori .nori .nori-svg{width:94px;height:94px}
+.streak-pop{display:inline-flex;align-items:center;gap:6px;background:linear-gradient(135deg,#ffb020,#ff7a00);color:#fff;font-weight:900;font-size:17px;border-radius:999px;height:40px;padding:0 16px 0 10px;box-shadow:0 6px 16px rgba(255,122,0,.3);animation:streakIn .7s cubic-bezier(.2,1.5,.4,1) both .35s;-webkit-text-fill-color:#fff}
+.streak-pop[hidden]{display:none}
+.streak-pop svg{width:24px;height:24px}
+@keyframes streakIn{from{transform:scale(.3);opacity:0}to{transform:none;opacity:1}}
+.set-note{font-size:12px;color:var(--muted);margin-top:6px;word-break:keep-all;line-height:1.5}
+.set-note:empty{display:none}
 /* ===== dictionary popup (after a card is solved) ===== */
 .blank.ok{cursor:pointer}
 #card.solved .blank.ok,.blank.ok.shown{box-shadow:inset 0 -2px 0 rgba(44,108,180,.28)}
@@ -453,7 +493,7 @@ details.panel:not([open]){gap:0}
   <section class="screen" id="login" hidden>
     <div class="scroll gutter">
       <div class="login-wrap">
-        <div class="login-brand"><span class="brand-mark">V</span><b>노리보카</b></div>
+        <div class="login-brand"><span class="brand-mark" id="lg-nori"></span><b>노리보카</b></div>
         <div class="lg-wait" id="lg-wait">불러오는 중</div>
         <div class="today-wrap" id="lg-box" hidden>
           <div class="login-tabs" role="tablist">
@@ -480,8 +520,9 @@ details.panel:not([open]){gap:0}
   <!-- HOME -->
   <section class="screen" id="home">
     <div class="home-top gutter">
-      <div class="brand"><span class="brand-mark">V</span>노리보카</div>
+      <div class="brand"><span class="brand-mark" id="brand-nori"></span>노리보카</div>
       <div class="right">
+        <button class="flame-chip" id="h-fire" type="button" aria-label="연속 학습"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5c.6 3.2 2.6 4.6 4.3 6.6 1.6 1.9 2.7 3.9 2.7 6.4A7 7 0 0 1 5 15.5c0-2.6 1.2-4.4 2.6-5.8.3 1.6 1 2.7 2.2 3.2-.5-3.8.6-7.6 2.2-10.4z" fill="currentColor"/><path d="M12 12.2c.4 1.5 1.4 2.3 2.1 3.3.6.8.9 1.6.9 2.5a3 3 0 0 1-6 0c0-1.3.6-2.4 1.6-3.2.2.7.6 1.1 1.1 1.3-.2-1.4.1-2.7.3-3.9z" fill="#ffd54a"/></svg><span id="h-fire-n">0</span></button>
         <button class="icon-btn" id="h-stats" aria-label="분야별 분석"><svg viewBox="0 0 24 24" fill="currentColor"><rect x="3.5" y="12" width="4.6" height="8.5" rx="1.6"/><rect x="9.7" y="4" width="4.6" height="16.5" rx="1.6"/><rect x="15.9" y="8.5" width="4.6" height="12" rx="1.6"/></svg></button>
         <button class="icon-btn" id="h-list" aria-label="단어장"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M4 5.6C4 4.7 4.7 4 5.6 4H11v16H5.6c-.9 0-1.6-.7-1.6-1.6zM13 4h5.4c.9 0 1.6.7 1.6 1.6v12.8c0 .9-.7 1.6-1.6 1.6H13z"/></svg></button>
         <button class="icon-btn" id="h-set" aria-label="설정"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M13.9 2.6l.4 2.3c.6.2 1.2.5 1.7.9l2.2-.8 1.9 3.3-1.8 1.5c.1.6.1 1.3 0 1.9l1.8 1.5-1.9 3.3-2.2-.8c-.5.4-1.1.7-1.7.9l-.4 2.3h-3.8l-.4-2.3c-.6-.2-1.2-.5-1.7-.9l-2.2.8-1.9-3.3 1.8-1.5c-.1-.6-.1-1.3 0-1.9L3.9 8.3l1.9-3.3 2.2.8c.5-.4 1.1-.7 1.7-.9l.4-2.3zM12 8.6a3.4 3.4 0 1 0 0 6.8 3.4 3.4 0 0 0 0-6.8z"/></svg></button>
@@ -517,7 +558,12 @@ details.panel:not([open]){gap:0}
         </div>
 
         <div class="panel">
-          <div class="pp-head"><h2>이번 주</h2><b id="h-streak" class="streak"></b></div>
+          <div class="nori-row">
+            <div class="nori" id="h-nori"></div>
+            <div class="nori-txt" id="h-nori-box"><b id="h-nori-t"></b><span id="h-nori-s"></span>
+              <button class="bell" id="h-bell" type="button" hidden><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 3a6 6 0 0 0-6 6v3.6L4.4 15.5A1 1 0 0 0 5.3 17h13.4a1 1 0 0 0 .9-1.5L18 12.6V9a6 6 0 0 0-6-6zm-2.5 15.5a2.5 2.5 0 0 0 5 0z"/></svg>노리 알림 받기</button></div>
+            <div class="flame-big" id="h-flame"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5c.6 3.2 2.6 4.6 4.3 6.6 1.6 1.9 2.7 3.9 2.7 6.4A7 7 0 0 1 5 15.5c0-2.6 1.2-4.4 2.6-5.8.3 1.6 1 2.7 2.2 3.2-.5-3.8.6-7.6 2.2-10.4z" fill="currentColor"/><path d="M12 12.2c.4 1.5 1.4 2.3 2.1 3.3.6.8.9 1.6.9 2.5a3 3 0 0 1-6 0c0-1.3.6-2.4 1.6-3.2.2.7.6 1.1 1.1 1.3-.2-1.4.1-2.7.3-3.9z" fill="#ffd54a"/></svg><b id="h-flame-n">0</b><small>일 연속</small></div>
+          </div>
           <div class="week" id="h-week"></div>
           <div class="pp-sep"></div>
           <div class="pp-head"><h2>172단어 진도</h2><b id="h-pct">0%</b></div>
@@ -579,7 +625,7 @@ details.panel:not([open]){gap:0}
     <div class="scroll gutter">
       <div class="done-wrap">
         <div class="panel">
-          <div class="done-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></div>
+          <div class="done-nori"><div class="nori m-happy" id="d-nori"></div><div class="streak-pop" id="d-streak" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5c.6 3.2 2.6 4.6 4.3 6.6 1.6 1.9 2.7 3.9 2.7 6.4A7 7 0 0 1 5 15.5c0-2.6 1.2-4.4 2.6-5.8.3 1.6 1 2.7 2.2 3.2-.5-3.8.6-7.6 2.2-10.4z" fill="currentColor"/><path d="M12 12.2c.4 1.5 1.4 2.3 2.1 3.3.6.8.9 1.6.9 2.5a3 3 0 0 1-6 0c0-1.3.6-2.4 1.6-3.2.2.7.6 1.1 1.1 1.3-.2-1.4.1-2.7.3-3.9z" fill="#ffd54a"/></svg><span id="d-streak-n"></span></div></div>
           <h2 class="done-title" id="d-title">오늘 분량 끝</h2>
           <p class="done-sub" id="d-sub"></p>
           <div class="split3">
@@ -675,6 +721,13 @@ details.panel:not([open]){gap:0}
         <label for="o-auto">맞히면 자동으로 넘어가기</label>
         <input type="checkbox" class="switch" id="o-auto">
       </div>
+      <div id="o-push-wrap" hidden>
+        <div class="set-row">
+          <label for="o-push">매일 저녁 8시 노리 알림</label>
+          <input type="checkbox" class="switch" id="o-push">
+        </div>
+        <div class="set-note" id="o-push-note"></div>
+      </div>
       <div class="set-sec">입력과 소리</div>
       <div class="set-row">
         <label for="o-kb">앱 키보드 사용</label>
@@ -746,7 +799,7 @@ function loadLocal(){ try { const raw = localStorage.getItem(lkey); return raw ?
 if (!FB) state = loadLocal();
 function persistLocal(){ try { localStorage.setItem(lkey, JSON.stringify(state)); } catch (e) {} }
 /* a real change by the learner: bump the clock so this copy wins over older ones */
-function save(){ state.updatedAt = Date.now(); persistLocal(); queueRemote(); }
+function save(){ state.updatedAt = Date.now(); persistLocal(); queueRemote(); if (typeof pushSync === 'function') pushSync(); }
 
 /* ---------- account sync (db capability) ---------- */
 const sync = { ref: null, status: 'pending', timer: null, writing: false, again: false };
@@ -874,6 +927,7 @@ async function enterAccount(user){
 }
 async function logout(){
   if (sync.timer || sync.writing) await flush();
+  if (pushOn()) await disablePush();
   sync.ref = null; account = null; lkey = LKEY; state = blankState();
   $('sheet').hidden = true;
   try { await fbAuth.signOut(); } catch (e) {}
@@ -1162,7 +1216,14 @@ function renderHome(){
     if (done) dot.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
     el.append(mk('span', null, DAYK[(i + 1) % 7]), dot); wk.appendChild(el);
   }
-  $('h-streak').textContent = sk ? sk + '일 연속' : '';
+  const ns = noriState(), done = ns.mood === 'happy';
+  paintNori($('h-nori'), ns.mood);
+  const [nt, nsub] = noriLines(ns, sk);
+  $('h-nori-t').textContent = nt; $('h-nori-s').textContent = nsub;
+  $('h-nori-box').classList.toggle('warn', ns.gap != null && ns.gap >= 3);
+  $('h-flame-n').textContent = sk; $('h-flame').classList.toggle('off', !done);
+  $('h-fire-n').textContent = sk; $('h-fire').classList.toggle('on', done);
+  paintPush();
   // overall progress
   const c = wordCounts();
   countUp($('h-c-new'), c.unseen); countUp($('h-c-learn'), c.learn); countUp($('h-c-ng'), c.ng); countUp($('h-c-long'), c.long);
@@ -1688,6 +1749,12 @@ async function advance(){
 /* done */
 function renderDone(){
   const s = state.sess;
+  const t = today(), doneToday = !!state.days[t], sk = streak();
+  const prev = lastDay(t - 1), revived = doneToday && prev != null && t - prev >= 7;
+  paintNori($('d-nori'), doneToday ? 'happy' : noriState().mood);
+  $('d-streak').hidden = !(doneToday && sk > 0);
+  $('d-streak-n').textContent = sk + '일 연속!';
+  $('d-title').textContent = revived ? '노리가 다시 살아났어요!' : doneToday && sk >= 2 ? sk + '일째 노리랑 놀았어요' : '오늘 분량 끝';
   $('d-total').textContent = s.total; $('d-ok').textContent = s.firstOk; $('d-ng').textContent = s.firstNg;
   const rate = s.total ? Math.round(s.firstOk / s.total * 100) : 0;
   $('d-sub').textContent = s.total ? '첫 시도 정답률 ' + rate + '%' : '';
@@ -1698,6 +1765,123 @@ function renderDone(){
   $('d-more').hidden = !left;
 }
 
+
+// Nori, the golden retriever. One face, moods change eyes, mouth and props.
+function nori(mood){
+  const G = '#e7ad55', G2 = '#cf8f37', C = '#f8e2b8', INK = '#3b2a20';
+  let eyes, mouth, extra = '', top = '', brows = '';
+  const eye = (x) => `<ellipse cx="${x}" cy="58" rx="5.2" ry="6.2" fill="${INK}"/><circle cx="${x + 1.8}" cy="55.6" r="1.9" fill="#fff"/>`;
+  if (mood === 'happy'){
+    eyes = `<path d="M40 59q6-8 12 0M68 59q6-8 12 0" stroke="${INK}" stroke-width="4" fill="none" stroke-linecap="round"/>`;
+    mouth = `<path d="M50 80q10 12 20 0z" fill="#8a3b33"/><path d="M54 84q6 12 12 0q-6-3-12 0z" fill="#f2828b"/>`;
+    extra = `<circle cx="38" cy="72" r="5" fill="#f5a3a3" opacity=".6"/><circle cx="82" cy="72" r="5" fill="#f5a3a3" opacity=".6"/>`;
+  } else if (mood === 'wait'){
+    eyes = eye(46) + eye(74);
+    mouth = `<path d="M52 80q8 6 16 0" stroke="${INK}" stroke-width="3" fill="none" stroke-linecap="round"/>`;
+    extra = `<circle cx="38" cy="72" r="5" fill="#f5a3a3" opacity=".45"/><circle cx="82" cy="72" r="5" fill="#f5a3a3" opacity=".45"/>`;
+  } else if (mood === 'sad'){
+    eyes = eye(46) + eye(74);
+    brows = `<path d="M39 47l12 4M81 47l-12 4" stroke="${G2}" stroke-width="3.4" stroke-linecap="round"/>`;
+    mouth = `<path d="M52 85q8-6 16 0" stroke="${INK}" stroke-width="3" fill="none" stroke-linecap="round"/>`;
+    extra = `<path d="M41 66q-3 6 0 9q3-3 0-9z" fill="#7cc4f2"/>`;
+  } else if (mood === 'sick'){
+    eyes = `<path d="M40 59h11M69 59h11" stroke="${INK}" stroke-width="3.6" stroke-linecap="round"/><path d="M40 55q5.5 3 11 0M69 55q5.5 3 11 0" stroke="${G2}" stroke-width="2.6" fill="none" stroke-linecap="round"/>`;
+    mouth = `<path d="M53 83q7-4 14 0" stroke="${INK}" stroke-width="3" fill="none" stroke-linecap="round"/><rect x="62" y="80" width="26" height="5" rx="2.5" transform="rotate(14 62 82)" fill="#fff" stroke="#9aa4b2" stroke-width="1.2"/><circle cx="87" cy="89" r="3.2" fill="#f04a5d"/>`;
+    top = `<rect x="42" y="18" width="36" height="16" rx="8" fill="#9fd3f7" stroke="#6fb6ea" stroke-width="2"/>`;
+    extra = `<circle cx="38" cy="72" r="5" fill="#b9d98a" opacity=".55"/><circle cx="82" cy="72" r="5" fill="#b9d98a" opacity=".55"/>`;
+  } else if (mood === 'hospital'){
+    eyes = `<path d="M41 55l9 8M50 55l-9 8M70 55l9 8M79 55l-9 8" stroke="${INK}" stroke-width="3.4" stroke-linecap="round"/>`;
+    mouth = `<path d="M53 84q7-5 14 0" stroke="${INK}" stroke-width="3" fill="none" stroke-linecap="round"/>`;
+    top = `<path d="M24 40q36-22 72 0v9q-36-20-72 0z" fill="#fff" stroke="#d5dde8" stroke-width="1.5"/><path d="M57 31h6v4h4v6h-4v4h-6v-4h-4v-6h4z" fill="#f04a5d"/>`;
+    extra = `<rect x="76" y="68" width="14" height="10" rx="2" fill="#fff" stroke="#d5dde8" stroke-width="1.4" transform="rotate(-18 83 73)"/>`;
+  } else { // ghost
+    eyes = `<path d="M40 60q6 5 12 0M68 60q6 5 12 0" stroke="${INK}" stroke-width="3.4" fill="none" stroke-linecap="round"/>`;
+    mouth = `<path d="M53 81q7 4 14 0" stroke="${INK}" stroke-width="3" fill="none" stroke-linecap="round"/>`;
+    top = `<ellipse cx="60" cy="14" rx="22" ry="6.5" fill="none" stroke="#f5c84b" stroke-width="4.5"/>`;
+  }
+  const ghost = mood === 'ghost';
+  const g = ghost ? '#e9edf3' : G, g2 = ghost ? '#cdd5e0' : G2, c = ghost ? '#ffffff' : C;
+  const wings = ghost ? `<path d="M18 70q-16-10-12-26q10 6 18 16zM102 70q16-10 12-26q-10 6-18 16z" fill="#fff" stroke="#dbe2ec" stroke-width="1.5"/>` : '';
+  return `<svg class="nori-svg" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">${wings}
+<g class="n-ear l"><path d="M30 38q-20 4-18 34q2 16 14 18q8-2 10-20z" fill="${g2}"/></g>
+<g class="n-ear r"><path d="M90 38q20 4 18 34q-2 16-14 18q-8-2-10-20z" fill="${g2}"/></g>
+<ellipse cx="60" cy="62" rx="36" ry="35" fill="${g}"/>
+<path d="M60 30q-6 14 0 26q6-12 0-26z" fill="${c}" opacity=".55"/>
+<ellipse cx="60" cy="80" rx="22" ry="16" fill="${c}"/>
+${brows}${eyes}${extra}
+<ellipse cx="60" cy="71" rx="7.5" ry="5.4" fill="${INK}"/><ellipse cx="58" cy="69.4" rx="2.4" ry="1.4" fill="#fff" opacity=".55"/>
+<path d="M60 76v3" stroke="${INK}" stroke-width="2.6" stroke-linecap="round"/>
+${mouth}${top}</svg>`;
+}
+
+/* ---------- Nori: how the dog feels depends on the last finished day ---------- */
+function lastDay(before){ const lim = before == null ? today() : before; let m = null; for (const k in state.days){ const d = +k; if (d <= lim && (m == null || d > m)) m = d; } return m; }
+function noriState(){
+  const t = today(), L = lastDay();
+  if (L === t) return { mood: 'happy', gap: 0 };
+  if (L == null) return { mood: 'wait', gap: null };
+  const g = t - L;
+  return { gap: g, mood: g <= 1 ? 'wait' : g === 2 ? 'sad' : g === 3 ? 'sick' : g <= 6 ? 'hospital' : 'ghost' };
+}
+function noriLines(ns, sk){
+  const g = ns.gap;
+  if (ns.mood === 'happy') return ['노리가 꼬리를 흔들어요', '오늘 학습 끝! 내일 또 놀아 줘요'];
+  if (g == null) return ['노리가 첫 산책을 기다려요', '오늘 분량을 끝내면 연속 기록이 시작돼요'];
+  if (g === 1) return ['노리가 현관에서 기다려요', sk ? '오늘 끝내면 ' + (sk + 1) + '일 연속이에요' : '오늘 끝내면 연속 기록이 시작돼요'];
+  if (g === 2) return ['노리가 삐졌어요', '어제 안 와서 밥도 안 먹었대요'];
+  if (g === 3) return ['노리가 아파요', '수의사 말로는 영어 단어가 약이래요'];
+  if (g <= 6) return ['노리가 입원했어요', 7 - g === 1 ? '오늘이 마지막 기회예요' : (7 - g) + '일 안에 와야 살 수 있어요'];
+  return ['노리가 무지개다리를 건넜어요', '오늘 분량을 끝내면 다시 살아나요'];
+}
+function paintNori(el, mood){ if (el.dataset.mood === mood) return; el.dataset.mood = mood; el.className = 'nori m-' + mood; el.innerHTML = nori(mood); }
+
+/* ---------- daily push (site build): one doc per account with this device's subscription ---------- */
+const VAPID = "BIAEFN8hAULXpFZxHKZW-KF7Aoj-8f8Gp6W94YgXQ_wnOjlWsbUubiynIqShbe78FXLkms9DnvZEQmibifg0B5I";
+const IOS_WEB = /iPhone|iPad|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+const PUSH_OK = !!(FB && VAPID && 'serviceWorker' in navigator && 'PushManager' in window && 'Notification' in window);
+const pushLS = () => 'norivoka:push:' + (account ? account.uid : '');
+function pushOn(){ try { return PUSH_OK && !!account && !!localStorage.getItem(pushLS()) && Notification.permission === 'granted'; } catch (e) { return false; } }
+function b64u(v){ const p = '='.repeat((4 - v.length % 4) % 4), b = atob((v + p).replace(/-/g, '+').replace(/_/g, '/')); return Uint8Array.from(b, c => c.charCodeAt(0)); }
+function subKey(s){ let h = 5381; for (let i = 0; i < s.length; i++) h = ((h << 5) + h + s.charCodeAt(i)) | 0; return 'k' + (h >>> 0).toString(36); }
+const pushDoc = () => firebase.firestore().collection('push').doc(account.uid);
+const pushInfo = () => ({ last: lastDay(), streak: streak(), nick: (state.settings.nick || '').slice(0, 10) });
+let pushSent = '';
+function pushSync(){
+  if (!pushOn()) return;
+  const i = pushInfo(), sig = JSON.stringify(i);
+  if (sig === pushSent) return;
+  pushSent = sig;
+  pushDoc().set(i, { merge: true }).catch(() => { pushSent = ''; });
+}
+async function enablePush(){
+  if (!PUSH_OK || !account) return false;
+  try {
+    let perm = Notification.permission;
+    if (perm === 'default') perm = await Notification.requestPermission();
+    if (perm !== 'granted'){ toast('휴대폰 설정에서 노리보카 알림을 허용해 주세요'); return false; }
+    const reg = await navigator.serviceWorker.ready;
+    let sub = await reg.pushManager.getSubscription();
+    if (!sub) sub = await reg.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: b64u(VAPID) });
+    const k = subKey(sub.endpoint);
+    await pushDoc().set(Object.assign({ subs: { [k]: JSON.stringify(sub) } }, pushInfo()), { merge: true });
+    localStorage.setItem(pushLS(), k); pushSent = '';
+    try { reg.showNotification('노리 알림을 켰어요 🐶', { body: '매일 저녁 8시에 노리가 찾아갈게요. 그날 분량을 끝냈으면 조용히 있을게요', icon: 'nori-happy.png', tag: 'nori-hello' }); } catch (e) {}
+    return true;
+  } catch (e) { toast('알림을 켜지 못했어요. 잠시 뒤에 다시 해 주세요'); return false; }
+}
+async function disablePush(){
+  let k = null; try { k = localStorage.getItem(pushLS()); localStorage.removeItem(pushLS()); } catch (e) {}
+  try { const reg = await navigator.serviceWorker.ready; const sub = await reg.pushManager.getSubscription(); if (sub){ k = k || subKey(sub.endpoint); await sub.unsubscribe(); } } catch (e) {}
+  if (k && account) try { await pushDoc().update({ ['subs.' + k]: firebase.firestore.FieldValue.delete() }); } catch (e) {}
+}
+function paintPush(){
+  const on = pushOn();
+  $('h-bell').hidden = !PUSH_OK || !account || on;
+  $('o-push-wrap').hidden = !FB;
+  $('o-push').checked = on; $('o-push').disabled = !PUSH_OK;
+  $('o-push-note').textContent = PUSH_OK ? (on ? '공부를 빼먹을수록 노리 상태가 나빠져요' : '')
+    : (IOS_WEB ? '홈 화면에 추가한 앱에서 켤 수 있어요' : '이 브라우저는 알림을 지원하지 않아요');
+}
 
 /* ---------- analysis by source ---------- */
 const GROUPS = ['수능특강', '모의고사', '생각의 지도', '기타'];
@@ -1852,6 +2036,7 @@ function openSettings(){
   $('o-keysnd').checked = !!state.settings.keySound;
   $('o-sfx').checked = !!state.settings.sfx;
   $('o-nick').value = state.settings.nick || '';
+  paintPush();
   document.querySelectorAll('#o-new button').forEach(b => b.setAttribute('aria-pressed', String(+b.dataset.v === state.settings.newPerDay)));
   $('o-confirm').hidden = true; $('o-reset').hidden = false;
   if ($('sheet').hidden) navOverlay('sheet', closeSettings);
@@ -1910,10 +2095,19 @@ $('o-kb').onchange = e => {
   const cur = state.sess && state.sess.cur; showKb(!!cur && !cur.solved);
 };
 buildKb();
+$('brand-nori').innerHTML = nori('happy'); $('lg-nori').innerHTML = nori('happy');
 $('o-reset').onclick = () => { $('o-confirm').hidden = false; $('o-reset').hidden = true; };
 $('o-no').onclick = () => { $('o-confirm').hidden = true; $('o-reset').hidden = false; };
 $('o-yes').onclick = () => { const keep = state.settings; state = blankState(); state.settings = keep; save(); $('sheet').hidden = true; navOverlayClosed('sheet'); goHome(); };
 $('o-close').onclick = closeSettings;
+$('o-push').onchange = async e => {
+  const want = e.target.checked; e.target.disabled = true;
+  if (want){ const ok = await enablePush(); if (ok) toast('매일 저녁 8시에 노리가 찾아갈게요'); }
+  else await disablePush();
+  paintPush(); if (current === 'home') renderHome();
+};
+$('h-bell').onclick = async () => { if (await enablePush()){ toast('매일 저녁 8시에 노리가 찾아갈게요'); } paintPush(); };
+$('h-fire').onclick = () => { const sk = streak(), on = state.days[today()]; toast(on ? sk + '일 연속 학습 중이에요 🔥' : sk ? '오늘 분량을 끝내면 ' + (sk + 1) + '일 연속!' : '오늘 분량을 끝내면 연속 기록이 시작돼요'); };
 $('sheet').onclick = e => { if (e.target === $('sheet')) closeSettings(); };
 document.addEventListener('keydown', e => { if (e.key === 'Escape' && !USE_CW){ if (!$('sheet').hidden) closeSettings(); else closeDict(); } });
 

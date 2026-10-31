@@ -1,7 +1,7 @@
 /* 노리보카 offline support: the app shell is cached so it opens without a connection.
    Account calls (Firebase) always go to the network. Bump CACHE when the shell changes. */
-const CACHE = 'norivoka-v9';
-const CORE = ['./', './index.html', './manifest.webmanifest', './icon-192.png', './icon-512.png', './apple-touch-icon.png'];
+const CACHE = 'norivoka-v10';
+const CORE = ['./', './index.html', './manifest.webmanifest', './icon-192.png', './icon-512.png', './apple-touch-icon.png', './nori-happy.png'];
 self.addEventListener('install', e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(CORE)).then(() => self.skipWaiting()));
 });
@@ -26,4 +26,21 @@ self.addEventListener('fetch', e => {
       return r;
     })));
   }
+});
+
+/* Nori's daily nudge (sent by the scheduled job in .github/workflows) */
+self.addEventListener('push', e => {
+  let d = {}; try { d = e.data ? e.data.json() : {}; } catch (x) { d = { body: e.data && e.data.text() }; }
+  e.waitUntil(self.registration.showNotification(d.title || '노리보카', {
+    body: d.body || '노리가 기다리고 있어요', icon: d.icon || 'nori-wait.png', badge: 'badge-96.png',
+    tag: 'nori-daily', renotify: true, data: { url: d.url || './' }
+  }));
+});
+self.addEventListener('notificationclick', e => {
+  e.notification.close();
+  const url = new URL((e.notification.data && e.notification.data.url) || './', self.registration.scope).href;
+  e.waitUntil(self.clients.matchAll({ type: 'window', includeUncontrolled: true }).then(cs => {
+    for (const c of cs){ if (c.url.startsWith(self.registration.scope) && 'focus' in c) return c.focus(); }
+    return self.clients.openWindow(url);
+  }));
 });
