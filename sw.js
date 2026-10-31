@@ -1,6 +1,6 @@
 /* 노리보카 offline support: the app shell is cached so it opens without a connection.
    Account calls (Firebase) always go to the network. Bump CACHE when the shell changes. */
-const CACHE = 'norivoka-v21';
+const CACHE = 'norivoka-v22-naver';
 const CORE = ['./', './index.html', './manifest.webmanifest', './icon-192.png', './icon-512.png', './apple-touch-icon.png', './nori-happy.png'];
 self.addEventListener('install', e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(CORE)).then(() => self.skipWaiting()));
@@ -12,6 +12,8 @@ self.addEventListener('fetch', e => {
   const req = e.request;
   if (req.method !== 'GET') return;
   const url = new URL(req.url);
+  // Authentication responses must never enter the offline cache.
+  if (url.pathname.startsWith('/api/') || url.searchParams.has('naver_complete') || url.searchParams.has('naver_error')) return;
   if (url.hostname.endsWith('googleapis.com') || url.hostname.endsWith('firebaseapp.com')) return;
   // the page itself: newest from the network, cached copy when offline (new words arrive on the next open)
   if (req.mode === 'navigate'){
