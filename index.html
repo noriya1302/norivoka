@@ -497,6 +497,49 @@ details.panel:not([open]){gap:0}
 .ask p{margin:0;font-size:15.5px;color:var(--ink-2);line-height:1.55;word-break:keep-all}
 .ask .go{width:100%;margin-top:14px}
 .ask .later{border:none;background:none;color:var(--muted);font-weight:700;font-size:14.5px;padding:10px}
+/* ===== bottom tab bar: floating liquid glass ===== */
+.tabbar{position:absolute;left:14px;right:14px;bottom:calc(10px + env(safe-area-inset-bottom,0px) * 0);z-index:15;display:grid;grid-template-columns:repeat(5,1fr);padding:6px;border-radius:28px;
+  background:linear-gradient(180deg,rgba(255,255,255,.62),rgba(255,255,255,.38));
+  -webkit-backdrop-filter:blur(18px) saturate(1.8);backdrop-filter:blur(18px) saturate(1.8);
+  border:1px solid rgba(255,255,255,.75);
+  box-shadow:0 12px 32px rgba(30,70,130,.18),0 2px 6px rgba(30,70,130,.08),inset 0 1px 0 rgba(255,255,255,.95),inset 0 -1px 0 rgba(255,255,255,.35)}
+.tabbar::before{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;background:radial-gradient(120% 90% at 20% -20%,rgba(255,255,255,.7),transparent 55%),radial-gradient(90% 80% at 110% 130%,rgba(160,200,255,.25),transparent 60%)}
+.tabbar[hidden]{display:none}
+.tab-pill{position:absolute;top:6px;bottom:6px;left:6px;width:calc((100% - 12px) / 5);border-radius:22px;pointer-events:none;
+  background:linear-gradient(180deg,rgba(255,255,255,.95),rgba(255,255,255,.7));
+  box-shadow:0 4px 12px rgba(108,93,245,.18),inset 0 1px 0 #fff,inset 0 0 0 1px rgba(255,255,255,.9);
+  transform:translateX(calc(var(--ti,0) * 100%));transition:transform .45s cubic-bezier(.3,1.35,.45,1)}
+.tab{position:relative;z-index:1;border:none;background:none;display:flex;flex-direction:column;align-items:center;gap:2px;padding:7px 0 5px;color:#7d8a9c;font-size:11px;font-weight:700;transition:color .25s}
+.tab svg{width:24px;height:24px;transition:transform .3s var(--ease)}
+.tab[aria-current="page"]{color:var(--violet)}
+.tab[aria-current="page"] svg{transform:scale(1.08)}
+.tab:active svg{transform:scale(.86)}
+#app.has-tabs .scroll{padding-bottom:104px;box-sizing:border-box}
+/* ===== ranking ===== */
+.rank-wrap{display:flex;flex-direction:column;gap:12px;padding-block:2px 24px}
+.rank-me{flex-direction:row;align-items:center;gap:14px;padding:18px}
+.rank-me .big-rank{font-size:40px;font-weight:900;letter-spacing:-.04em;color:var(--violet);line-height:1;font-variant-numeric:tabular-nums}
+.rank-me .big-rank small{font-size:18px;margin-left:2px}
+.rank-me .me-t{display:flex;flex-direction:column;gap:3px;min-width:0;flex:1;word-break:keep-all}
+.rank-me .me-t b{font-size:16px;font-weight:800}
+.rank-me .me-t span{font-size:13px;color:var(--ink-2)}
+.rank-me .ghost{height:38px;font-size:13.5px;flex:none}
+.rank-list{display:flex;flex-direction:column;gap:8px}
+.rk{display:flex;align-items:center;gap:12px;background:var(--card);border-radius:18px;padding:10px 14px;box-shadow:0 4px 14px rgba(40,95,160,.08);animation:rise .45s var(--ease) both}
+.rk.me{box-shadow:0 0 0 2.5px var(--violet),0 6px 18px rgba(108,93,245,.18)}
+.rk-n{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;font-weight:900;font-size:14px;color:var(--ink-2);flex:none;font-variant-numeric:tabular-nums}
+.rk-n.g1{background:linear-gradient(135deg,#ffe27a,#f5b400);color:#5a3d00}
+.rk-n.g2{background:linear-gradient(135deg,#eef2f7,#b9c3d0);color:#3d4655}
+.rk-n.g3{background:linear-gradient(135deg,#ffd2a6,#d9894a);color:#5a2e0a}
+.rk .nori{width:44px;height:44px;border-radius:14px}
+.rk .nori .nori-svg{width:40px;height:40px}
+.rk-t{flex:1;min-width:0;display:flex;flex-direction:column;gap:1px}
+.rk-t b{font-size:15.5px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rk-t b i{font-style:normal;font-size:11px;font-weight:800;color:var(--white);background:var(--violet);border-radius:999px;padding:1px 7px;margin-left:6px;vertical-align:2px}
+.rk-t span{font-size:12px;color:var(--muted);font-weight:600}
+.rk-v{font-size:17px;font-weight:900;font-variant-numeric:tabular-nums;white-space:nowrap}
+.rk-v small{font-size:12px;font-weight:700;color:var(--muted);margin-left:2px}
+.rk-v.fire{color:#ff8a00}
 /* ===== dictionary popup (after a card is solved) ===== */
 .blank.ok{cursor:pointer}
 #card.solved .blank.ok,.blank.ok.shown{box-shadow:inset 0 -2px 0 rgba(44,108,180,.28)}
@@ -591,9 +634,6 @@ details.panel:not([open]){gap:0}
       <div class="brand"><span class="brand-mark" id="brand-nori"></span>노리보카</div>
       <div class="right">
         <button class="flame-chip" id="h-fire" type="button" aria-label="연속 학습"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5c.6 3.2 2.6 4.6 4.3 6.6 1.6 1.9 2.7 3.9 2.7 6.4A7 7 0 0 1 5 15.5c0-2.6 1.2-4.4 2.6-5.8.3 1.6 1 2.7 2.2 3.2-.5-3.8.6-7.6 2.2-10.4z" fill="currentColor"/><path d="M12 12.2c.4 1.5 1.4 2.3 2.1 3.3.6.8.9 1.6.9 2.5a3 3 0 0 1-6 0c0-1.3.6-2.4 1.6-3.2.2.7.6 1.1 1.1 1.3-.2-1.4.1-2.7.3-3.9z" fill="#ffd54a"/></svg><span id="h-fire-n">0</span></button>
-        <button class="icon-btn" id="h-stats" aria-label="분야별 분석"><svg viewBox="0 0 24 24" fill="currentColor"><rect x="3.5" y="12" width="4.6" height="8.5" rx="1.6"/><rect x="9.7" y="4" width="4.6" height="16.5" rx="1.6"/><rect x="15.9" y="8.5" width="4.6" height="12" rx="1.6"/></svg></button>
-        <button class="icon-btn" id="h-list" aria-label="단어장"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M4 5.6C4 4.7 4.7 4 5.6 4H11v16H5.6c-.9 0-1.6-.7-1.6-1.6zM13 4h5.4c.9 0 1.6.7 1.6 1.6v12.8c0 .9-.7 1.6-1.6 1.6H13z"/></svg></button>
-        <button class="icon-btn" id="h-set" aria-label="설정"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M13.9 2.6l.4 2.3c.6.2 1.2.5 1.7.9l2.2-.8 1.9 3.3-1.8 1.5c.1.6.1 1.3 0 1.9l1.8 1.5-1.9 3.3-2.2-.8c-.5.4-1.1.7-1.7.9l-.4 2.3h-3.8l-.4-2.3c-.6-.2-1.2-.5-1.7-.9l-2.2.8-1.9-3.3 1.8-1.5c-.1-.6-.1-1.3 0-1.9L3.9 8.3l1.9-3.3 2.2.8c.5-.4 1.1-.7 1.7-.9l.4-2.3zM12 8.6a3.4 3.4 0 1 0 0 6.8 3.4 3.4 0 0 0 0-6.8z"/></svg></button>
       </div>
     </div>
     <div class="scroll gutter">
@@ -790,6 +830,17 @@ details.panel:not([open]){gap:0}
     </div>
   </section>
 
+  <!-- RANKING -->
+  <section class="screen" id="rank" hidden>
+    <div class="list-top gutter"><div class="list-title">랭킹</div></div>
+    <div class="gutter"><div class="seg" id="r-seg" role="group" aria-label="순위 기준"><button data-r="week" aria-pressed="true">이번 주</button><button data-r="streak" aria-pressed="false">연속 기록</button></div></div>
+    <div class="scroll gutter"><div class="rank-wrap">
+      <div class="panel rank-me" id="r-me"></div>
+      <div class="rank-list" id="r-list"></div>
+      <div class="foot" id="r-foot"></div>
+    </div></div>
+  </section>
+
   <!-- ADD TO HOME SCREEN STEPS -->
   <div class="overlay" id="inst" hidden>
     <div class="sheet gutter" role="dialog" aria-modal="true" aria-labelledby="inst-title">
@@ -813,6 +864,7 @@ details.panel:not([open]){gap:0}
             <label for="o-nick">닉네임</label>
             <input class="nick-in" id="o-nick" maxlength="10" placeholder="이름 적기" autocomplete="nickname">
           </div>
+          <div class="set-row" id="o-rank-row" hidden><label for="o-rank">순위표 참여<small>닉네임과 학습량만 보여요</small></label><input type="checkbox" class="switch" id="o-rank"></div>
           <div class="set-row" id="o-acct" hidden>
             <div class="lab"><small id="o-acct-label">로그인 아이디</small><span id="o-acct-id"></span></div>
             <button type="button" class="text-btn" id="o-logout">로그아웃</button>
@@ -851,6 +903,7 @@ details.panel:not([open]){gap:0}
       </div>
     </div>
   </section>
+  <nav class="tabbar" id="tabbar" aria-label="메뉴"><span class="tab-pill" id="tab-pill"></span><button type="button" class="tab" id="t-home" data-tab="home"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M3.5 11.2 12 4l8.5 7.2V19a1.5 1.5 0 0 1-1.5 1.5h-4.2v-5.3H9.2v5.3H5A1.5 1.5 0 0 1 3.5 19z"/></svg><span>홈</span></button><button type="button" class="tab" id="h-list" data-tab="list"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M4 5.6C4 4.7 4.7 4 5.6 4H11v16H5.6c-.9 0-1.6-.7-1.6-1.6zM13 4h5.4c.9 0 1.6.7 1.6 1.6v12.8c0 .9-.7 1.6-1.6 1.6H13z"/></svg><span>단어장</span></button><button type="button" class="tab" id="t-rank" data-tab="rank"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 3h10v2h3a1 1 0 0 1 1 1v2a5 5 0 0 1-4.6 5A5 5 0 0 1 13 15.9V18h3v3H8v-3h3v-2.1A5 5 0 0 1 7.6 13 5 5 0 0 1 3 8V6a1 1 0 0 1 1-1h3zm10 4v3.9A3 3 0 0 0 19 8V7zM5 7v1a3 3 0 0 0 2 2.9V7z"/></svg><span>랭킹</span></button><button type="button" class="tab" id="h-stats" data-tab="stats"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="3.5" y="12" width="4.6" height="8.5" rx="1.6"/><rect x="9.7" y="4" width="4.6" height="16.5" rx="1.6"/><rect x="15.9" y="8.5" width="4.6" height="12" rx="1.6"/></svg><span>분석</span></button><button type="button" class="tab" id="h-set" data-tab="settings"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M13.9 2.6l.4 2.3c.6.2 1.2.5 1.7.9l2.2-.8 1.9 3.3-1.8 1.5c.1.6.1 1.3 0 1.9l1.8 1.5-1.9 3.3-2.2-.8c-.5.4-1.1.7-1.7.9l-.4 2.3h-3.8l-.4-2.3c-.6-.2-1.2-.5-1.7-.9l-2.2.8-1.9-3.3 1.8-1.5c-.1-.6-.1-1.3 0-1.9L3.9 8.3l1.9-3.3 2.2.8c.5-.4 1.1-.7 1.7-.9l.4-2.3zM12 8.6a3.4 3.4 0 1 0 0 6.8 3.4 3.4 0 0 0 0-6.8z"/></svg><span>설정</span></button></nav>
 </div>
 
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script><script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script><script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script><script>
@@ -886,13 +939,14 @@ function norm(s){ return String(s).toLowerCase().replace(/[‘’ʼ`´]/g, "'").
 function hit(v, alts){ const nv = norm(v); return nv.length > 0 && alts.some(a => norm(a) === nv); }
 
 /* ---------- state ---------- */
-function blankState(){ return { v: 1, updatedAt: 0, settings: { newPerDay: 20, hintIsWrong: true, autoNext: false, ownKb: true, keySound: true, sfx: true, nick: '' }, w: {}, sess: null, days: {} }; }
+function blankState(){ return { v: 1, updatedAt: 0, settings: { newPerDay: 20, hintIsWrong: true, autoNext: false, ownKb: true, keySound: true, sfx: true, nick: '', rank: true }, w: {}, sess: null, days: {}, cnt: {} }; }
 function clean(s){
   const f = blankState();
   if (!s || typeof s !== 'object') return f;
   s.settings = Object.assign(f.settings, s.settings || {});
   if (!s.w || typeof s.w !== 'object') s.w = {};
   if (!s.days || typeof s.days !== 'object') s.days = {};
+  if (!s.cnt || typeof s.cnt !== 'object') s.cnt = {};
   if (s.sess && (!Array.isArray(s.sess.queue) || !Array.isArray(s.sess.retry))) s.sess = null;
   return s;
 }
@@ -901,7 +955,7 @@ function loadLocal(){ try { const raw = localStorage.getItem(lkey); return raw ?
 if (!FB) state = loadLocal();
 function persistLocal(){ try { localStorage.setItem(lkey, JSON.stringify(state)); } catch (e) {} }
 /* a real change by the learner: bump the clock so this copy wins over older ones */
-function save(){ state.updatedAt = Date.now(); persistLocal(); queueRemote(); if (typeof pushSync === 'function') pushSync(); }
+function save(){ state.updatedAt = Date.now(); persistLocal(); queueRemote(); if (typeof pushSync === 'function') pushSync(); if (typeof rankSync === 'function') rankSync(); }
 
 /* ---------- account sync (db capability) ---------- */
 const sync = { ref: null, status: 'pending', timer: null, writing: false, again: false };
@@ -1116,6 +1170,8 @@ function finishCard(){
   const gap = Math.min(3, s.queue.length);
   if (cur.mode === 'main'){
     s.done++;
+    state.cnt[t] = (state.cnt[t] || 0) + 1;
+    for (const k of Object.keys(state.cnt)) if (+k < t - 60) delete state.cnt[k];
     if (ok){
       s.firstOk++;
       if (s.kinds[n] === 'mix'){ r.f = 'ok'; }
@@ -1174,7 +1230,7 @@ function navPush(from, back, ov){
   try {
     if (USE_CW){
       e.w = new CloseWatcher();
-      e.w.onclose = () => { if (e.dead) return; e.dead = true; const i = navStack.indexOf(e); if (i >= 0) navStack.splice(i); quietly(back); };
+      e.w.onclose = () => { if (e.dead) return; e.dead = true; const i = navStack.indexOf(e); if (i >= 0) navStack.splice(i); quietly(e.back); };
     } else history.pushState({ lv: navStack.length + 1 }, '');
   } catch (x) {}
   navStack.push(e);
@@ -1226,7 +1282,9 @@ if (!USE_CW) addEventListener('popstate', () => {
 });
 function show(id){
   navTrack(id);
-  for (const s of ['login', 'home', 'study', 'done', 'list', 'stats', 'settings']) $(s).hidden = s !== id;
+  for (const s of ['login', 'home', 'study', 'done', 'list', 'stats', 'settings', 'rank']) $(s).hidden = s !== id;
+  if (id === 'home') tabCur = 'home';
+  paintTabbar(id);
   if (id !== 'study') closeDict();
   if (current !== id){ const el = $(id); el.classList.remove('enter'); void el.offsetWidth; el.classList.add('enter'); }
   current = id;
@@ -1237,6 +1295,7 @@ function rerender(){
   else if (current === 'list') renderList();
   else if (current === 'stats') renderStats();
   else if (current === 'settings') paintSettings();
+  else if (current === 'rank') renderRank();
   else renderHome();
 }
 
@@ -2067,6 +2126,100 @@ function maybeAskPush(){
 }
 function closeAsk(){ $('ask').hidden = true; try { localStorage.setItem(askLS(), String(Date.now())); } catch (e) {} }
 
+/* ---------- bottom tabs ---------- */
+const TABS = ['home', 'list', 'rank', 'stats', 'settings'];
+let tabCur = 'home';
+function paintTabbar(id){
+  const on = id === 'home' || (TABS.includes(id) && tabCur === id);
+  $('tabbar').hidden = !on; $('app').classList.toggle('has-tabs', on);
+  const act = id === 'home' ? 'home' : tabCur; $('tab-pill').style.setProperty('--ti', Math.max(0, TABS.indexOf(act)));
+  document.querySelectorAll('#tabbar .tab').forEach(b => { if (b.dataset.tab === (id === 'home' ? 'home' : tabCur)) b.setAttribute('aria-current', 'page'); else b.removeAttribute('aria-current'); });
+}
+function openTab(id){
+  if (id === 'list') openList(); else if (id === 'stats') openStats(); else if (id === 'settings') openSettings(); else if (id === 'rank') openRank();
+  const back = { list: 'l-back', stats: 'a-back', settings: 'o-back' }[id]; if (back) $(back).hidden = true;
+  paintTabbar(id);
+}
+/* tabs sit one level above home: a back press from any tab lands on home */
+function goTab(id){
+  if (id === 'home'){ goHome(); return; }
+  if (current === id && tabCur === id){ const sc = $(id).querySelector('.scroll'); if (sc) sc.scrollTo({ top: 0, behavior: 'smooth' }); return; }
+  if (current === 'settings') saveNick();
+  tabCur = id;
+  if (!navStack.length){ openTab(id); }
+  else { if (navStack.length > 1) navDropTo(1); quietly(() => openTab(id)); }
+  const top = navStack[0]; if (top){ top.from = 'home'; top.back = () => goHome(); top.ov = null; }
+}
+
+/* ---------- ranking: only nickname, counts and streak ever leave the device ---------- */
+function weekStart(t){ const dow = new Date(t * 864e5).getUTCDay(); return t - (dow + 6) % 7; }
+function weekCount(){ const w = weekStart(today()); let c = 0; for (let d = w; d < w + 7; d++) c += state.cnt[d] || 0; return c; }
+function moodFor(last){
+  const t = today(); if (last === t) return 'happy'; if (last == null) return 'wait';
+  const g = t - last; return g <= 1 ? 'wait' : g === 2 ? 'sad' : g <= 4 ? 'sick' : g <= 9 ? 'hospital' : 'dead';
+}
+const rankDoc = () => firebase.firestore().collection('board').doc(account.uid);
+const rankInfo = () => ({ nick: (state.settings.nick || '').slice(0, 10), wk: weekStart(today()), wc: weekCount(), streak: streak(), last: lastDay(), seen: Object.keys(state.w).length });
+let rankSent = '';
+function rankSync(){
+  if (!FB || !account || state.settings.rank === false) return;
+  const i = rankInfo(), sig = JSON.stringify(i);
+  if (sig === rankSent) return;
+  rankSent = sig;
+  rankDoc().set(Object.assign({ at: Date.now() }, i)).catch(() => { rankSent = ''; });
+}
+let rankMode = 'week', rankRows = null, rankErr = '';
+async function loadRank(){
+  if (!FB || !account){ rankRows = []; return; }
+  rankSync();
+  try {
+    const snap = await firebase.firestore().collection('board').limit(300).get();
+    const rows = []; snap.forEach(d => rows.push(Object.assign({ uid: d.id }, d.data())));
+    rankRows = rows; rankErr = '';
+  } catch (e) { rankErr = '순위표를 불러오지 못했어요'; }
+}
+function openRank(){ show('rank'); $('rank').querySelector('.scroll').scrollTop = 0; renderRank(); loadRank().then(() => { if (current === 'rank') renderRank(); }); }
+function renderRank(){
+  const wk = weekStart(today()), meUid = account ? account.uid : '__me';
+  const mine = Object.assign({ uid: meUid }, rankInfo());
+  const joined = FB && account && state.settings.rank !== false;
+  let rows = (rankRows || []).filter(r => r.uid !== meUid);
+  if (joined || !FB) rows.push(mine);
+  rows = rows.map(r => ({ ...r, val: rankMode === 'week' ? (r.wk === wk ? r.wc || 0 : 0) : (r.last != null && today() - r.last <= 1 ? r.streak || 0 : 0) }));
+  rows.sort((a, b) => b.val - a.val || (b.seen || 0) - (a.seen || 0));
+  const unit = rankMode === 'week' ? '단어' : '일';
+  // my card
+  const me = $('r-me'); me.replaceChildren();
+  const myI = rows.findIndex(r => r.uid === meUid);
+  if (!joined && FB){
+    const t = mk('div', 'me-t'); t.append(mk('b', null, '순위표에 참여하지 않고 있어요'), mk('span', null, '참여하면 친구들과 학습량을 겨룰 수 있어요'));
+    const go = mk('button', 'ghost', '참여하기'); go.type = 'button'; go.onclick = () => { state.settings.rank = true; save(); renderRank(); loadRank().then(renderRank); };
+    me.append(t, go);
+  } else {
+    const big = mk('div', 'big-rank'); big.append(String(myI + 1)); big.appendChild(mk('small', null, '위'));
+    const t = mk('div', 'me-t');
+    const lead = myI > 0 ? rows[myI - 1].val - rows[myI].val : 0;
+    t.append(mk('b', null, rankMode === 'week' ? '이번 주 ' + mine.wc + '단어' : '🔥 ' + rows[myI].val + '일 연속'),
+      mk('span', null, myI === 0 ? (rows.length > 1 ? '1등이에요! 노리가 자랑스러워해요' : '아직 혼자예요. 친구를 불러 보세요') : (lead + 1) + unit + ' 더 하면 ' + myI + '위예요'));
+    me.append(big, t);
+    if (!(state.settings.nick || '').trim()){ const go = mk('button', 'ghost', '닉네임 정하기'); go.type = 'button'; go.onclick = () => { goTab('settings'); setTimeout(() => $('o-nick').focus(), 350); }; me.appendChild(go); }
+  }
+  // list
+  const list = $('r-list'); list.replaceChildren();
+  rows.slice(0, 100).forEach((r, i) => {
+    const row = mk('div', 'rk' + (r.uid === meUid ? ' me' : '')); row.style.animationDelay = Math.min(i, 12) * .03 + 's';
+    row.appendChild(mk('div', 'rk-n' + (i < 3 && r.val > 0 ? ' g' + (i + 1) : ''), String(i + 1)));
+    const t = mk('div', 'rk-t'); const nm = mk('b', null, (r.nick || '').trim() || '이름 없는 노리'); if (r.uid === meUid) nm.appendChild(mk('i', null, '나'));
+    t.append(nm, mk('span', null, rankMode === 'week' ? '🔥 ' + (r.last != null && today() - r.last <= 1 ? r.streak || 0 : 0) + '일 연속' : '이번 주 ' + (r.wk === wk ? r.wc || 0 : 0) + '단어'));
+    row.appendChild(t);
+    const v = mk('div', 'rk-v' + (rankMode === 'streak' ? ' fire' : ''), String(r.val)); v.appendChild(mk('small', null, unit)); row.appendChild(v);
+    list.appendChild(row);
+  });
+  const left = wk + 7 - today();
+  $('r-foot').textContent = !FB ? '순위표는 노리보카 앱에서 친구들과 함께 볼 수 있어요'
+    : rankErr || (rankRows == null ? '불러오는 중' : rankMode === 'week' ? '월요일에 새로 시작해요 · ' + left + '일 남음' : '오늘이나 어제까지 이어진 기록만 세요');
+}
+
 /* ---------- analysis by source ---------- */
 const GROUPS = ['수능특강', '모의고사', '생각의 지도', '기타'];
 function grp(d){ return /^수특/.test(d.src) ? '수능특강' : /모의고사/.test(d.src) ? '모의고사' : d.src === '생각의 지도' ? '생각의 지도' : '기타'; }
@@ -2161,7 +2314,7 @@ function renderStats(){
   requestAnimationFrame(() => requestAnimationFrame(() => document.querySelectorAll('#stats .an-bar i').forEach(i => { i.style.width = i.dataset.w + '%'; })));
 }
 let statsFrom = 'home';
-function openStats(){ statsFrom = current; show('stats'); $('stats').querySelector('.scroll').scrollTop = 0; renderStats(); }
+function openStats(){ $('a-back').hidden = false; statsFrom = current; show('stats'); $('stats').querySelector('.scroll').scrollTop = 0; renderStats(); }
 
 /* list */
 let filter = 'all', srcFilter = null;
@@ -2205,6 +2358,7 @@ function renderList(){
 let listFrom = 'home';
 function setFilter(f){ filter = f; document.querySelectorAll('#l-seg button').forEach(x => x.setAttribute('aria-pressed', String(x.dataset.f === f))); }
 function openList(src, f){
+  $('l-back').hidden = false;
   listFrom = current; srcFilter = typeof src === 'string' ? src : null;
   setFilter(typeof f === 'string' ? f : 'all'); $('l-q').value = ''; openRows.clear();
   show('list'); $('list').querySelector('.scroll').scrollTop = 0; renderList();
@@ -2221,11 +2375,13 @@ function paintSettings(){
   $('o-sfx').checked = !!state.settings.sfx;
   if (document.activeElement !== $('o-nick')) $('o-nick').value = state.settings.nick || '';
   paintPush();
+  $('o-rank-row').hidden = !FB; $('o-rank').checked = state.settings.rank !== false;
   document.querySelectorAll('#o-new button').forEach(b => b.setAttribute('aria-pressed', String(+b.dataset.v === state.settings.newPerDay)));
 }
 let settingsFrom = 'home';
 function openSettings(){
   if (current === 'settings') return;
+  $('o-back').hidden = false;
   settingsFrom = current; paintSettings();
   $('o-confirm').hidden = true; $('o-reset').hidden = false;
   show('settings'); $('settings').querySelector('.scroll').scrollTop = 0;
@@ -2241,7 +2397,7 @@ function closeSettings(){
 function leaveStudy(){ clearTimeout(advTimer); closeDict(); if (state.sess.cur && state.sess.cur.solved){ finishCard(); pickNext(); save(); } busy = false; }
 $('h-start').onclick = start;
 $('h-more').onclick = () => { if (addMore(10)){ if (!state.sess.cur) pickNext(); save(); openStudy(); } };
-$('h-list').onclick = () => openList(); $('h-set').onclick = openSettings; $('h-stats').onclick = openStats;
+document.querySelectorAll('#tabbar .tab').forEach(b => b.onclick = () => goTab(b.dataset.tab));
 $('a-back').onclick = () => { if (statsFrom === 'done'){ show('done'); renderDone(); } else goHome(); };
 $('s-back').onclick = () => { leaveStudy(); goHome(); };
 $('s-set').onclick = openSettings;
@@ -2281,8 +2437,13 @@ $('o-sfx').onchange = e => { state.settings.sfx = e.target.checked; save(); if (
 const saveNick = () => { const v = $('o-nick').value.trim().slice(0, 10); if (v !== (state.settings.nick || '')){ state.settings.nick = v; save(); if (current === 'home') renderHome(); } };
 $('o-nick').addEventListener('change', saveNick);
 $('o-nick').addEventListener('keydown', e => { if (e.key === 'Enter' && !e.isComposing){ e.preventDefault(); $('o-nick').blur(); } });
-$('h-nick').onclick = () => { openSettings(); setTimeout(() => $('o-nick').focus(), 350); };
+$('h-nick').onclick = () => { goTab('settings'); setTimeout(() => $('o-nick').focus(), 350); };
 $('o-back').onclick = closeSettings;
+$('o-rank').onchange = async e => {
+  state.settings.rank = e.target.checked; save();
+  if (!e.target.checked && FB && account){ rankSent = ''; try { await rankDoc().delete(); } catch (x) {} toast('순위표에서 빠졌어요'); }
+};
+$('r-seg').onclick = e => { const b = e.target.closest('button'); if (!b) return; rankMode = b.dataset.r; document.querySelectorAll('#r-seg button').forEach(x => x.setAttribute('aria-pressed', String(x === b))); renderRank(); };
 $('o-kb').onchange = e => {
   state.settings.ownKb = e.target.checked; save();
   inputs().forEach(i => i.setAttribute('inputmode', state.settings.ownKb ? 'none' : 'text'));
