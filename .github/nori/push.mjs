@@ -1,4 +1,4 @@
-// 노리의 매일 알림: 저녁마다 계정별 마지막 학습일을 보고 노리 상태에 맞는 알림을 보낸다.
+// 노리의 매일 알림: 아침마다 계정별 마지막 학습일을 보고 노리 상태에 맞는 알림을 보낸다.
 // Secret NORI_PUSH = {"vapidPublic","vapidPrivate","email","password","subject"}
 import webpush from 'web-push';
 
@@ -17,7 +17,7 @@ export function message(gap, streak, nick, seed){
   if (gap === 0) return null;
   if (gap == null) return { mood: 'wait', title: '🐶 노리가 기다려요', body: who + '첫 산책 언제 가요? 오늘 분량이면 충분해요' };
   if (gap === 1){
-    if (streak >= 2) return { mood: 'wait', title: `🔥 ${streak}일 연속, 오늘 밤 끊겨요!`, body: pick(['노리가 목줄 물고 기다리는 중... 지금 하면 지켜요', '노리가 현관에서 꼬리 흔드는 중! 5분이면 돼요'], seed) };
+    if (streak >= 2) return { mood: 'wait', title: `🔥 ${streak}일 연속, 오늘 지켜야 해요!`, body: pick(['노리가 목줄 물고 기다리는 중... 지금 하면 지켜요', '노리가 현관에서 꼬리 흔드는 중! 5분이면 돼요'], seed) };
     return { mood: 'wait', title: '🐶 노리가 낑낑대요', body: who + '오늘 분량 끝내고 산책 가요!' };
   }
   if (gap === 2) return { mood: 'sad', title: '😤 노리 삐짐', body: pick(['어제 안 와서 밥그릇 엎었대요. 오늘은 와요?', '노리가 등 돌리고 누웠어요. 단어로 달래 주세요'], seed) };
@@ -60,7 +60,7 @@ export async function main(){
     const uid = d.name.split('/').pop(), f = d.fields || {};
     const subs = val(f.subs) || {}, last = val(f.last), streak = val(f.streak) || 0, nick = val(f.nick) || '';
     const gap = last == null ? null : dayKST - last;
-    const m = TEST ? { mood: 'happy', title: '노리 알림 테스트 🐶', body: (nick ? nick + '님, ' : '') + '알림이 잘 와요! 매일 저녁 8시쯤 찾아갈게요' } : message(gap, streak, nick, dayKST + seedOf(uid));
+    const m = TEST ? { mood: 'happy', title: '노리 알림 테스트 🐶', body: (nick ? nick + '님, ' : '') + '알림이 잘 와요! 매일 아침 9시쯤 찾아갈게요' } : message(gap, streak, nick, dayKST + seedOf(uid));
     if (!m || !Object.keys(subs).length){ skipped++; continue; }
     const payload = JSON.stringify({ title: m.title, body: m.body, icon: `nori-${m.mood}.png`, url: './' });
     const dead = [];
