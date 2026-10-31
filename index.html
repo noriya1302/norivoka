@@ -1,7 +1,7 @@
-<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#a6d1f6"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="노리보카"><style>:root{color-scheme:light;padding-top:env(safe-area-inset-top);padding-bottom:env(safe-area-inset-bottom)}body{margin:0;font:14px system-ui}img{max-width:100%}[hidden]{display:none!important}</style><link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="apple-touch-icon.png"><link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><link rel="preload" href="pretendard.71f297ee85.woff2" as="font" type="font/woff2" crossorigin></head><body><title>노리보카</title>
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#a6d1f6"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="노리보카"><style>:root{color-scheme:light;padding-top:env(safe-area-inset-top);padding-bottom:env(safe-area-inset-bottom)}body{margin:0;font:14px system-ui}img{max-width:100%}[hidden]{display:none!important}</style><link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="apple-touch-icon.png"><link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><link rel="preload" href="pretendard.03e1319fd0.woff2" as="font" type="font/woff2" crossorigin></head><body><title>노리보카</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <style>
-@font-face{font-family:"Pretendard";font-style:normal;font-weight:45 920;font-display:swap;src:url(pretendard.71f297ee85.woff2) format("woff2")}
+@font-face{font-family:"Pretendard";font-style:normal;font-weight:45 920;font-display:swap;src:url(pretendard.03e1319fd0.woff2) format("woff2")}
 </style>
 <style>
 /* Layout: one phone-width column on a sky-blue backdrop — progress bar on top, a two-tone prompt card centred in the free space, hint bar docked above the keyboard.
@@ -642,6 +642,42 @@ details.panel:not([open]){gap:0}
 .err-tip{background:var(--red-soft);border-radius:14px;padding:11px 13px;display:flex;flex-direction:column;gap:3px;word-break:keep-all}
 .err-tip b{color:var(--red);font-size:15px}
 .err-tip span{font-size:13px;color:var(--red-ink);line-height:1.5}
+/* ===== 서술형 ===== */
+.ess-card{gap:8px}
+.ess-sub{margin:-2px 0 4px;font-size:13.5px;color:var(--ink-2);word-break:keep-all}
+.es-mode{flex:none;font-size:12.5px;font-weight:800;color:var(--violet);background:#fff;border-radius:999px;padding:5px 11px}
+.es-mode:empty{display:none}
+.es-wrap{padding-block:4px 20px}
+.es-card{background:var(--card);border-radius:24px;box-shadow:var(--shadow);padding:20px;display:flex;flex-direction:column;gap:14px;word-break:keep-all}
+.es-q{display:flex;flex-direction:column;gap:5px}
+.es-q small{font-size:12px;font-weight:700;color:var(--muted)}
+.es-q b{font-size:18px;line-height:1.45;letter-spacing:-.01em}
+.es-q span{font-size:14px;color:var(--ink-2);line-height:1.5}
+.es-sit{background:var(--soft);border-radius:14px;padding:10px 13px;font-size:13.5px;line-height:1.6;color:var(--ink-2)}
+.es-sit summary{font-weight:700;color:var(--violet);cursor:pointer}
+.es-sit p{margin:8px 0 4px}.es-sit ul{margin:4px 0 0;padding-left:18px}
+.es-line{min-height:54px;border:2px dashed var(--line);border-radius:14px;padding:8px;display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.es-ph{font-size:13px;color:var(--muted)}
+.es-pool{display:flex;flex-wrap:wrap;gap:7px}
+.es-chip{border:none;background:var(--blank);color:var(--blank-ink);font:inherit;font-size:15.5px;font-weight:600;border-radius:11px;padding:8px 11px;box-shadow:0 2px 0 rgba(44,108,180,.18);transition:transform .12s}
+.es-chip:active{transform:scale(.95)}
+.es-chip.on{background:var(--violet-tint);color:var(--violet)}
+.es-cloze{margin:0;font-size:17px;line-height:2.1}
+.es-in{font:inherit;font-size:16px;line-height:1.3;vertical-align:baseline;border:none;border-bottom:2px solid var(--violet);background:var(--blank);border-radius:8px 8px 0 0;padding:2px 6px;margin:0 2px;color:var(--blank-ink);outline:none;max-width:100%}
+.es-in.ok{border-color:var(--green);color:var(--green)}.es-in.bad{border-color:var(--red);color:var(--red)}
+.es-ko{margin:4px 0 0;font-size:13.5px;color:var(--ink-2);line-height:1.55}
+.es-ta{font:inherit;font-size:16px;line-height:1.55;border:1.5px solid var(--line);border-radius:14px;padding:12px;background:var(--soft);outline:none;resize:vertical}
+.es-ta:focus{border-color:var(--violet);background:#fff}
+.es-fb:empty{display:none}
+.es-fb{border-radius:16px;padding:13px 14px;display:flex;flex-direction:column;gap:7px;font-size:13.5px;line-height:1.55;animation:rise .35s var(--ease)}
+.es-fb.good{background:var(--green-soft);color:var(--green-ink)}.es-fb.bad{background:var(--red-soft);color:var(--red-ink)}
+.es-fb b{font-size:16px}
+.es-keys{margin:0;padding:0;list-style:none}.es-keys .y{color:var(--green)}.es-keys .n{color:var(--red);font-weight:700}
+.es-model{background:#fff;color:var(--ink);border-radius:12px;padding:10px 12px;font-size:15px;font-weight:600}
+.es-tip{font-size:12.5px;opacity:.85}
+.es-done{display:flex;flex-direction:column;align-items:center;text-align:center;gap:8px;padding:10px 0}
+.es-done .nori{width:110px;height:110px;border-radius:34px}.es-done .nori .nori-svg{width:96px;height:96px}
+.es-done h2{margin:6px 0 0;font-size:24px}.es-done p{margin:0;color:var(--ink-2);font-size:14.5px}
 /* ===== dictionary popup (after a card is solved) ===== */
 .blank.ok{cursor:pointer}
 #card.solved .blank.ok,.blank.ok.shown{box-shadow:inset 0 -2px 0 rgba(44,108,180,.28)}
@@ -776,6 +812,12 @@ details.panel:not([open]){gap:0}
               <button class="ghost" id="h-more" hidden>새 단어 10개 더 하기</button>
             </div>
           </div>
+        </div>
+
+        <div class="panel ess-card">
+          <div class="pp-head"><h2>오늘의 서술형</h2><b id="h-ess-n">0문제</b></div>
+          <p class="ess-sub" id="h-ess-sub"></p>
+          <button class="go" id="h-ess-go" type="button">서술형 시작</button>
         </div>
 
         <div class="panel">
@@ -955,6 +997,17 @@ details.panel:not([open]){gap:0}
         </div>
       </div>
     </div>
+  </section>
+
+  <!-- ESSAY -->
+  <section class="screen" id="essay" hidden>
+    <div class="list-top gutter">
+      <button class="icon-btn" id="es-back" aria-label="홈으로"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M15 4.5 7.5 12l7.5 7.5"/></svg></button>
+      <div class="list-title">서술형 <span id="es-prog"></span></div>
+      <span class="es-mode" id="es-mode"></span>
+    </div>
+    <div class="scroll gutter"><div class="es-wrap"><div class="es-card" id="es-body"></div></div></div>
+    <div class="nextbar gutter"><button class="next-btn" id="es-go" type="button">확인</button></div>
   </section>
 
   <!-- ADMIN -->
@@ -1720,7 +1773,7 @@ if (!USE_CW) addEventListener('popstate', () => {
 });
 function show(id){
   navTrack(id);
-  for (const s of ['login', 'home', 'study', 'done', 'list', 'stats', 'settings', 'rank', 'admin']) $(s).hidden = s !== id;
+  for (const s of ['login', 'home', 'study', 'done', 'list', 'stats', 'settings', 'rank', 'admin', 'essay']) $(s).hidden = s !== id;
   if (id === 'home') tabCur = 'home';
   paintTabbar(id);
   if (id !== 'study') closeDict();
@@ -1834,6 +1887,7 @@ function renderHome(){
   if (!bar.children.length) [['ng', 'var(--red)'], ['learn', 'var(--prog)'], ['long', 'var(--green)']].forEach(([k, col]) => { const i = mk('i'); i.dataset.k = k; i.style.background = col; i.style.width = '0%'; bar.appendChild(i); });
   requestAnimationFrame(() => Array.from(bar.children).forEach(i => { i.style.width = (c[i.dataset.k] / N * 100) + '%'; }));
   paintSync();
+  renderEssayCard();
 }
 function goHome(){ const was = current; show('home'); if (was !== 'home') $('home').querySelector('.scroll').scrollTop = 0; renderHome(); }
 function start(){
@@ -2889,6 +2943,7 @@ const ERR = {
   form: ['형태', '단어는 아는데 형태(시제·복수·품사)가 달라요', '빈칸 앞뒤를 보고 동사인지 명사인지, 시제가 무엇인지 먼저 정하세요'],
   syn: ['유의어', '뜻은 맞는데 배운 표현 대신 비슷한 말을 써요', '정답을 맞힌 뒤 사전 팝업에서 목표 단어를 한 번 더 보세요'],
   trap: ['혼동·반대말', '헷갈리는 단어나 반대 뜻을 골라요', '한국어 문장의 초록 글씨 뜻을 먼저 확인하고 답하세요'],
+  essay: ['서술형', '서술형 문장에서 빠뜨리거나 틀린 부분이 있어요', '모범 답안을 소리 내어 두 번 읽고 핵심 표현을 먼저 떠올리세요'],
   wrong: ['기억 안 남', '전혀 다른 단어를 써요', '틀린 단어는 단어장 오답 목록에서 예문과 함께 다시 보세요'],
   hint: ['힌트 사용', '힌트를 보고 풀어요', '힌트 전에 첫 글자라도 먼저 떠올려 보세요'],
   reveal: ['정답 보기', '정답을 바로 봐요', '모르겠어도 한 번은 써 보고 정답을 확인하세요']
@@ -2911,6 +2966,164 @@ function renderErr(){
     list.appendChild(r);
   });
   box.appendChild(list);
+}
+
+/* 서술형: 플랭스쿨 과제 모범 답안. keys = 꼭 들어가야 하는 표현 (영작 채점과 빈칸에 쓰임) */
+const ESSAY = [
+  { id: 'L14-03', title: '정체성은 무엇을 중심으로 형성되는가', ref: '14강 03번 · 책 96쪽',
+    q: "What is many people’s identity centered around according to the economics of identity?", qko: '정체성 경제학에 따르면 많은 사람의 정체성은 무엇을 중심으로 형성되는가?',
+    sit: '전통적인 경제 모형에서는 사람들이 소비할 돈을 벌기 위해 일한다고 봐. 하지만 정체성 경제학에서는 무엇을 소비하는지보다 무엇을 생산하고 어떤 일을 하는지가 정체성을 형성한다고 설명해.',
+    todo: ['정체성의 중심이 what they produce라는 점을 영어 한 문장으로 쓰기'],
+    a: 'Many people’s identities are centered around what they produce rather than what they consume.',
+    ko: '많은 사람의 정체성은 자신이 소비하는 것보다 자신이 생산하는 것을 중심으로 형성된다.',
+    tip: 'identities are로 복수에 맞추고, 소비와의 대조(rather than what they consume)까지 넣으면 완벽해.',
+    keys: ['are centered around', 'what they produce', 'rather than what they consume'] },
+  { id: 'L14-04', title: '고정관념은 무엇을 만들어 내는가', ref: '14강 04번 · 책 97쪽',
+    q: 'What do stereotypes generate in us?', qko: '고정관념은 우리 안에 무엇을 만들어 내는가?',
+    sit: '미디어에서 특정 집단을 반복적으로 묘사하면 그 집단에 대한 고정관념이 생겨. 그러면 실제 사람을 만나기 전부터 어떻게 행동할지 기대하고, 그 기대에 맞춰 행동을 해석하게 돼.',
+    todo: ['고정관념이 집단 구성원의 행동에 대한 기대를 만들어 낸다고 영어 한 문장으로 쓰기'],
+    a: 'Stereotypes generate in us an expectation of how a member of a group will behave.',
+    ko: '고정관념은 우리 안에 어떤 집단의 구성원이 어떻게 행동할 것인지에 대한 기대를 만들어 낸다.',
+    tip: 'an 뒤에는 단수 expectation, 단수 가산명사 group 앞에는 관사 a가 필요해.',
+    keys: ['generate in us', 'an expectation of', 'how a member of a group will behave'] },
+  { id: 'L17-03', title: '음악에 대한 즉각적인 반응', ref: '17강 03번 · 책 116쪽',
+    q: 'What do music psychologists call an intuitive and immediate response to music?', qko: '음악 심리학자들은 음악에 대한 직관적이고 즉각적인 반응을 무엇이라고 부르는가?',
+    sit: '어린아이들이 오케스트라 음악을 듣자 곧바로 박자에 맞춰 몸을 움직였어. 문화적·교육적 배경이 달라도 음악에 즉각 비슷하게 반응한 거야.',
+    todo: ['반응의 명칭을 넣어 완전한 영어 한 문장으로 답하기'],
+    a: 'Music psychologists call an intuitive and immediate response to music emotional contagion.',
+    ko: '음악 심리학자들은 음악에 대한 직관적이고 즉각적인 반응을 정서 전염이라고 부른다.',
+    tip: '핵심 용어는 emotional contagion. 단어만 쓰지 말고 call A B 구조의 완전한 문장으로.',
+    keys: ['music psychologists call', 'an intuitive and immediate response to music', 'emotional contagion'] },
+  { id: 'L17-04', title: '버팔로가 개미처럼 보인 이유', ref: '17강 04번 · 책 117쪽',
+    q: 'Why did the young man think the buffalo were as small as ants?', qko: '젊은 남자는 왜 버팔로가 개미처럼 작다고 생각했는가?',
+    sit: '울창한 숲에서 자란 젊은 남자가 들판에서 멀리 있는 버팔로를 봤어. 가까운 사물만 보며 자랐기 때문에 멀리 있는 사물의 실제 크기를 추정한 경험이 없었어.',
+    todo: ['숲에서 자란 배경 넣기', '먼 사물의 크기를 판단한 경험이 없었다는 원인 넣기', '영어 한 문장으로 쓰기'],
+    a: 'He thought the buffalo were as small as ants because he had grown up in a dense forest and had no experience of estimating the size of distant objects.',
+    ko: '그는 울창한 숲에서 자라 멀리 있는 사물의 크기를 추정한 경험이 없었기 때문에 버팔로가 개미처럼 작다고 생각했다.',
+    tip: '멀리 있었기 때문이라고만 쓰면 부족해. 숲에서 자란 배경과 크기 추정 경험 부족을 모두 써.',
+    keys: ['had grown up in a dense forest', 'had no experience of', 'estimating the size of distant objects'] },
+  { id: 'L18-01', title: '기존의 잘못된 이론', ref: '18강 01번 · 책 120쪽',
+    q: 'What happens to an old incorrect theory after a child learns a new correct one?', qko: '아이가 새로운 올바른 이론을 배운 후에도 기존의 잘못된 이론은 어떻게 되는가?',
+    sit: '새로운 지식을 배운다고 기존의 잘못된 생각이 완전히 사라지는 것은 아니야. 잘못된 이론도 뇌에 남아 지각적 기대에 계속 영향을 줘.',
+    todo: ['영어 한 문장으로 답하기', '제시어 not disappear, influence 모두 포함하기', '사라지지 않는다는 점과 계속 영향을 준다는 점 모두 쓰기'],
+    a: 'The old incorrect theory does not disappear but remains in the brain and continues to influence the child’s perceptual expectations.',
+    ko: '기존의 잘못된 이론은 사라지지 않고 뇌에 남아 아이의 지각적 기대에 계속 영향을 준다.',
+    tip: '단수 주어이므로 does not disappear. 새 이론이 기존 이론을 없앤다고 쓰면 지문과 반대야.',
+    keys: ['does not disappear', 'remains in the brain', 'continues to influence', 'perceptual expectations'] },
+  { id: 'L18-02', title: '시의 이미지와 리듬', ref: '18강 02번 · 책 121쪽',
+    q: '시는 사람의 감정에 어떻게 도움을 줄 수 있는가? 이미지가 주는 효과와 리듬이 주는 효과를 모두 포함하여 한 문장으로 쓰세요.', qko: '',
+    sit: '시는 상징과 이미지로 인간의 경험을 담아낼 수 있어. 또 시의 리듬은 기분에 영향을 주어 사람을 진정시키거나 활력을 줄 수 있어.',
+    todo: ['영어 한 문장으로 쓰기', '상징·이미지: 인간의 경험을 담아냄', '리듬: 진정시키거나 활력을 줌'],
+    a: 'Poetry can capture human experiences through symbols and images, while its rhythm can calm people down or energize them.',
+    ko: '시는 상징과 이미지를 통해 인간의 경험을 담아낼 수 있으며, 그 리듬은 사람들을 진정시키거나 활력을 줄 수 있다.',
+    tip: '좋아진다고만 쓰지 말고 이미지의 역할과 리듬의 역할을 각각 밝혀야 해.',
+    keys: ['capture human experiences', 'through symbols and images', 'its rhythm', 'calm people down or energize them'] }
+];
+/* ---------- 서술형 연습: 배열 → 빈칸 → 영작, 매일 조금씩 바꿔서 반복 ---------- */
+const EIV = [0, 1, 2, 4, 7, 14, 30];
+const enorm = s => String(s).toLowerCase().replace(/[’‘`´]/g, "'").replace(/[^a-z0-9' ]+/g, ' ').replace(/\s+/g, ' ').trim();
+function essayState(){ if (!state.essay || typeof state.essay !== 'object') state.essay = {}; return state.essay; }
+function essayDue(){ const t = today(), es = essayState(); return ESSAY.filter(e => { const r = es[e.id]; return !r || r.due <= t; }); }
+function essayMode(e){ const r = essayState()[e.id]; const st = r ? r.s : 0; return st <= 0 ? 'order' : st === 1 ? 'blank' : 'write'; }
+let ess = null; // { list: [ids], i, cur: {...} }
+function renderEssayCard(){
+  const due = essayDue(), es = essayState(), t = today();
+  const doneToday = ESSAY.filter(e => es[e.id] && es[e.id].last === t).length;
+  $('h-ess-n').textContent = due.length ? due.length + '문제' : '완료';
+  $('h-ess-sub').textContent = due.length ? '배열·빈칸·영작으로 바꿔 가며 반복해요' : (doneToday ? '오늘 서술형 끝! 내일 또 바꿔서 나와요' : '오늘은 쉬어도 돼요');
+  $('h-ess-go').textContent = due.length ? '서술형 시작' : '한 번 더 연습';
+}
+function openEssay(){
+  let due = essayDue();
+  if (!due.length) due = ESSAY.slice();
+  ess = { list: shuffle(due.map(e => e.id)), i: 0, ok: 0 };
+  show('essay'); essNext(true);
+}
+function essNext(first){
+  if (!first) ess.i++;
+  if (ess.i >= ess.list.length){ essDone(); return; }
+  const e = ESSAY.find(x => x.id === ess.list[ess.i]);
+  ess.cur = { e, mode: essayMode(e), tries: 0, solved: false };
+  renderEss();
+}
+function chunksOf(a){
+  const w = a.replace(/[.?!]$/, '').split(' '), out = []; let buf = [];
+  w.forEach((x, i) => { buf.push(x); if (buf.length >= 3 || /,$/.test(x) || i === w.length - 1){ out.push(buf.join(' ')); buf = []; } });
+  return out;
+}
+function renderEss(){
+  const c = ess.cur, e = c.e, box = $('es-body'); box.replaceChildren();
+  $('es-prog').textContent = (ess.i + 1) + ' / ' + ess.list.length;
+  $('es-mode').textContent = { order: '단어 배열', blank: '빈칸 채우기', write: '직접 영작' }[c.mode];
+  const q = mk('div', 'es-q'); q.appendChild(mk('small', null, e.ref + ' · ' + e.title)); q.appendChild(mk('b', null, e.q)); if (e.qko) q.appendChild(mk('span', null, e.qko)); box.appendChild(q);
+  const sit = mk('details', 'es-sit'); sit.appendChild(mk('summary', null, '문제 상황과 조건 보기')); sit.appendChild(mk('p', null, e.sit));
+  const ul = mk('ul'); e.todo.forEach(t => ul.appendChild(mk('li', null, t))); sit.appendChild(ul); if (c.mode === 'write') sit.open = true; box.appendChild(sit);
+  const area = mk('div', 'es-area'); box.appendChild(area);
+  const fb = mk('div', 'es-fb'); fb.id = 'es-fb'; box.appendChild(fb);
+  const go = $('es-go'); go.disabled = false;
+  if (c.mode === 'order'){
+    if (!c.pool){ c.parts = chunksOf(e.a); let p; do { p = shuffle(c.parts.map((x, i) => i)); } while (c.parts.length > 2 && p.every((x, i) => x === i)); c.pool = p; c.pick = []; }
+    const line = mk('div', 'es-line'); c.pick.forEach((pi, k) => { const b = mk('button', 'es-chip on', c.parts[pi]); b.type = 'button'; b.onclick = () => { c.pick.splice(k, 1); renderEss(); }; line.appendChild(b); });
+    if (!c.pick.length) line.appendChild(mk('span', 'es-ph', '아래 조각을 순서대로 눌러 문장을 만들어요'));
+    const pool = mk('div', 'es-pool'); c.pool.forEach(pi => { if (c.pick.includes(pi)) return; const b = mk('button', 'es-chip', c.parts[pi]); b.type = 'button'; b.onclick = () => { c.pick.push(pi); renderEss(); }; pool.appendChild(b); });
+    area.append(line, pool); go.textContent = '확인';
+  } else if (c.mode === 'blank'){
+    if (!c.holes){ const k = e.keys.map((x, i) => i); c.holes = shuffle(k).slice(0, Math.min(2, k.length)).sort(); }
+    let html = e.a; const parts = []; let rest = e.a;
+    const segs = []; let pos = 0; const marks = c.holes.map(i => ({ i, at: e.a.toLowerCase().indexOf(e.keys[i].toLowerCase()) })).filter(m => m.at >= 0).sort((a, b) => a.at - b.at);
+    marks.forEach(m => { segs.push(document.createTextNode(e.a.slice(pos, m.at))); const inp = mk('input', 'es-in'); inp.dataset.k = m.i; inp.style.width = Math.min(e.keys[m.i].length * 0.55 + 1.2, 17) + 'em'; inp.onkeydown = ev => { if (ev.key === 'Enter'){ ev.preventDefault(); essCheck(); } }; inp.autocapitalize = 'none'; inp.spellcheck = false; inp.setAttribute('autocomplete', 'off'); segs.push(inp); pos = m.at + e.keys[m.i].length; });
+    segs.push(document.createTextNode(e.a.slice(pos)));
+    const p = mk('p', 'es-cloze'); p.append(...segs); area.appendChild(p);
+    area.appendChild(mk('p', 'es-ko', e.ko)); go.textContent = '확인';
+  } else {
+    const ta = mk('textarea', 'es-ta'); ta.id = 'es-ta'; ta.rows = 4; ta.placeholder = '영어 한 문장으로 써 보세요'; ta.autocapitalize = 'sentences'; ta.spellcheck = false;
+    area.append(mk('p', 'es-ko', '뜻: ' + e.ko), ta); go.textContent = '채점';
+  }
+}
+function essCheck(){
+  const c = ess.cur, e = c.e, fb = $('es-fb');
+  if (c.solved){ essNext(); return; }
+  let ok = false, detail = null;
+  if (c.mode === 'order'){
+    if (c.pick.length < c.parts.length){ fb.className = 'es-fb'; fb.textContent = '조각을 모두 써 주세요'; return; }
+    ok = enorm(c.pick.map(i => c.parts[i]).join(' ')) === enorm(e.a);
+  } else if (c.mode === 'blank'){
+    const ins = Array.from(document.querySelectorAll('#es-body .es-in'));
+    ok = true; ins.forEach(i => { const good = enorm(i.value) === enorm(e.keys[+i.dataset.k]); i.classList.toggle('bad', !good); i.classList.toggle('ok', good); if (!good) ok = false; });
+  } else {
+    const v = enorm($('es-ta').value); if (!v){ return; }
+    detail = e.keys.map(k => [k, v.includes(enorm(k))]);
+    ok = detail.every(d => d[1]);
+  }
+  c.tries++;
+  fb.replaceChildren();
+  if (ok || c.mode === 'write' || c.tries >= 2){
+    c.solved = true; essRecord(e, ok && c.tries === 1);
+    fb.className = 'es-fb ' + (ok ? 'good' : 'bad');
+    fb.appendChild(mk('b', null, ok ? (c.tries === 1 ? '완벽해요!' : '맞았어요!') : (c.mode === 'write' ? '빠진 내용이 있어요' : '정답을 확인해요')));
+    if (detail){ const ul = mk('ul', 'es-keys'); detail.forEach(([k, has]) => ul.appendChild(mk('li', has ? 'y' : 'n', (has ? '✓ ' : '✗ ') + k))); fb.appendChild(ul); }
+    fb.appendChild(mk('div', 'es-model', e.a)); fb.appendChild(mk('div', 'es-tip', '작성 포인트: ' + e.tip));
+    if (ok && c.tries === 1) jingle();
+    $('es-go').textContent = ess.i + 1 < ess.list.length ? '다음 문제' : '끝내기';
+  } else {
+    fb.className = 'es-fb bad'; fb.appendChild(mk('b', null, '다시 한 번 해 볼까요?'));
+    if (c.mode === 'order') fb.appendChild(mk('span', null, '앞부분: ' + c.parts.slice(0, 2).join(' ') + ' …'));
+    wobbleEl($('es-body'));
+  }
+}
+function wobbleEl(el){ anim(el, [{ transform: 'translateX(0)' }, { transform: 'translateX(-9px)' }, { transform: 'translateX(8px)' }, { transform: 'translateX(-4px)' }, { transform: 'translateX(0)' }], { duration: 380 }); }
+function essRecord(e, clean){
+  const es = essayState(), t = today(); const r = es[e.id] || { s: 0, due: t, wr: 0 };
+  if (clean){ r.s = Math.min(r.s + 1, EIV.length - 1); r.due = t + EIV[r.s]; ess.ok++; }
+  else { r.s = Math.max(0, r.s - 1); r.due = t + 1; r.wr = (r.wr || 0) + 1; logErr('essay'); }
+  r.last = t; es[e.id] = r; save();
+}
+function essDone(){
+  const box = $('es-body'); box.replaceChildren();
+  const d = mk('div', 'es-done'); const n = mk('div', 'nori m-happy'); n.innerHTML = nori('happy'); d.appendChild(n);
+  d.appendChild(mk('h2', null, '서술형 끝!')); d.appendChild(mk('p', null, ess.list.length + '문제 중 ' + ess.ok + '문제를 한 번에 맞혔어요. 내일은 다른 방식으로 바꿔서 나와요.'));
+  box.appendChild(d); $('es-prog').textContent = ''; $('es-mode').textContent = '';
+  $('es-go').textContent = '홈으로'; ess.cur = { solved: true, done: true };
 }
 
 /* ---------- analysis by source ---------- */
@@ -3135,6 +3348,9 @@ $('o-nick').addEventListener('change', saveNick);
 $('o-nick').addEventListener('keydown', e => { if (e.key === 'Enter' && !e.isComposing){ e.preventDefault(); $('o-nick').blur(); } });
 $('h-nick').onclick = () => { goTab('settings'); setTimeout(() => $('o-nick').focus(), 350); };
 $('o-back').onclick = closeSettings;
+$('h-ess-go').onclick = openEssay;
+$('es-back').onclick = () => goHome();
+$('es-go').onclick = () => { if (ess && ess.cur && ess.cur.done) goHome(); else essCheck(); };
 $('o-admin').onclick = openAdmin;
 $('adm-back').onclick = () => { show('settings'); paintSettings(); };
 $('adm-seg').onclick = e => { const b = e.target.closest('button'); if (!b) return; admTab = b.dataset.t; renderAdmin(); };
