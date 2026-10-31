@@ -1149,7 +1149,7 @@ async function enterAccount(user){
   const prov = ((user.providerData || [])[0] || {}).providerId || '';
   const social = !idUser && !phoneUser;
   account = { uid: user.uid, id: idUser ? email.split('@')[0] : phoneUser ? maskPh(user.phoneNumber) : (user.displayName || email.split('@')[0] || '사용자'), google: social, phone: phoneUser,
-    via: idUser ? '로그인 아이디' : phoneUser ? '휴대폰 번호' : prov === 'facebook.com' ? '페이스북 계정' : '구글 계정' };
+    via: idUser ? '로그인 아이디' : phoneUser ? '휴대폰 번호' : prov === 'facebook.com' ? '페이스북 계정' : prov.startsWith('oidc.kakao') ? '카카오 계정' : '구글 계정' };
   lkey = LKEY + ':' + user.uid;
   state = loadLocal();
   sync.ref = fbRef(user.uid); setSync('pending');
