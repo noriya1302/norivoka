@@ -734,6 +734,50 @@ details.panel:not([open]){gap:0}
 .an-left .when{text-align:right}
 @media (prefers-reduced-motion: reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
 @media (max-width:360px){.split{grid-template-columns:repeat(2,minmax(0,1fr))}.en,.blank{font-size:21px}.ko{font-size:17px}}
+
+/* ===== Liquid glass for floating chrome (cards stay solid for reading) ===== */
+:root{--lg-ease:cubic-bezier(.3,1.4,.45,1);
+  --lg-fill:linear-gradient(180deg,rgba(255,255,255,.58),rgba(255,255,255,.3));
+  --lg-blur:blur(16px) saturate(1.9) brightness(1.04);
+  --lg-shadow:0 10px 28px rgba(30,70,130,.16),0 2px 6px rgba(30,70,130,.08),inset 0 1px 0 rgba(255,255,255,.95),inset 0 -1.5px 1px rgba(255,255,255,.4),inset 0 0 12px rgba(255,255,255,.25)}
+/* specular rim: bright top-left and bottom-right edges, like light caught in thick glass */
+.icon-btn,.flame-chip,.es-mode,.next-btn,.sheet,.ask-card{position:relative}
+.icon-btn,.flame-chip,.es-mode,.tabbar,.toast,.next-btn,.sheet,.ask-card,.dict{isolation:isolate}
+.icon-btn::after,.flame-chip::after,.es-mode::after,.tabbar::after,.toast::after,.next-btn::after,.sheet::after,.ask-card::after,.dict::after{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;padding:1.2px;
+  background:linear-gradient(140deg,rgba(255,255,255,.98),rgba(255,255,255,.2) 32%,rgba(255,255,255,0) 50%,rgba(255,255,255,.18) 68%,rgba(255,255,255,.85));
+  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask:linear-gradient(#000 0 0) content-box exclude,linear-gradient(#000 0 0)}
+/* round glass buttons in the top bars */
+.icon-btn{width:42px;height:42px;border-radius:50%;background:var(--lg-fill);-webkit-backdrop-filter:var(--lg-blur);backdrop-filter:var(--lg-blur);box-shadow:var(--lg-shadow);color:#4b5a70;transition:transform .35s var(--lg-ease),box-shadow .2s}
+.icon-btn svg{width:22px;height:22px;filter:none}
+.icon-btn:active{transform:scale(.9)}
+.flame-chip{height:38px;padding:0 13px 0 9px;background:var(--lg-fill);-webkit-backdrop-filter:var(--lg-blur);backdrop-filter:var(--lg-blur);box-shadow:var(--lg-shadow);color:#7c8ca2;transition:transform .35s var(--lg-ease)}
+.flame-chip.on{background:linear-gradient(180deg,rgba(255,255,255,.92),rgba(255,255,255,.66));color:#ff8a00}
+.flame-chip:active{transform:scale(.92)}
+.es-mode{background:var(--lg-fill);-webkit-backdrop-filter:var(--lg-blur);backdrop-filter:var(--lg-blur);box-shadow:var(--lg-shadow);padding:7px 13px}
+/* tab bar: thicker, brighter glass */
+.tabbar{background:linear-gradient(180deg,rgba(255,255,255,.6),rgba(255,255,255,.32));-webkit-backdrop-filter:blur(20px) saturate(2) brightness(1.05);backdrop-filter:blur(20px) saturate(2) brightness(1.05);border:none;
+  box-shadow:0 16px 40px rgba(30,70,130,.2),0 3px 8px rgba(30,70,130,.08),inset 0 1px 0 #fff,inset 0 -2px 2px rgba(255,255,255,.45),inset 0 0 16px rgba(255,255,255,.3)}
+.tab-pill{box-shadow:0 4px 14px rgba(108,93,245,.2),inset 0 1px 0 #fff,inset 0 -1px 1px rgba(160,180,220,.25),inset 0 0 0 1px rgba(255,255,255,.9)}
+.tab:active svg{transform:scale(.84)}
+/* bottom action: the bar disappears and the button floats as tinted violet glass */
+.nextbar{background:transparent;box-shadow:none;padding-block:10px calc(14px + env(safe-area-inset-bottom,0px))}
+.next-btn{background:linear-gradient(135deg,rgba(139,123,248,.94),rgba(99,89,240,.94));-webkit-backdrop-filter:blur(12px) saturate(1.6);backdrop-filter:blur(12px) saturate(1.6);
+  box-shadow:0 14px 30px rgba(99,89,240,.34),0 3px 8px rgba(70,60,200,.18),inset 0 1.5px 0 rgba(255,255,255,.55),inset 0 -2px 3px rgba(40,30,160,.25);transition:transform .35s var(--lg-ease)}
+.next-btn::before{content:"";position:absolute;inset:0;border-radius:inherit;background:linear-gradient(180deg,rgba(255,255,255,.24),rgba(255,255,255,.04) 48%,rgba(255,255,255,0) 52%);pointer-events:none}
+.next-btn:active{transform:scale(.96)}
+/* toast: dark smoked glass */
+.toast{background:rgba(24,32,46,.62);-webkit-backdrop-filter:blur(18px) saturate(1.8);backdrop-filter:blur(18px) saturate(1.8);box-shadow:0 12px 30px rgba(10,20,40,.28),inset 0 1px 0 rgba(255,255,255,.22)}
+.toast::after{opacity:.35}
+/* sheets and pop-ups float off the edges; mostly opaque so text stays crisp */
+.overlay,.ask{align-items:flex-end;padding:0 8px calc(8px + env(safe-area-inset-bottom,0px));box-sizing:border-box}
+.sheet,.ask-card{background:linear-gradient(180deg,rgba(255,255,255,.98),rgba(250,252,255,.97));-webkit-backdrop-filter:blur(30px) saturate(1.8);backdrop-filter:blur(30px) saturate(1.8);border-radius:32px;
+  box-shadow:0 24px 60px rgba(15,40,80,.3),inset 0 1px 0 #fff,inset 0 0 18px rgba(255,255,255,.4)}
+.ask-card{padding-bottom:22px}
+.dict{background:rgba(255,255,255,.95);-webkit-backdrop-filter:blur(20px) saturate(1.8);backdrop-filter:blur(20px) saturate(1.8)}
+.dict::after{z-index:2}
+/* content slides softly under the top bar instead of being cut */
+.screen > .scroll{padding-top:10px;-webkit-mask-image:linear-gradient(180deg,transparent 0,#000 10px);mask-image:linear-gradient(180deg,transparent 0,#000 10px)}
+@media (prefers-reduced-transparency:reduce){.icon-btn,.flame-chip,.es-mode,.tabbar,.sheet,.ask-card,.dict{background:#fff;-webkit-backdrop-filter:none;backdrop-filter:none}.toast{background:rgba(22,26,34,.92)}}
 </style>
 
 <div class="toast" id="toast" role="status"></div>
