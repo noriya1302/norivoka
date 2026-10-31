@@ -308,10 +308,6 @@ details.panel:not([open]){gap:0}
 .redo-chips span{background:var(--red-soft);color:var(--red-ink);font-size:13.5px;font-weight:600;padding:6px 11px;border-radius:999px;animation:chipIn .45s var(--ease) both}
 .redo-chips span.more{background:var(--soft);color:var(--ink-2)}
 @keyframes chipIn{from{opacity:0;transform:translateY(8px) scale(.9)}to{opacity:1;transform:none}}
-.go.pulse{position:relative;overflow:hidden}
-.go.pulse::after{content:"";position:absolute;inset:0;background:linear-gradient(105deg,transparent 35%,rgba(255,255,255,.35) 50%,transparent 65%);transform:translateX(-100%);animation:shine 3.2s ease-in-out 1.2s infinite}
-@keyframes shine{0%{transform:translateX(-100%)}35%,100%{transform:translateX(100%)}}
-.go.pulse:disabled::after{display:none}
 .streak{color:var(--sun)!important}
 .muted-b{color:var(--ink-2)!important;font-size:16px!important}
 .week{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px}
@@ -336,6 +332,12 @@ details.panel:not([open]){gap:0}
 .fc-empty{position:absolute;left:0;right:0;top:34%;text-align:center;font-size:13px;font-weight:600;color:var(--muted)}
 .pp-foot{font-size:13px;color:var(--ink-2);font-weight:600}
 .pp-foot b{color:var(--ink);font-variant-numeric:tabular-nums}
+.mix-line{display:flex;justify-content:center;flex-wrap:wrap;gap:6px 16px;font-size:14px;color:var(--ink-2);font-weight:600}
+.mix-line span{display:inline-flex;align-items:center;gap:6px}
+.mix-line i{width:8px;height:8px;border-radius:50%;display:inline-block}
+.mix-line b{color:var(--ink);font-weight:800;font-variant-numeric:tabular-nums}
+.pp-sep{height:1px;background:var(--line);margin-block:2px}
+.set-sec{font-size:12.5px;font-weight:800;color:var(--muted);margin:6px 0 -6px;letter-spacing:.02em}
 /* ===== login ===== */
 .login-wrap{min-height:100%;display:flex;flex-direction:column;justify-content:center;gap:22px;padding-block:28px}
 .login-brand{display:flex;flex-direction:column;align-items:center;gap:12px;color:var(--white)}
@@ -434,7 +436,6 @@ details.panel:not([open]){gap:0}
 
         <div class="today-wrap">
           <div class="lv-tab static"><span>오늘의 학습</span></div>
-          <div class="tag red" id="h-tag" hidden></div>
           <div class="card today">
             <div class="today-top">
               <div class="ring-box">
@@ -447,34 +448,17 @@ details.panel:not([open]){gap:0}
               </div>
             </div>
             <div class="today-bot">
-              <div class="mixbar" id="h-mixbar" role="img" aria-label="오늘 문제 구성"></div>
-              <div class="mix-row">
-                <div class="mx ng" id="h-mx-ng"><b id="h-ng">0</b><small>오답</small></div>
-                <div class="mx due" id="h-mx-due"><b id="h-due">0</b><small>복습</small></div>
-                <div class="mx mix" id="h-mx-mix"><b id="h-mix">0</b><small>랜덤</small></div>
-                <div class="mx new" id="h-mx-new"><b id="h-new">0</b><small>새 단어</small></div>
-              </div>
-              <div class="redo" id="h-redo" hidden>
-                <small>다시 잡을 단어</small>
-                <div class="redo-chips" id="h-redo-chips"></div>
-              </div>
-              <button class="go big pulse" id="h-start"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.5.9l10.4-6.5a1 1 0 0 0 0-1.8L9.5 4.6A1 1 0 0 0 8 5.5z"/></svg><span id="h-start-text">학습 시작</span></button>
+              <div class="mix-line" id="h-mixline"></div>
+              <button class="go big" id="h-start"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.5.9l10.4-6.5a1 1 0 0 0 0-1.8L9.5 4.6A1 1 0 0 0 8 5.5z"/></svg><span id="h-start-text">학습 시작</span></button>
               <button class="ghost" id="h-more" hidden>새 단어 10개 더 하기</button>
             </div>
           </div>
         </div>
 
         <div class="panel">
-          <div class="pp-head"><h2>이번 주</h2><b id="h-streak" class="streak">0일 연속</b></div>
+          <div class="pp-head"><h2>이번 주</h2><b id="h-streak" class="streak"></b></div>
           <div class="week" id="h-week"></div>
-        </div>
-
-        <div class="panel">
-          <div class="pp-head"><h2>앞으로 7일 복습</h2><b id="h-fc-total" class="muted-b">0단어</b></div>
-          <div class="fc" id="h-fc" role="img" aria-label="앞으로 7일 날짜별 복습 단어 수"></div>
-        </div>
-
-        <div class="panel">
+          <div class="pp-sep"></div>
           <div class="pp-head"><h2>172단어 진도</h2><b id="h-pct">0%</b></div>
           <div class="bar" id="h-bar" role="img" aria-label="단어 상태 비율"></div>
           <div class="stat4">
@@ -483,7 +467,6 @@ details.panel:not([open]){gap:0}
             <div class="st"><small><i style="background:var(--red)"></i>오답</small><b id="h-c-ng">0</b></div>
             <div class="st"><small><i style="background:var(--green)"></i>장기 기억</small><b id="h-c-long">0</b></div>
           </div>
-          <div class="pp-foot" id="h-left-line"></div>
         </div>
 
         <div class="foot"><span class="sync-dot" id="h-sync-dot"></span><span id="h-sync">저장소 확인 중</span></div>
@@ -581,11 +564,13 @@ details.panel:not([open]){gap:0}
   <div class="overlay" id="sheet" hidden>
     <div class="sheet gutter" role="dialog" aria-modal="true" aria-labelledby="set-title">
       <h3 id="set-title">설정</h3>
+      <div class="set-sec">계정</div>
       <div class="set-row">
         <label for="o-nick">닉네임</label>
         <input class="nick-in" id="o-nick" maxlength="10" placeholder="이름을 적어 주세요" autocomplete="nickname">
       </div>
       <div class="acct" id="o-acct" hidden><div><small id="o-acct-label">로그인 아이디</small><b id="o-acct-id"></b></div><button type="button" id="o-logout">로그아웃</button></div>
+      <div class="set-sec">학습</div>
       <div class="set-row">
         <div class="lab">하루 새 단어</div>
         <div class="opts" id="o-new">
@@ -600,6 +585,7 @@ details.panel:not([open]){gap:0}
         <label for="o-auto">맞히면 자동으로 넘어가기</label>
         <input type="checkbox" class="switch" id="o-auto">
       </div>
+      <div class="set-sec">입력과 소리</div>
       <div class="set-row">
         <label for="o-kb">앱 키보드 사용</label>
         <input type="checkbox" class="switch" id="o-kb">
@@ -975,9 +961,8 @@ function renderHome(){
   const started = s.done > 0 || !!s.cur || s.retry.length > 0;
   const left = unseenLeft(), fresh = !Object.keys(state.w).length && !started;
   const pend = s.retry.length + (s.cur && s.cur.mode === 'retry' ? 1 : 0);
-  const fc = forecast(t);
+  const c0 = s.counts, fc = forecast(t);
   // the headline says what today is about
-  const c0 = s.counts;
   if (s.completed && s.total) setTitle('done', fc[0] ? '내일은 ' + fc[0] + '단어가 기다려요' : '오늘 분량 끝! 푹 쉬어요');
   else if (s.completed) setTitle('', left ? '새 단어로 가 볼까요?' : '172단어를 전부 한 번씩 봤어요');
   else if (started) setTitle('back', pend ? '재도전 ' + pend + '개가 기다리고 있어요' : (s.total - s.done) + '문제 남았어요. 이어서 해요');
@@ -985,10 +970,6 @@ function renderHome(){
   else if (c0.ng) setTitle('', '지난번 틀린 ' + c0.ng + '단어부터 잡아 볼까요?');
   else if (c0.due) setTitle('', '잊을 때가 된 ' + c0.due + '단어 같이 볼까요?');
   else setTitle('', s.total + '단어 같이 해볼까요?');
-  // streak tag
-  const sk = streak();
-  const tag = $('h-tag');
-  if (sk > 0){ tag.hidden = false; tag.textContent = '연속 ' + sk + '일'; } else tag.hidden = true;
   // ring
   const p = s.total ? (s.completed ? 1 : s.done / s.total) : 0;
   const ring = $('h-ring');
@@ -998,19 +979,14 @@ function renderHome(){
   if (s.completed && s.total){ big.dataset.v = ''; big.innerHTML = CHECK; unit.textContent = '완료'; }
   else if (started){ if (!/^\d+$/.test(big.textContent)) delete big.dataset.v; countUp(big, s.done); unit.textContent = '/ ' + s.total; }
   else { if (!/^\d+$/.test(big.textContent)) delete big.dataset.v; countUp(big, s.total); unit.textContent = '문제'; }
-  // today's mix: bar + counts
-  const mix = [['ng', c0.ng, 'var(--red)'], ['due', c0.due, 'var(--prog)'], ['mix', c0.mix, 'var(--green)'], ['new', c0.new, 'var(--violet)']];
-  mix.forEach(([k, v]) => { countUp($('h-' + k), v); $('h-mx-' + k).classList.toggle('zero', !v); });
-  const mb = $('h-mixbar');
-  if (!mb.children.length) mix.forEach(([k, , col]) => { const i = mk('i'); i.dataset.k = k; i.style.background = col; mb.appendChild(i); });
-  const tot = Math.max(1, mix.reduce((a, m) => a + m[1], 0));
-  requestAnimationFrame(() => Array.from(mb.children).forEach((i, ix) => { i.style.width = (mix[ix][1] / tot * 100) + '%'; }));
-  // the words to win back, shown by meaning only (never the English)
-  const redoIds = Object.keys(s.kinds).map(Number).filter(n => s.kinds[n] === 'ng' && (s.queue.includes(n) || s.retry.some(x => x.n === n) || (s.cur && s.cur.n === n)));
-  const box = $('h-redo-chips'); box.replaceChildren();
-  $('h-redo').hidden = s.completed || !redoIds.length;
-  redoIds.slice(0, 6).forEach((n, i) => { const c = mk('span', null, firstGloss(BY.get(n).m)); c.style.animationDelay = (0.25 + i * 0.06) + 's'; box.appendChild(c); });
-  if (redoIds.length > 6){ const c = mk('span', 'more', '+' + (redoIds.length - 6)); c.style.animationDelay = (0.25 + 6 * 0.06) + 's'; box.appendChild(c); }
+  // what today is made of, only the parts that exist
+  const ml = $('h-mixline'); ml.replaceChildren();
+  [['오답', c0.ng, 'var(--red)'], ['복습', c0.due, 'var(--prog)'], ['랜덤', c0.mix, 'var(--green)'], ['새 단어', c0.new, 'var(--violet)']].forEach(([lab, v, col]) => {
+    if (!v) return;
+    const sp = mk('span'), dot = mk('i'); dot.style.background = col;
+    sp.append(dot, lab + ' ', mk('b', null, String(v))); ml.appendChild(sp);
+  });
+  ml.hidden = !ml.children.length || s.completed;
   // buttons
   const btn = $('h-start'), bt = $('h-start-text');
   if (s.completed){
@@ -1019,37 +995,17 @@ function renderHome(){
     $('h-more').hidden = !s.total || !left;
   } else { bt.textContent = started ? '이어서 하기' : (c0.ng ? '오답부터 시작' : '학습 시작'); btn.disabled = false; $('h-more').hidden = true; }
   // this week (Monday first)
+  const sk = streak();
   const wk = $('h-week'); wk.replaceChildren();
   const dow = (dt.getUTCDay() + 6) % 7;
   for (let i = 0; i < 7; i++){
     const d = t - dow + i, done = !!state.days[d] || (d === t && s.done > 0);
     const el = mk('div', 'wd' + (done ? ' on' : '') + (d === t ? ' today' : ''));
-    const dot = mk('i'); dot.style.animationDelay = (0.15 + i * 0.05) + 's';
+    const dot = mk('i'); dot.style.animationDelay = (0.1 + i * 0.04) + 's';
     if (done) dot.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
     el.append(mk('span', null, DAYK[(i + 1) % 7]), dot); wk.appendChild(el);
   }
-  $('h-streak').textContent = sk ? sk + '일 연속' : '오늘이 첫날';
-  // next 7 days of reviews (forgetting-curve schedule)
-  const fcBox = $('h-fc'); fcBox.replaceChildren();
-  const max = Math.max(1, ...fc), peak = fc.indexOf(Math.max(...fc));
-  fc.forEach((v, i) => {
-    const d = t + 1 + i, wdn = DAYK[new Date(d * 864e5).getUTCDay()];
-    const col = mk('div', 'fcol' + (i === 0 ? ' first' : '')); col.tabIndex = 0;
-    const label = i === 0 ? '내일' : i === 1 ? '모레' : wdn;
-    col.setAttribute('aria-label', label + ' ' + v + '단어');
-    const num = mk('b', null, (i === 0 || (i === peak && v > 0)) ? String(v) : '');
-    const bar = mk('span', 'fb');
-    col.append(num, bar, mk('small', null, label));
-    const tip = () => { const old = fcBox.querySelector('.fc-tip'); if (old) old.remove(); const tp = mk('div', 'fc-tip', label + ' ' + v + '단어'); tp.style.left = (col.offsetLeft + col.offsetWidth / 2) + 'px'; fcBox.appendChild(tp); };
-    col.addEventListener('pointerenter', tip); col.addEventListener('focus', tip);
-    col.addEventListener('pointerleave', () => { const o = fcBox.querySelector('.fc-tip'); if (o) o.remove(); });
-    col.addEventListener('click', tip);
-    fcBox.appendChild(col);
-    requestAnimationFrame(() => requestAnimationFrame(() => { bar.style.height = (v / max * 74) + 'px'; bar.style.transitionDelay = (0.1 + i * 0.06) + 's'; }));
-  });
-  const fcSum = fc.reduce((a, b) => a + b, 0);
-  $('h-fc-total').textContent = fcSum + '단어';
-  if (!fcSum) fcBox.appendChild(mk('div', 'fc-empty', '첫 단어를 맞히면 복습 일정이 생겨요'));
+  $('h-streak').textContent = sk ? sk + '일 연속' : '';
   // overall progress
   const c = wordCounts();
   countUp($('h-c-new'), c.unseen); countUp($('h-c-learn'), c.learn); countUp($('h-c-ng'), c.ng); countUp($('h-c-long'), c.long);
@@ -1057,9 +1013,6 @@ function renderHome(){
   const bar = $('h-bar');
   if (!bar.children.length) [['ng', 'var(--red)'], ['learn', 'var(--prog)'], ['long', 'var(--green)']].forEach(([k, col]) => { const i = mk('i'); i.dataset.k = k; i.style.background = col; i.style.width = '0%'; bar.appendChild(i); });
   requestAnimationFrame(() => Array.from(bar.children).forEach(i => { i.style.width = (c[i.dataset.k] / N * 100) + '%'; }));
-  const per = state.settings.newPerDay, ll = $('h-left-line'); ll.replaceChildren();
-  if (left){ ll.append('남은 새 단어 ', mk('b', null, left + '개'), ' · 하루 ' + per + '개씩 ', mk('b', null, Math.ceil(left / per) + '일')); }
-  else ll.append('새 단어는 오늘 분량까지가 끝이에요');
   paintSync();
 }
 function goHome(){ const was = current; show('home'); if (was !== 'home') $('home').querySelector('.scroll').scrollTop = 0; renderHome(); }
