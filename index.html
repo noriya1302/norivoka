@@ -300,6 +300,11 @@ details.panel:not([open]){gap:0}
 .fld input{height:50px;border-radius:14px;border:1.5px solid var(--line);background:var(--soft);padding:0 14px;font:inherit;font-size:17px;color:var(--ink);outline:none;transition:border-color .2s,background .2s;box-sizing:border-box;width:100%}
 .fld input:focus{border-color:var(--violet);background:var(--white)}
 .lg-err{margin:-4px 0 0;min-height:20px;font-size:13.5px;color:var(--red);font-weight:600}
+.or-line{display:flex;align-items:center;gap:10px;color:var(--muted);font-size:12.5px;font-weight:600}
+.or-line::before,.or-line::after{content:"";flex:1;height:1px;background:var(--line)}
+.g-btn{height:54px;border-radius:16px;border:1.5px solid var(--line);background:var(--white);color:var(--ink);font-size:16px;font-weight:700;display:flex;align-items:center;justify-content:center;gap:10px;transition:transform .15s var(--ease),background .15s}
+.g-btn svg{width:20px;height:20px}
+.g-btn:active{transform:scale(.97);background:var(--soft)}
 .lg-note{margin:0;text-align:center;font-size:13px;color:var(--white);font-weight:600;text-shadow:0 1px 2px rgba(30,80,150,.25)}
 .lg-wait{text-align:center;color:var(--white);font-weight:700;font-size:15px}
 .lg-wait::before{content:"";display:block;width:28px;height:28px;margin:0 auto 12px;border-radius:50%;border:3px solid rgba(255,255,255,.45);border-top-color:var(--white);animation:spin .8s linear infinite}
@@ -349,6 +354,8 @@ details.panel:not([open]){gap:0}
             <label class="fld" id="lg-pw2-row" hidden><span>비밀번호 확인</span><input id="lg-pw2" type="password" autocomplete="new-password"></label>
             <p class="lg-err" id="lg-err" role="alert"></p>
             <button class="go big" id="lg-go" type="submit">로그인</button>
+            <div class="or-line" id="lg-or" hidden>또는</div>
+            <button class="g-btn" id="lg-google" type="button" hidden><svg viewBox="0 0 48 48" aria-hidden="true"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>Google로 계속하기</button>
           </form>
         </div>
         <p class="lg-note" id="lg-note" hidden>아이디는 영문 소문자와 숫자 3~16자, 비밀번호는 6자 이상</p>
@@ -511,7 +518,7 @@ details.panel:not([open]){gap:0}
   <div class="overlay" id="sheet" hidden>
     <div class="sheet gutter" role="dialog" aria-modal="true" aria-labelledby="set-title">
       <h3 id="set-title">설정</h3>
-      <div class="acct" id="o-acct" hidden><div><small>로그인 아이디</small><b id="o-acct-id"></b></div><button type="button" id="o-logout">로그아웃</button></div>
+      <div class="acct" id="o-acct" hidden><div><small id="o-acct-label">로그인 아이디</small><b id="o-acct-id"></b></div><button type="button" id="o-logout">로그아웃</button></div>
       <div class="set-row">
         <div class="lab">하루 새 단어</div>
         <div class="opts" id="o-new">
@@ -699,7 +706,8 @@ async function submitLogin(e){
 }
 /* each account keeps its own copy on this device, so two people on one phone never mix */
 async function enterAccount(user){
-  account = { uid: user.uid, id: (user.email || '').split('@')[0] };
+  const email = user.email || '', idUser = email.endsWith('@binkanvoca.app');
+  account = { uid: user.uid, id: idUser ? email.split('@')[0] : (user.displayName || email.split('@')[0] || '구글 사용자'), google: !idUser };
   lkey = LKEY + ':' + user.uid;
   state = loadLocal();
   sync.ref = fbRef(user.uid); setSync('pending');
@@ -1373,7 +1381,8 @@ function openList(){ listFrom = current; show('list'); renderList(); }
 
 /* settings */
 function openSettings(){
-  $('o-acct').hidden = !account; if (account) $('o-acct-id').textContent = account.id;
+  $('o-acct').hidden = !account;
+  if (account){ $('o-acct-id').textContent = account.id; $('o-acct-label').textContent = account.google ? '구글 계정' : '로그인 아이디'; }
   $('o-hint').checked = !!state.settings.hintIsWrong;
   $('o-auto').checked = !!state.settings.autoNext;
   $('o-kb').checked = !!state.settings.ownKb;
@@ -1461,6 +1470,23 @@ paintInstall();
 /* KakaoTalk's in-app browser can't log in or install: hand the link to the phone's own browser */
 if (FB && /KAKAOTALK/i.test(navigator.userAgent)) location.href = 'kakaotalk://web/openExternal?url=' + encodeURIComponent(location.href);
 $('lg-form').addEventListener('submit', submitLogin);
+/* Google sign-in: a popup flow. An iPhone home-screen app can't run it, so the button stays hidden there */
+const IOS_DEVICE = /iPhone|iPad|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+const G_MSG = {
+  'auth/popup-blocked': '팝업이 막혔어요. 브라우저에서 팝업을 허용해 주세요',
+  'auth/operation-not-allowed': '구글 로그인이 아직 켜져 있지 않아요',
+  'auth/unauthorized-domain': '이 주소가 구글 로그인 허용 목록에 없어요',
+  'auth/operation-not-supported-in-this-environment': '여기서는 구글 로그인이 안 돼요. 아이디로 로그인해 주세요',
+  'auth/network-request-failed': '인터넷 연결을 확인해 주세요',
+  'auth/account-exists-with-different-credential': '이미 다른 방법으로 가입한 계정이에요'
+};
+if (FB && !(IOS_DEVICE && STANDALONE)){ $('lg-or').hidden = false; $('lg-google').hidden = false; }
+$('lg-google').onclick = async () => {
+  const err = $('lg-err'); err.textContent = '';
+  if (!fbAuth || !window.firebase || !firebase.auth.GoogleAuthProvider){ err.textContent = '서버에 연결하지 못했어요'; return; }
+  try { const prov = new firebase.auth.GoogleAuthProvider(); prov.setCustomParameters({ prompt: 'select_account' }); await fbAuth.signInWithPopup(prov); }
+  catch (x) { const c = x && x.code; if (c === 'auth/popup-closed-by-user' || c === 'auth/cancelled-popup-request') return; err.textContent = G_MSG[c] || '구글 로그인에 실패했어요. 아이디로 로그인해 주세요'; }
+};
 document.querySelectorAll('.login-tabs .lv-tab').forEach(b => b.onclick = () => setLoginMode(b.dataset.m));
 if (FB) bootFirebase();
 else { $('home').classList.add('enter'); goHome(); initSync(); }
