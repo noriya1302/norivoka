@@ -1,4 +1,4 @@
-<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#a6d1f6"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="노리보카"><style>:root{color-scheme:light;padding-top:env(safe-area-inset-top);padding-bottom:env(safe-area-inset-bottom)}body{margin:0;font:14px system-ui}img{max-width:100%}[hidden]{display:none!important}</style><link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="apple-touch-icon.png"><link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><link rel="preload" href="pretendard.03e1319fd0.woff2" as="font" type="font/woff2" crossorigin></head><body><title>노리보카</title>
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#b6daf6"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="노리보카"><style>:root{color-scheme:light;padding-top:env(safe-area-inset-top);padding-bottom:env(safe-area-inset-bottom)}body{margin:0;font:14px system-ui}img{max-width:100%}[hidden]{display:none!important}</style><link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="apple-touch-icon.png"><link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><link rel="preload" href="pretendard.03e1319fd0.woff2" as="font" type="font/woff2" crossorigin></head><body><title>노리보카</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <style>
 @font-face{font-family:"Pretendard";font-style:normal;font-weight:45 920;font-display:swap;src:url(pretendard.03e1319fd0.woff2) format("woff2")}
@@ -14,7 +14,7 @@
   --green:#18a058; --green-soft:#d3f2df; --green-ink:#0f5e35; --green-line:#8fdcb0;
   --red:#f04a5d; --red-soft:#fbd3d8; --red-ink:#7a1f2a;
   --blank:#dbeafb; --blank-ink:#2c6cb4; --caret:#2f7df0;
-  --violet:#6c5df5; --violet-2:#8a7df7; --violet-soft:#a79bf5; --violet-tint:#efedff;
+  --violet:#26365e; --violet-2:#3a4c7a; --violet-soft:#93a0bd; --violet-tint:#e7ecf5;
   --teal:#43a9b7;
   --tab:#c2d9f3;
   --prog:#4f9cf0; --prog-2:#7cbcf8; --track:rgba(255,255,255,.5); --prog-ring:#5ba5ee;
@@ -24,7 +24,7 @@
   --font:"Pretendard",-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif;
 }
 html,body{height:100%}
-body{margin:0;background:linear-gradient(180deg,var(--sky-1) 0%,var(--sky-2) 100%) fixed var(--sky-2);color:var(--ink);font-family:var(--font);font-size:15px;-webkit-tap-highlight-color:transparent;overflow:hidden;-webkit-font-smoothing:antialiased}
+body{margin:0;background:#b6daf6;color:var(--ink);font-family:var(--font);font-size:15px;-webkit-tap-highlight-color:transparent;overflow:hidden;-webkit-font-smoothing:antialiased}
 button{font:inherit;color:inherit;cursor:pointer}
 button:focus-visible,input:focus-visible,summary:focus-visible{outline:2px solid var(--violet);outline-offset:2px}
 #app{position:fixed;left:0;right:0;margin:0 auto;max-width:480px;top:calc(var(--vvt,0px) + env(safe-area-inset-top,0px));height:calc(var(--vvh,100dvh) - env(safe-area-inset-top,0px) - env(safe-area-inset-bottom,0px));display:flex;flex-direction:column}
@@ -107,7 +107,7 @@ button:focus-visible,input:focus-visible,summary:focus-visible{outline:2px solid
 .stamp.still .tick{stroke-dashoffset:0}
 .nextbar{background:var(--white);padding-block:14px 16px;box-shadow:0 -1px 0 var(--line);animation:barUp .38s var(--ease) both}
 @keyframes barUp{from{transform:translateY(100%);opacity:.4}to{transform:none;opacity:1}}
-.next-btn{width:100%;height:76px;border:none;border-radius:26px;background:linear-gradient(135deg,#8b7bf8,#6359f0);color:var(--white);display:flex;align-items:center;justify-content:center;gap:12px;font-size:21px;font-weight:800;letter-spacing:-.02em;box-shadow:0 8px 20px rgba(99,89,240,.3);transition:transform .15s var(--ease)}
+.next-btn{width:100%;height:76px;border:none;border-radius:26px;background:var(--violet);color:var(--white);display:flex;align-items:center;justify-content:center;gap:12px;font-size:21px;font-weight:800;letter-spacing:-.02em;box-shadow:0 8px 20px rgba(38,54,94,.3);transition:transform .15s var(--ease)}
 .next-btn svg{width:30px;height:30px}
 .next-btn:active{transform:scale(.97)}
 /* in-app keyboard, modelled on the iOS light keyboard */
@@ -167,7 +167,7 @@ button:focus-visible,input:focus-visible,summary:focus-visible{outline:2px solid
 .lg b{margin-left:auto;font-size:15px;font-weight:800;color:var(--ink);font-variant-numeric:tabular-nums}
 .facts{display:flex;flex-direction:column;gap:6px;font-size:13.5px;color:var(--ink-2);line-height:1.5}
 .facts b{color:var(--ink);font-variant-numeric:tabular-nums}
-.go{background:var(--violet);color:var(--white);border:none;border-radius:16px;height:54px;font-weight:800;font-size:17px;padding:0 24px;transition:transform .15s var(--ease),filter .15s;box-shadow:0 6px 16px rgba(108,93,245,.28)}
+.go{background:var(--violet);color:var(--white);border:none;border-radius:16px;height:54px;font-weight:800;font-size:17px;padding:0 24px;transition:transform .15s var(--ease),filter .15s;box-shadow:0 6px 16px rgba(38,54,94,.28)}
 .go:active{transform:scale(.97)}
 .go:disabled{filter:grayscale(.6) opacity(.6);box-shadow:none}
 /* keep button labels white on every phone browser */
@@ -281,7 +281,7 @@ details.panel:not([open]){gap:0}
 .mx.ng b{color:var(--red)} .mx.due b{color:var(--prog)} .mx.mix b{color:var(--green)} .mx.new b{color:var(--violet)}
 .mx.zero{opacity:.45}
 .intro{word-break:keep-all;font-size:13.5px;color:var(--ink-2);line-height:1.65;text-align:center;margin:0}
-.go.big{height:58px;font-size:18px;display:flex;align-items:center;justify-content:center;gap:8px;background:linear-gradient(135deg,var(--violet-2),var(--violet))}
+.go.big{height:58px;font-size:18px;display:flex;align-items:center;justify-content:center;gap:8px;background:var(--violet)}
 .go.big svg{width:20px;height:20px}
 .pp-head{display:flex;justify-content:space-between;align-items:baseline}
 .pp-head b{font-size:22px;font-weight:800;color:var(--violet);font-variant-numeric:tabular-nums}
@@ -324,7 +324,7 @@ details.panel:not([open]){gap:0}
 .wd{display:flex;flex-direction:column;align-items:center;gap:7px;font-size:12px;font-weight:700;color:var(--muted)}
 .wd i{width:34px;height:34px;border-radius:50%;background:var(--soft);display:grid;place-items:center;color:var(--white);transition:transform .3s var(--ease);animation:chipIn .5s var(--ease) both}
 .wd i svg{width:18px;height:18px}
-.wd.on i{background:linear-gradient(135deg,var(--violet-2),var(--violet))}
+.wd.on i{background:var(--violet)}
 .wd.today{color:var(--violet)}
 .wd.today i{box-shadow:0 0 0 2.5px var(--violet) inset}
 .wd.today:not(.on) i{animation:chipIn .5s var(--ease) both,breathe 2.4s ease-in-out .6s infinite}
@@ -529,7 +529,7 @@ details.panel:not([open]){gap:0}
 .tabbar[hidden]{display:none}
 .tab-pill{position:absolute;top:6px;bottom:6px;left:6px;width:calc((100% - 12px) / 5);border-radius:22px;pointer-events:none;
   background:linear-gradient(180deg,rgba(255,255,255,.95),rgba(255,255,255,.7));
-  box-shadow:0 4px 12px rgba(108,93,245,.18),inset 0 1px 0 #fff,inset 0 0 0 1px rgba(255,255,255,.9);
+  box-shadow:0 4px 12px rgba(38,54,94,.18),inset 0 1px 0 #fff,inset 0 0 0 1px rgba(255,255,255,.9);
   transform:translateX(calc(var(--ti,0) * 100%));transition:transform .45s cubic-bezier(.3,1.35,.45,1)}
 .tab{position:relative;z-index:1;border:none;background:none;display:flex;flex-direction:column;align-items:center;gap:2px;padding:7px 0 5px;color:#7d8a9c;font-size:11px;font-weight:700;transition:color .25s}
 .tab svg{width:24px;height:24px;transition:transform .3s var(--ease)}
@@ -548,7 +548,7 @@ details.panel:not([open]){gap:0}
 .rank-me .ghost{height:38px;font-size:13.5px;flex:none}
 .rank-list{display:flex;flex-direction:column;gap:8px}
 .rk{display:flex;align-items:center;gap:12px;background:var(--card);border-radius:18px;padding:10px 14px;box-shadow:0 4px 14px rgba(40,95,160,.08);animation:rise .45s var(--ease) both}
-.rk.me{box-shadow:0 0 0 2.5px var(--violet),0 6px 18px rgba(108,93,245,.18)}
+.rk.me{box-shadow:0 0 0 2.5px var(--violet),0 6px 18px rgba(38,54,94,.18)}
 .rk-n{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;font-weight:900;font-size:14px;color:var(--ink-2);flex:none;font-variant-numeric:tabular-nums}
 .rk-n.g1{background:linear-gradient(135deg,#ffe27a,#f5b400);color:#5a3d00}
 .rk-n.g2{background:linear-gradient(135deg,#eef2f7,#b9c3d0);color:#3d4655}
@@ -567,7 +567,7 @@ details.panel:not([open]){gap:0}
 .fld.step{max-height:0;opacity:0;overflow:hidden;margin-top:-14px;transform:translateY(-10px) scale(.98);transition:max-height .5s var(--ease),opacity .35s ease,transform .5s var(--ease),margin-top .5s var(--ease);pointer-events:none}
 .fld.step.show{max-height:96px;opacity:1;margin-top:0;transform:none;pointer-events:auto}
 .fld input{transition:border-color .2s,background .2s,box-shadow .25s}
-.fld input:focus{box-shadow:0 0 0 4px rgba(108,93,245,.12)}
+.fld input:focus{box-shadow:0 0 0 4px rgba(38,54,94,.12)}
 .fld.ok-id input{border-color:var(--green-line)}
 .login-brand .brand-mark{animation:brandIn .9s cubic-bezier(.2,1.5,.4,1) both,floaty 3.4s ease-in-out 1s infinite}
 @keyframes brandIn{0%{transform:translateY(-40px) scale(.4) rotate(-12deg);opacity:0}60%{transform:translateY(6px) scale(1.08) rotate(4deg);opacity:1}100%{transform:none}}
@@ -643,7 +643,7 @@ details.panel:not([open]){gap:0}
 .adm-v{display:flex;flex-direction:column;align-items:flex-end;flex:none}
 .adm-v b{font-size:15px;font-variant-numeric:tabular-nums}
 .adm-v small{font-size:12px;color:var(--muted)}
-.adm-pubbar{position:sticky;bottom:0;display:flex;flex-direction:column;gap:6px;background:linear-gradient(transparent,var(--sky-2) 30%);padding:16px 0 8px}
+.adm-pubbar{position:sticky;bottom:0;display:flex;flex-direction:column;gap:6px;background:linear-gradient(transparent,#b6daf6 30%);padding:16px 0 8px}
 .adm-pubbar[hidden]{display:none}
 .err-tip{background:var(--red-soft);border-radius:14px;padding:11px 13px;display:flex;flex-direction:column;gap:3px;word-break:keep-all}
 .err-tip b{color:var(--red);font-size:15px}
@@ -763,13 +763,13 @@ details.panel:not([open]){gap:0}
 /* tab bar: thicker, brighter glass */
 .tabbar{background:linear-gradient(180deg,rgba(255,255,255,.6),rgba(255,255,255,.32));-webkit-backdrop-filter:blur(20px) saturate(2) brightness(1.05);backdrop-filter:blur(20px) saturate(2) brightness(1.05);border:none;
   box-shadow:0 16px 40px rgba(30,70,130,.2),0 3px 8px rgba(30,70,130,.08),inset 0 1px 0 #fff,inset 0 -2px 2px rgba(255,255,255,.45),inset 0 0 16px rgba(255,255,255,.3)}
-.tab-pill{box-shadow:0 4px 14px rgba(108,93,245,.2),inset 0 1px 0 #fff,inset 0 -1px 1px rgba(160,180,220,.25),inset 0 0 0 1px rgba(255,255,255,.9)}
+.tab-pill{box-shadow:0 4px 14px rgba(38,54,94,.2),inset 0 1px 0 #fff,inset 0 -1px 1px rgba(160,180,220,.25),inset 0 0 0 1px rgba(255,255,255,.9)}
 .tab:active svg{transform:scale(.84)}
 /* bottom action: the bar disappears and the button floats as tinted violet glass */
 .nextbar{background:transparent;box-shadow:none;padding-block:10px calc(14px + env(safe-area-inset-bottom,0px))}
-.next-btn{background:linear-gradient(135deg,rgba(139,123,248,.94),rgba(99,89,240,.94));-webkit-backdrop-filter:blur(12px) saturate(1.6);backdrop-filter:blur(12px) saturate(1.6);
-  box-shadow:0 14px 30px rgba(99,89,240,.34),0 3px 8px rgba(70,60,200,.18),inset 0 1.5px 0 rgba(255,255,255,.55),inset 0 -2px 3px rgba(40,30,160,.25);transition:transform .35s var(--lg-ease)}
-.next-btn::before{content:"";position:absolute;inset:0;border-radius:inherit;background:linear-gradient(180deg,rgba(255,255,255,.24),rgba(255,255,255,.04) 48%,rgba(255,255,255,0) 52%);pointer-events:none}
+.next-btn{background:linear-gradient(135deg,rgba(139,123,248,.94),rgba(38,54,94,.94));-webkit-backdrop-filter:blur(12px) saturate(1.6);backdrop-filter:blur(12px) saturate(1.6);
+  box-shadow:0 14px 30px rgba(38,54,94,.34),0 3px 8px rgba(20,30,60,.18),inset 0 1.5px 0 rgba(255,255,255,.55),inset 0 -2px 3px rgba(10,18,40,.25);transition:transform .35s var(--lg-ease)}
+.next-btn::before{content:"";position:absolute;inset:0;border-radius:inherit;background:linear-gradient(180deg,rgba(255,255,255,.1),rgba(255,255,255,0) 50%);pointer-events:none}
 .next-btn:active{transform:scale(.96)}
 /* toast: dark smoked glass */
 .toast{background:rgba(24,32,46,.62);-webkit-backdrop-filter:blur(18px) saturate(1.8);backdrop-filter:blur(18px) saturate(1.8);box-shadow:0 12px 30px rgba(10,20,40,.28),inset 0 1px 0 rgba(255,255,255,.22)}
@@ -849,7 +849,7 @@ details.panel:not([open]){gap:0}
             <div class="today-top">
               <div class="ring-box">
                 <svg class="ring" viewBox="0 0 120 120" aria-hidden="true">
-                  <defs><linearGradient id="ring-grad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#7cbcf8"/><stop offset="1" stop-color="#6c5df5"/></linearGradient></defs>
+                  <defs><linearGradient id="ring-grad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#7cbcf8"/><stop offset="1" stop-color="#26365e"/></linearGradient></defs>
                   <circle class="ring-bg" cx="60" cy="60" r="50"/>
                   <circle class="ring-fg" id="h-ring" cx="60" cy="60" r="50"/>
                 </svg>
@@ -910,7 +910,7 @@ details.panel:not([open]){gap:0}
       <div class="card-wrap" id="card-wrap">
         <button class="lv-tab" id="c-lv" type="button" aria-label="레벨 설명"><span id="c-lv-text">새 단어</span><span class="q">?</span></button>
         <div class="tag" id="c-tag" hidden></div>
-        <div class="lv-pop" id="c-pop" hidden>맞힐수록 레벨이 오르고 복습 간격이 1·3·7·14·30·60일로 늘어나요. 틀리면 레벨 1로 돌아가요.</div>
+        <div class="lv-pop" id="c-pop" hidden>맞히면 다음 복습이 1일, 3일, 7일, 14일, 30일, 60일 뒤로 늘어나요. 틀리면 다음 날 다시 나와요.</div>
         <div class="dict" id="c-dict" role="dialog" aria-label="사전 검색 결과" hidden></div>
         <article class="card" id="card">
           <div class="ko-sec"><p class="ko" id="c-ko"></p></div>
@@ -979,10 +979,10 @@ details.panel:not([open]){gap:0}
     <div class="cheer-box">
       <div class="cheer-nori" id="cheer-nori"></div>
       <div class="cheer-shadow"></div>
-      <h2 id="cheer-t">잘했어요!</h2>
+      <h2 id="cheer-t">오늘 분량 끝</h2>
       <p id="cheer-sub"></p>
       <div class="streak-pop" id="cheer-streak"></div>
-      <button class="go" id="cheer-ok" type="button">노리랑 하이파이브</button>
+      <button class="go" id="cheer-ok" type="button">계속</button>
     </div>
   </div>
 
@@ -1016,7 +1016,7 @@ details.panel:not([open]){gap:0}
     <div class="ask-card">
       <div class="ask-nori" id="ask-nori"></div>
       <h3 id="ask-t">노리가 매일 찾아가도 될까요?</h3>
-      <p>아침 9시에 노리가 공부하자고 조를게요.<br>안 오면 노리가 아파요 🥺</p>
+      <p>아침 9시에 노리가 공부하자고 조를게요.<br>안 오면 노리가 아파요</p>
       <button class="go" id="ask-yes" type="button">알림 받기</button>
       <button class="later" id="ask-no" type="button">나중에</button>
     </div>
@@ -1124,7 +1124,7 @@ details.panel:not([open]){gap:0}
             <input class="nick-in" id="o-nick" maxlength="10" placeholder="이름 적기" autocomplete="nickname">
           </div>
           <div class="set-row" id="o-rank-row" hidden><label for="o-rank">순위표 참여<small>닉네임과 학습량만 보여요</small></label><input type="checkbox" class="switch" id="o-rank"></div>
-          <div class="set-row" id="o-admin-row" hidden><div class="lab">관리자<small>단어 추가 · 사용자 현황</small></div><button type="button" class="text-btn go-link" id="o-admin">열기</button></div>
+          <div class="set-row" id="o-admin-row" hidden><div class="lab">관리자<small>단어 추가, 사용자 현황</small></div><button type="button" class="text-btn go-link" id="o-admin">열기</button></div>
           <div class="set-row" id="o-acct" hidden>
             <div class="lab"><small id="o-acct-label">로그인 아이디</small><span id="o-acct-id"></span></div>
             <button type="button" class="text-btn" id="o-logout">로그아웃</button>
@@ -1868,13 +1868,11 @@ function countUp(el, to){
 const CHECK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
 function greeting(kind){
   const h = new Date().getHours();
-  const g = kind === 'back' ? '다시 왔네요' : kind === 'done' ? '수고했어요'
-    : h < 5 ? '늦은 밤이에요' : h < 11 ? '좋은 아침이에요' : h < 17 ? '반가워요' : h < 22 ? '좋은 저녁이에요' : '늦은 밤이에요';
   const nick = (state.settings.nick || '').trim();
-  return nick ? g + ' ' + nick + '님,' : g + '!';
+  return nick ? nick + '님' : '';
 }
 function setTitle(kind, line2){
-  const el = $('h-title'); el.replaceChildren(mk('span', 'l1', greeting(kind)), mk('span', 'l2', line2));
+  const el = $('h-title'), g = greeting(kind); el.replaceChildren(...(g ? [mk('span', 'l1', g)] : []), mk('span', 'l2', line2));
 }
 function firstGloss(m){ return String(m).split(/[;(]/)[0].trim(); }
 const DAYK = ['일','월','화','수','목','금','토'];
@@ -1894,13 +1892,13 @@ function renderHome(){
   const pend = s.retry.length + (s.cur && s.cur.mode === 'retry' ? 1 : 0);
   const c0 = s.counts, fc = forecast(t);
   // the headline says what today is about
-  if (s.completed && s.total) setTitle('done', fc[0] ? '내일은 ' + fc[0] + '단어가 기다려요' : '오늘 분량 끝! 푹 쉬어요');
-  else if (s.completed) setTitle('', left ? '새 단어로 가 볼까요?' : N + '단어를 전부 한 번씩 봤어요');
-  else if (started) setTitle('back', pend ? '재도전 ' + pend + '개가 기다리고 있어요' : (s.total - s.done) + '문제 남았어요. 이어서 해요');
-  else if (fresh) setTitle('', '첫 단어 ' + c0.new + '개 같이 해볼까요?');
-  else if (c0.ng) setTitle('', '지난번 틀린 ' + c0.ng + '단어부터 잡아 볼까요?');
-  else if (c0.due) setTitle('', '잊을 때가 된 ' + c0.due + '단어 같이 볼까요?');
-  else setTitle('', s.total + '단어 같이 해볼까요?');
+  if (s.completed && s.total) setTitle('done', fc[0] ? '오늘 끝. 내일 복습 ' + fc[0] + '개' : '오늘 분량 끝');
+  else if (s.completed) setTitle('', left ? '오늘 복습은 없어요' : '단어 ' + N + '개를 다 봤어요');
+  else if (started) setTitle('back', pend ? '다시 풀 단어 ' + pend + '개' : (s.total - s.done) + '문제 남았어요');
+  else if (fresh) setTitle('', '오늘 새 단어 ' + c0.new + '개');
+  else if (c0.ng) setTitle('', '어제 틀린 단어 ' + c0.ng + '개부터');
+  else if (c0.due) setTitle('', '오늘 복습 ' + c0.due + '개');
+  else setTitle('', '오늘 ' + s.total + '문제');
   // ring
   const p = s.total ? (s.completed ? 1 : s.done / s.total) : 0;
   const ring = $('h-ring');
@@ -2116,7 +2114,7 @@ function fillCard(keepFocus){
   if (cur.got) inputs().forEach(i => { const v = cur.got[i.dataset.i]; if (v != null){ i.value = i.dataset.v = v; i.classList.add('ok'); } });
   inputs().forEach(fit);
   if (cur.fb) showFeedback(cur.fb, false); else hideFeedback(false);
-  $('c-src').textContent = '[어휘 출처] ' + d.ref;
+  $('c-src').textContent = '출처 ' + d.ref;
   if (cur.solved){ solved(true); return; }
   const first = unsolved()[0];
   if (first && (keepFocus || document.activeElement !== first)) first.focus({ preventScroll: true });
@@ -2245,7 +2243,7 @@ function showFeedback(list, animate){
   if (!parts.length){
     if (!list.some(c => c.kind === 'wrong')){ hideFeedback(); return; }
     const x = mk('span', 'x-ic'); x.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.6" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>';
-    parts.push(x, mk('span', 'wrong-t', '틀렸어요!'));
+    parts.push(x, mk('span', 'wrong-t', '틀렸어요'));
   }
   const sig = cls + '|' + list.map(c => c.kind + (c.w || '')).join(',');
   const old = box.firstChild, open = wrap.classList.contains('show');
@@ -2359,7 +2357,7 @@ function openDict(anchor){
   const d = BY.get(cur.n), e = dictEntry(d), box = $('c-dict');
   if (!box.hidden && dictFor === anchor){ closeDict(); return; }
   box.replaceChildren();
-  box.appendChild(mk('div', 'dict-head', '사전 검색 결과입니다.'));
+  box.appendChild(mk('div', 'dict-head', '사전 검색 결과'));
   const body = mk('div', 'dict-body');
   const w = mk('div', 'dict-word'); w.append(mk('b', null, e.head)); if (e.pos) w.append(mk('span', 'dict-pos', e.pos));
   body.appendChild(w);
@@ -2477,8 +2475,8 @@ function renderDone(){
   const prev = lastDay(t - 1), revived = doneToday && prev != null && t - prev >= 10;
   paintNori($('d-nori'), doneToday ? 'happy' : noriState().mood);
   $('d-streak').hidden = !(doneToday && sk > 0);
-  $('d-streak-n').textContent = sk + '일 연속!';
-  $('d-title').textContent = revived ? '노리가 다시 살아났어요!' : doneToday && sk >= 2 ? sk + '일째 노리랑 놀았어요' : '오늘 분량 끝';
+  $('d-streak-n').textContent = sk + '일 연속';
+  $('d-title').textContent = revived ? '노리가 살아났어요' : '오늘 분량 끝';
   $('d-total').textContent = s.total; $('d-ok').textContent = s.firstOk; $('d-ng').textContent = s.firstNg;
   const rate = s.total ? Math.round(s.firstOk / s.total * 100) : 0;
   $('d-sub').textContent = s.total ? '첫 시도 정답률 ' + rate + '%' : '';
@@ -2553,9 +2551,9 @@ function noriState(){
 }
 function noriLines(ns, sk){
   const g = ns.gap;
-  if (ns.mood === 'happy') return ['노리가 꼬리를 흔들어요', '오늘 끝! 내일 또 놀아 줘요'];
+  if (ns.mood === 'happy') return ['노리가 꼬리를 흔들어요', '오늘 끝. 내일 또 와요'];
   if (g == null) return ['노리가 첫 산책을 기다려요', '오늘 ' + goalText() + ' 풀면 연속 기록 시작'];
-  if (g === 1) return ['노리가 현관에서 기다려요', sk ? '오늘 ' + goalText() + ' 풀면 ' + (sk + 1) + '일 연속!' : '오늘 ' + goalText() + ' 풀면 연속 기록 시작'];
+  if (g === 1) return ['노리가 현관에서 기다려요', sk ? '오늘 ' + goalText() + ' 풀면 ' + (sk + 1) + '일 연속' : '오늘 ' + goalText() + ' 풀면 연속 기록 시작'];
   if (g === 2) return ['노리가 삐졌어요', '어제 안 와서 밥그릇을 엎었대요'];
   if (g <= 4) return ['노리가 아파요', '약은 영어 단어뿐이래요'];
   if (g <= 6) return ['노리가 입원했어요', '면회는 노리보카에서만 돼요'];
@@ -2594,7 +2592,7 @@ async function enablePush(){
     const k = subKey(sub.endpoint);
     await pushDoc().set(Object.assign({ subs: { [k]: JSON.stringify(sub) } }, pushInfo()), { merge: true });
     localStorage.setItem(pushLS(), k); pushSent = '';
-    try { reg.showNotification('노리 알림을 켰어요 🐶', { body: '매일 아침 9시에 노리가 찾아갈게요. 그날 분량을 끝냈으면 조용히 있을게요', icon: 'nori-happy.png', tag: 'nori-hello' }); } catch (e) {}
+    try { reg.showNotification('노리 알림을 켰어요', { body: '매일 아침 9시에 알려 드려요. 그날 분량을 끝냈으면 울리지 않아요', icon: 'nori-happy.png', tag: 'nori-hello' }); } catch (e) {}
     return true;
   } catch (e) { toast('알림을 켜지 못했어요. 잠시 뒤에 다시 해 주세요'); return false; }
 }
@@ -2629,13 +2627,12 @@ function cheer(){
   state.sess.cheered = true; persistLocal();
   const sk = streak(), prev = lastDay(t - 1), revived = prev != null && t - prev >= 10;
   $('cheer-nori').innerHTML = nori('happy');
-  ['💛', '🐾', '💛', '✨'].forEach((h, i) => { const e = mk('span', 'heart', h); e.style.left = (8 + i * 26) + '%'; e.style.animationDelay = (i * .35) + 's'; $('cheer-nori').appendChild(e); });
-  $('cheer-t').textContent = revived ? '노리가 살아났어요!' : '잘했어요!';
-  $('cheer-sub').textContent = revived ? '다시는 떠나지 마요 🥹' : sk >= 2 ? '노리가 신나서 뛰어다녀요' : '오늘 분량 완료! 노리가 꼬리를 흔들어요';
-  $('cheer-streak').replaceChildren(); $('cheer-streak').insertAdjacentHTML('beforeend', $('h-fire').querySelector('svg').outerHTML); $('cheer-streak').append(sk + '일 연속!');
+  $('cheer-t').textContent = revived ? '노리가 살아났어요' : '오늘 분량 끝';
+  $('cheer-sub').textContent = revived ? '이번엔 오래 같이 있어 줘요' : '노리가 꼬리를 흔들어요';
+  $('cheer-streak').replaceChildren(); $('cheer-streak').insertAdjacentHTML('beforeend', $('h-fire').querySelector('svg').outerHTML); $('cheer-streak').append(sk + '일 연속');
   const box = $('cheer');
   box.querySelectorAll('.cf').forEach(e => e.remove());
-  const cols = ['#6c5df5', '#ff8a00', '#18a058', '#f04a5d', '#4f9cf0', '#ffd54a'];
+  const cols = ['#26365e', '#ff8a00', '#18a058', '#f04a5d', '#4f9cf0', '#ffd54a'];
   if (!reduced) for (let i = 0; i < 46; i++){ const e = mk('i', 'cf'); e.style.left = Math.random() * 100 + '%'; e.style.background = cols[i % cols.length]; e.style.animationDuration = (2.2 + Math.random() * 2) + 's'; e.style.animationDelay = (Math.random() * .8) + 's'; box.appendChild(e); }
   box.hidden = false;
   fanfare();
@@ -2651,9 +2648,9 @@ function showStreak(){
   const big = isMilestone(sk), box = $('stk');
   box.classList.toggle('big', big);
   $('stk-flame').innerHTML = $('h-fire').querySelector('svg').outerHTML;
-  $('stk-t').textContent = big ? sk + '일 연속 달성!' : sk + '일째 연속 기록이에요!';
-  $('stk-sub').textContent = big ? (sk >= 100 ? '이건 진짜 전설이에요. 노리가 평생 자랑할 거예요' : '노리가 동네방네 자랑하고 다녀요') : '내일도 오면 ' + (sk + 1) + '일! 노리가 기다릴게요';
-  $('stk-badge').textContent = '🏆 ' + sk + '일 배지 획득';
+  $('stk-t').textContent = sk + '일 연속';
+  $('stk-sub').textContent = big ? '노리가 동네에 자랑하고 다녀요' : '내일도 오면 ' + (sk + 1) + '일';
+  $('stk-badge').textContent = sk + '일 배지';
   box.querySelectorAll('.fw').forEach(e => e.remove());
   if (big && !reduced){
     const cols = ['#ffd54a', '#ff8fa3', '#7cd4ff', '#b6f27a', '#ffffff'];
@@ -2755,15 +2752,15 @@ function renderRank(){
   const me = $('r-me'); me.replaceChildren();
   const myI = rows.findIndex(r => r.uid === meUid);
   if (!joined && FB){
-    const t = mk('div', 'me-t'); t.append(mk('b', null, '순위표에 참여하지 않고 있어요'), mk('span', null, '참여하면 친구들과 학습량을 겨룰 수 있어요'));
+    const t = mk('div', 'me-t'); t.append(mk('b', null, '순위표에 참여하지 않고 있어요'), mk('span', null, '참여하면 친구들과 학습량을 비교해요'));
     const go = mk('button', 'ghost', '참여하기'); go.type = 'button'; go.onclick = () => { state.settings.rank = true; save(); renderRank(); loadRank().then(renderRank); };
     me.append(t, go);
   } else {
     const big = mk('div', 'big-rank'); big.append(String(myI + 1)); big.appendChild(mk('small', null, '위'));
     const t = mk('div', 'me-t');
     const lead = myI > 0 ? rows[myI - 1].val - rows[myI].val : 0;
-    t.append(mk('b', null, rankMode === 'week' ? '이번 주 ' + mine.wc + '단어' : '🔥 ' + rows[myI].val + '일 연속'),
-      mk('span', null, myI === 0 ? (rows.length > 1 ? '1등이에요! 노리가 자랑스러워해요' : '아직 혼자예요. 친구를 불러 보세요') : (lead + 1) + unit + ' 더 하면 ' + myI + '위예요'));
+    t.append(mk('b', null, rankMode === 'week' ? '이번 주 ' + mine.wc + '단어' : rows[myI].val + '일 연속'),
+      mk('span', null, myI === 0 ? (rows.length > 1 ? '1등' : '아직 참여한 친구가 없어요') : (lead + 1) + unit + ' 더 하면 ' + myI + '위'));
     me.append(big, t);
     if (!(state.settings.nick || '').trim()){ const go = mk('button', 'ghost', '닉네임 정하기'); go.type = 'button'; go.onclick = () => { goTab('settings'); setTimeout(() => $('o-nick').focus(), 350); }; me.appendChild(go); }
   }
@@ -2773,14 +2770,14 @@ function renderRank(){
     const row = mk('div', 'rk' + (r.uid === meUid ? ' me' : '')); row.style.animationDelay = Math.min(i, 12) * .03 + 's';
     row.appendChild(mk('div', 'rk-n' + (i < 3 && r.val > 0 ? ' g' + (i + 1) : ''), String(i + 1)));
     const t = mk('div', 'rk-t'); const nm = mk('b', null, (r.nick || '').trim() || '이름 없는 노리'); if (r.uid === meUid) nm.appendChild(mk('i', null, '나'));
-    t.append(nm, mk('span', null, rankMode === 'week' ? '🔥 ' + (r.last != null && today() - r.last <= 1 ? r.streak || 0 : 0) + '일 연속' : '이번 주 ' + (r.wk === wk ? r.wc || 0 : 0) + '단어'));
+    t.append(nm, mk('span', null, rankMode === 'week' ? (r.last != null && today() - r.last <= 1 ? r.streak || 0 : 0) + '일 연속' : '이번 주 ' + (r.wk === wk ? r.wc || 0 : 0) + '단어'));
     row.appendChild(t);
     const v = mk('div', 'rk-v' + (rankMode === 'streak' ? ' fire' : ''), String(r.val)); v.appendChild(mk('small', null, unit)); row.appendChild(v);
     list.appendChild(row);
   });
   const left = wk + 7 - today();
-  $('r-foot').textContent = !FB ? '순위표는 노리보카 앱에서 친구들과 함께 볼 수 있어요'
-    : rankErr || (rankRows == null ? '불러오는 중' : rankMode === 'week' ? '월요일에 새로 시작해요 · ' + left + '일 남음' : '오늘이나 어제까지 이어진 기록만 세요');
+  $('r-foot').textContent = !FB ? '순위표는 로그인하면 보여요'
+    : rankErr || (rankRows == null ? '불러오는 중' : rankMode === 'week' ? left + '일 뒤 월요일에 초기화' : '어제까지 이어진 기록만 셉니다');
 }
 
 const BASE_N = DATA.length;
@@ -3003,7 +3000,7 @@ async function renderAdmUsers(){
       const row = mk('div', 'set-row adm-user');
       const lab = mk('div', 'lab'); lab.append((r.nick || '').trim() || '이름 없는 노리');
       lab.appendChild(mk('small', null, (r.last == null ? '아직 목표 달성 없음' : t - r.last === 0 ? '오늘 달성' : (t - r.last) + '일 전 달성') + ' · 본 단어 ' + (r.seen || 0) + '개'));
-      const v = mk('div', 'adm-v'); v.append(mk('b', null, (r.wk === wk ? r.wc || 0 : 0) + '단어'), mk('small', null, '🔥 ' + (r.last != null && t - r.last <= 1 ? r.streak || 0 : 0) + '일'));
+      const v = mk('div', 'adm-v'); v.append(mk('b', null, (r.wk === wk ? r.wc || 0 : 0) + '단어'), mk('small', null, (r.last != null && t - r.last <= 1 ? r.streak || 0 : 0) + '일 연속'));
       const me = fbAuth && fbAuth.currentUser && fbAuth.currentUser.uid === r.id;
       const del = mk('button', 'text-btn danger-sm', admDelArm === r.id ? '정말 삭제' : '삭제'); del.type = 'button'; del.hidden = me;
       del.onclick = () => admDeleteUser(r.id);
@@ -3032,20 +3029,20 @@ async function admDeleteUser(id){
 /* ---------- what kind of mistakes: counted per answer the learner submits ---------- */
 const ERR = {
   spell: ['철자', '거의 맞았는데 글자가 틀려요', '단어를 소리 내어 읽으며 한 글자씩 써 보세요'],
-  form: ['형태', '단어는 아는데 형태(시제·복수·품사)가 달라요', '빈칸 앞뒤를 보고 동사인지 명사인지, 시제가 무엇인지 먼저 정하세요'],
-  syn: ['유의어', '뜻은 맞는데 배운 표현 대신 비슷한 말을 써요', '정답을 맞힌 뒤 사전 팝업에서 목표 단어를 한 번 더 보세요'],
+  form: ['형태', '단어는 맞는데 시제나 수, 품사가 달라요', '빈칸 앞뒤를 보고 품사와 시제부터 정하세요'],
+  syn: ['유의어', '뜻은 맞는데 배운 단어 대신 비슷한 말을 써요', '맞힌 뒤 사전에서 목표 단어를 한 번 더 보세요'],
   trap: ['혼동·반대말', '헷갈리는 단어나 반대 뜻을 골라요', '한국어 문장의 초록 글씨 뜻을 먼저 확인하고 답하세요'],
-  essay: ['서술형', '서술형 문장에서 빠뜨리거나 틀린 부분이 있어요', '모범 답안을 소리 내어 두 번 읽고 핵심 표현을 먼저 떠올리세요'],
+  essay: ['서술형', '서술형 문장에서 빠뜨리거나 틀린 부분이 있어요', '모범 답안을 두 번 소리 내어 읽으세요'],
   wrong: ['기억 안 남', '전혀 다른 단어를 써요', '틀린 단어는 단어장 오답 목록에서 예문과 함께 다시 보세요'],
   hint: ['힌트 사용', '힌트를 보고 풀어요', '힌트 전에 첫 글자라도 먼저 떠올려 보세요'],
-  reveal: ['정답 보기', '정답을 바로 봐요', '모르겠어도 한 번은 써 보고 정답을 확인하세요']
+  reveal: ['정답 보기', '정답을 바로 봐요', '모르겠어도 한 번은 써 보세요']
 };
 function logErr(k){ if (!state.err) state.err = {}; state.err[k] = (state.err[k] || 0) + 1; }
 function renderErr(){
   const box = $('an-err'); box.replaceChildren();
   const e = state.err || {}, tot = Object.values(e).reduce((a, b) => a + b, 0), MIN = 10;
   const head = mk('div', 'pp-head'); head.append(mk('h2', null, '자주 하는 실수'), mk('b', null, tot ? tot + '번' : '-')); box.appendChild(head);
-  if (tot < MIN){ box.appendChild(mk('p', 'an-note', '틀린 기록이 ' + MIN + '번 쌓이면 철자, 형태, 유의어 중 무엇을 자주 틀리는지 알려 드릴게요' + (tot ? ' (지금 ' + tot + '번)' : ''))); return; }
+  if (tot < MIN){ box.appendChild(mk('p', 'an-note', '틀린 답이 ' + MIN + '번 쌓이면 보여요' + (tot ? '. 지금 ' + tot + '번' : ''))); return; }
   const rows = Object.keys(ERR).map(k => [k, e[k] || 0]).filter(r => r[1] > 0).sort((a, b) => b[1] - a[1]);
   const top = ERR[rows[0][0]];
   const tip = mk('div', 'err-tip'); tip.append(mk('b', null, top[0] + ' 실수가 가장 많아요'), mk('span', null, top[1] + '. ' + top[2] + '.')); box.appendChild(tip);
@@ -3122,7 +3119,7 @@ function renderEssayCard(){
   const due = essayDue(), es = essayState(), t = today();
   const doneToday = ESSAY.filter(e => es[e.id] && es[e.id].last === t).length;
   $('h-ess-n').textContent = due.length ? due.length + '문제' : '완료';
-  $('h-ess-sub').textContent = due.length ? '배열·빈칸·영작으로 바꿔 가며 반복해요' : (doneToday ? '오늘 서술형 끝! 내일 또 바꿔서 나와요' : '오늘은 쉬어도 돼요');
+  $('h-ess-sub').textContent = due.length ? '날마다 배열, 빈칸, 영작 순으로 바뀌어요' : (doneToday ? '오늘 서술형 끝' : '오늘 할 서술형이 없어요');
   $('h-ess-go').textContent = due.length ? '서술형 시작' : '한 번 더 연습';
 }
 function openEssay(){
@@ -3156,7 +3153,7 @@ function renderEss(){
   if (c.mode === 'order'){
     if (!c.pool){ c.parts = chunksOf(e.a); let p; do { p = shuffle(c.parts.map((x, i) => i)); } while (c.parts.length > 2 && p.every((x, i) => x === i)); c.pool = p; c.pick = []; }
     const line = mk('div', 'es-line'); c.pick.forEach((pi, k) => { const b = mk('button', 'es-chip on', c.parts[pi]); b.type = 'button'; b.onclick = () => { c.pick.splice(k, 1); renderEss(); }; line.appendChild(b); });
-    if (!c.pick.length) line.appendChild(mk('span', 'es-ph', '아래 조각을 순서대로 눌러 문장을 만들어요'));
+    if (!c.pick.length) line.appendChild(mk('span', 'es-ph', '조각을 순서대로 누르세요'));
     const pool = mk('div', 'es-pool'); c.pool.forEach(pi => { if (c.pick.includes(pi)) return; const b = mk('button', 'es-chip', c.parts[pi]); b.type = 'button'; b.onclick = () => { c.pick.push(pi); renderEss(); }; pool.appendChild(b); });
     area.append(line, pool); go.textContent = '확인';
   } else if (c.mode === 'blank'){
@@ -3192,13 +3189,13 @@ function essCheck(){
   if (ok || c.mode === 'write' || c.tries >= 2){
     c.solved = true; essRecord(e, ok && c.tries === 1);
     fb.className = 'es-fb ' + (ok ? 'good' : 'bad');
-    fb.appendChild(mk('b', null, ok ? (c.tries === 1 ? '완벽해요!' : '맞았어요!') : (c.mode === 'write' ? '빠진 내용이 있어요' : '정답을 확인해요')));
+    fb.appendChild(mk('b', null, ok ? '정답' : (c.mode === 'write' ? '빠진 표현이 있어요' : '정답 확인')));
     if (detail){ const ul = mk('ul', 'es-keys'); detail.forEach(([k, has]) => ul.appendChild(mk('li', has ? 'y' : 'n', (has ? '✓ ' : '✗ ') + k))); fb.appendChild(ul); }
     fb.appendChild(mk('div', 'es-model', e.a)); fb.appendChild(mk('div', 'es-tip', '작성 포인트: ' + e.tip));
     if (ok && c.tries === 1) jingle();
     $('es-go').textContent = ess.i + 1 < ess.list.length ? '다음 문제' : '끝내기';
   } else {
-    fb.className = 'es-fb bad'; fb.appendChild(mk('b', null, '다시 한 번 해 볼까요?'));
+    fb.className = 'es-fb bad'; fb.appendChild(mk('b', null, '다시 해 보세요'));
     if (c.mode === 'order') fb.appendChild(mk('span', null, '앞부분: ' + c.parts.slice(0, 2).join(' ') + ' …'));
     wobbleEl($('es-body'));
   }
@@ -3213,7 +3210,7 @@ function essRecord(e, clean){
 function essDone(){
   const box = $('es-body'); box.replaceChildren();
   const d = mk('div', 'es-done'); const n = mk('div', 'nori m-happy'); n.innerHTML = nori('happy'); d.appendChild(n);
-  d.appendChild(mk('h2', null, '서술형 끝!')); d.appendChild(mk('p', null, ess.list.length + '문제 중 ' + ess.ok + '문제를 한 번에 맞혔어요. 내일은 다른 방식으로 바꿔서 나와요.'));
+  d.appendChild(mk('h2', null, '서술형 끝')); d.appendChild(mk('p', null, ess.list.length + '문제 중 ' + ess.ok + '문제를 한 번에 맞혔어요'));
   box.appendChild(d); $('es-prog').textContent = ''; $('es-mode').textContent = '';
   $('es-go').textContent = '홈으로'; ess.cur = { solved: true, done: true };
 }
@@ -3281,7 +3278,7 @@ function renderStats(){
   } else {
     hero.appendChild(mk('small', null, '가장 약한 분야'));
     hero.appendChild(mk('h2', 'name', '아직 기록이 적어요'));
-    hero.appendChild(mk('p', null, '분야마다 ' + MIN + '번 넘게 풀면 어디가 약한지 알려 드릴게요'));
+    hero.appendChild(mk('p', null, '교재마다 ' + MIN + '번 넘게 풀면 보여요'));
   }
   // accuracy
   const tr = G.reduce((a, g) => a + g.rp, 0), tw = G.reduce((a, g) => a + g.wr, 0);
@@ -3368,7 +3365,7 @@ function renderList(){
       d.seg.forEach(sg => { if (sg.alts) enf.appendChild(mk('mark', null, sg.alts[0])); else if (sg.text) enf.appendChild(document.createTextNode(sg.text)); });
       more.appendChild(enf);
       more.appendChild(mk('div', null, d.ko.replace(/[\[\]]/g, '')));
-      more.appendChild(mk('div', 'soft', '[어휘 출처] ' + d.ref + (d.loc ? ' · ' + d.loc : '')));
+      more.appendChild(mk('div', 'soft', '출처 ' + d.ref + (d.loc ? ' · ' + d.loc : '')));
       it.appendChild(more);
     }
     it.onclick = () => { openRows.has(d.n) ? openRows.delete(d.n) : openRows.add(d.n); renderList(); };
@@ -3376,7 +3373,7 @@ function renderList(){
   }
   $('l-title').textContent = '단어장 ';
   $('l-count').textContent = shown + '개';
-  if (!shown) box.appendChild(mk('div', 'empty', filter === 'ng' ? '오답 단어가 없어요.' : '해당하는 단어가 없어요.'));
+  if (!shown) box.appendChild(mk('div', 'empty', filter === 'ng' ? '틀린 단어가 없어요' : '단어가 없어요'));
 }
 let listFrom = 'home';
 function setFilter(f){ filter = f; document.querySelectorAll('#l-seg button').forEach(x => x.setAttribute('aria-pressed', String(x.dataset.f === f))); }
@@ -3505,7 +3502,7 @@ $('o-push').onchange = async e => {
   paintPush(); if (current === 'home') renderHome();
 };
 $('h-bell').onclick = async () => { if (await enablePush()){ toast('매일 아침 9시에 노리가 찾아갈게요'); } paintPush(); };
-$('h-fire').onclick = () => { const sk = streak(), on = doneOn(today()); toast(on ? sk + '일 연속 학습 중이에요 🔥' : sk ? '오늘 ' + goalText() + ' 풀면 ' + (sk + 1) + '일 연속!' : '오늘 ' + goalText() + ' 풀면 연속 기록이 시작돼요'); };
+$('h-fire').onclick = () => { const sk = streak(), on = doneOn(today()); toast(on ? sk + '일 연속' : sk ? '오늘 ' + goalText() + ' 풀면 ' + (sk + 1) + '일 연속' : '오늘 ' + goalText() + ' 풀면 연속 기록이 시작돼요'); };
 document.addEventListener('keydown', e => { if (e.key === 'Escape' && !USE_CW){ if (current === 'settings') closeSettings(); else closeDict(); } });
 
 /* keep the hint bar right above the on-screen keyboard */
