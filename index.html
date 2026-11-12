@@ -90,6 +90,12 @@ button:focus-visible,input:focus-visible,summary:focus-visible{outline:2px solid
 .blank:focus-visible{outline:none}
 .blank.ok.shown{color:var(--red)}
 .blank.ok{color:var(--green)}
+.blank.ok.win{background:linear-gradient(var(--green),var(--green)) left bottom/0% 3px no-repeat,var(--green-soft);animation:winPop .5s cubic-bezier(.2,1.5,.4,1) both,winLine .45s ease-out .12s forwards}
+@keyframes winPop{0%{transform:scale(1)}40%{transform:scale(1.13)}100%{transform:scale(1)}}
+@keyframes winLine{to{background-size:100% 3px,auto}}
+#card.win{animation:cardGlow .8s ease-out}
+@keyframes cardGlow{0%{box-shadow:0 10px 30px rgba(40,95,160,.14),0 0 0 0 rgba(24,160,88,.45)}100%{box-shadow:0 10px 30px rgba(40,95,160,.14),0 0 0 16px rgba(24,160,88,0)}}
+.spark{position:absolute;width:8px;height:8px;border-radius:50%;pointer-events:none;z-index:5}
 .blank.bad{background:var(--red-soft);color:var(--red)}
 .blank.near{background:var(--green-soft);color:var(--green-ink)}
 .src{align-self:flex-end;font-size:12.5px;color:var(--muted);text-align:right}
@@ -2149,6 +2155,7 @@ function fillCard(keepFocus){
   $('card').classList.remove('solved');
   $('c-pop').hidden = true; closeDict(); $('c-tip').hidden = true;
   const stamp = $('c-stamp'); stamp.hidden = true; stamp.classList.remove('stamped', 'still');
+  $('card').classList.remove('win'); document.querySelectorAll('#card .blank.win').forEach(i => i.classList.remove('win'));
   $('nextbar').hidden = true; $('bbar').hidden = false; showKb(true);
   $('c-lv-text').textContent = r ? '레벨 ' + r.s : '새 단어';
   if (cur.mode === 'retry') setTag('red', '재도전');
@@ -2359,16 +2366,42 @@ function keyTick(kind){
 function jingle(){
   if (!state.settings.sfx) return;
   const c = audio(); if (!c) return;
-  const t0 = c.currentTime + 0.01, out = c.createGain(); out.gain.value = 0.22; out.connect(c.destination);
-  [[783.99, 0, 0.32], [1046.5, 0.085, 0.32], [1567.98, 0.17, 0.75]].forEach(([f, at, len]) => {
-    [[1, 'sine', 1], [2, 'triangle', 0.18], [3, 'sine', 0.06]].forEach(([mul, type, vol]) => {
+  const t0 = c.currentTime + 0.01;
+  const out = c.createGain(); out.gain.value = 0.2;
+  const lp = c.createBiquadFilter(); lp.type = 'lowpass'; lp.frequency.value = 5200; lp.Q.value = 0.4;
+  // a short echo gives the chime some air without a reverb file
+  const dl = c.createDelay(0.5), fb = c.createGain(), wet = c.createGain(), dlp = c.createBiquadFilter();
+  dl.delayTime.value = 0.11; fb.gain.value = 0.28; wet.gain.value = 0.32; dlp.type = 'lowpass'; dlp.frequency.value = 2800;
+  out.connect(lp); lp.connect(c.destination); lp.connect(dl); dl.connect(dlp); dlp.connect(fb); fb.connect(dl); dlp.connect(wet); wet.connect(c.destination);
+  // two plucked notes a major sixth apart: E6 then C#7, kalimba-like (fundamental + quick metallic partials)
+  [[1318.5, 0, 0.9], [2217.5, 0.075, 1]].forEach(([f, at, v]) => {
+    [[1, 'sine', 1, 0.55], [2.76, 'sine', 0.22, 0.12], [5.4, 'sine', 0.08, 0.05]].forEach(([mul, type, vol, len]) => {
       const o = c.createOscillator(), g = c.createGain();
-      o.type = type; o.frequency.value = f * mul;
+      o.type = type; o.frequency.value = f * mul; o.detune.value = (Math.random() - .5) * 6;
       g.gain.setValueAtTime(0.0001, t0 + at);
-      g.gain.exponentialRampToValueAtTime(vol, t0 + at + 0.012);
+      g.gain.exponentialRampToValueAtTime(vol * v, t0 + at + 0.004);
       g.gain.exponentialRampToValueAtTime(0.0001, t0 + at + len);
       o.connect(g); g.connect(out); o.start(t0 + at); o.stop(t0 + at + len + 0.05);
     });
+  });
+}
+/* correct answer: the filled word pops, a green line sweeps under it, a few sparks fly off, the card glows once */
+function celebrateCard(){
+  const card = $('card'); if (!card) return;
+  card.classList.remove('win'); void card.offsetWidth; card.classList.add('win');
+  const box = card.getBoundingClientRect();
+  inputs().forEach((i, k) => {
+    i.classList.remove('win'); void i.offsetWidth; i.classList.add('win');
+    if (reduced) return;
+    const r = i.getBoundingClientRect(), cx = r.left + r.width / 2 - box.left, cy = r.top + r.height / 2 - box.top;
+    const cols = ['#18a058', '#2f6fed', '#ffc23d', '#18a058'];
+    for (let n = 0; n < 8; n++){
+      const sp = mk('i', 'spark'); sp.style.left = cx + 'px'; sp.style.top = cy + 'px'; sp.style.background = cols[n % cols.length];
+      card.appendChild(sp);
+      const a = (n / 8) * Math.PI * 2 + Math.random() * .5, d = 34 + Math.random() * 26;
+      sp.animate([{ transform: 'translate(-50%,-50%) scale(1)', opacity: 1 }, { transform: 'translate(calc(-50% + ' + Math.cos(a) * d + 'px), calc(-50% + ' + Math.sin(a) * d * .7 + 'px)) scale(.2)', opacity: 0 }],
+        { duration: 560 + Math.random() * 160, delay: 60 + k * 60, easing: 'cubic-bezier(.2,.7,.3,1)', fill: 'forwards' }).onfinish = () => sp.remove();
+    }
   });
 }
 /* show the answer right away; the word is recorded as wrong and comes back as a retry */
@@ -2388,8 +2421,8 @@ function solved(restored){
   busy = true;
   hideFeedback();
   setTag('teal', nextLabel(), !restored);
-  const stamp = $('c-stamp'); stamp.hidden = !!cur.revealed;
-  if (!cur.revealed){ if (restored) stamp.classList.add('still'); else { stamp.classList.remove('stamped'); void stamp.offsetWidth; stamp.classList.add('stamped'); } }
+  $('c-stamp').hidden = true;
+  if (!cur.revealed && !restored) celebrateCard();
   $('card').classList.toggle('solved', !cur.revealed);
   $('c-tip').hidden = (state.settings.dictSeen || 0) > 0;
   renderTop();
