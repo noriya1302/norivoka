@@ -537,6 +537,14 @@ details.panel:not([open]){gap:0}
 .tab[aria-current="page"] svg{transform:scale(1.08)}
 .tab:active svg{transform:scale(.86)}
 #app.has-tabs .scroll{padding-bottom:104px;box-sizing:border-box}
+.tabbar{touch-action:none;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;transition:transform .35s cubic-bezier(.3,1.4,.45,1)}
+.tabbar.scrub{transform:scale(1.03)}
+.tabbar.scrub .tab-pill{transition:transform .12s ease-out;background:linear-gradient(180deg,rgba(255,255,255,.5),rgba(255,255,255,.18));
+  box-shadow:0 10px 26px rgba(20,50,100,.25),inset 0 1.5px 1px #fff,inset 0 -2px 3px rgba(255,255,255,.7),inset 0 0 0 1.5px rgba(255,255,255,.85),inset 0 0 18px rgba(255,255,255,.35);
+  -webkit-backdrop-filter:blur(2px) saturate(1.8) brightness(1.1);backdrop-filter:blur(2px) saturate(1.8) brightness(1.1)}
+.tabbar.scrub .tab{color:#7d8a9c}
+.tabbar.scrub .tab.hov{color:var(--violet)}
+.tabbar.scrub .tab.hov svg{transform:scale(1.18)}
 /* ===== ranking ===== */
 .rank-wrap{display:flex;flex-direction:column;gap:12px;padding-block:2px 24px}
 .rank-me{flex-direction:row;align-items:center;gap:14px;padding:18px}
@@ -744,27 +752,27 @@ details.panel:not([open]){gap:0}
 
 /* ===== Liquid glass for floating chrome (cards stay solid for reading) ===== */
 :root{--lg-ease:cubic-bezier(.3,1.4,.45,1);
-  --lg-fill:linear-gradient(180deg,rgba(255,255,255,.58),rgba(255,255,255,.3));
-  --lg-blur:blur(16px) saturate(1.9) brightness(1.04);
-  --lg-shadow:0 10px 28px rgba(30,70,130,.16),0 2px 6px rgba(30,70,130,.08),inset 0 1px 0 rgba(255,255,255,.95),inset 0 -1.5px 1px rgba(255,255,255,.4),inset 0 0 12px rgba(255,255,255,.25)}
+  --lg-fill:linear-gradient(180deg,rgba(255,255,255,.36),rgba(255,255,255,.1) 60%,rgba(255,255,255,.2));
+  --lg-blur:blur(9px) saturate(2.3) brightness(1.08);
+  --lg-shadow:0 12px 30px rgba(20,50,100,.2),0 2px 6px rgba(20,50,100,.1),inset 0 1.5px 1px rgba(255,255,255,.95),inset 0 -1.5px 1px rgba(255,255,255,.65),inset 1.5px 0 1px rgba(255,255,255,.3),inset -1.5px 0 1px rgba(255,255,255,.3),inset 0 0 22px rgba(255,255,255,.22),inset 0 -10px 18px -10px rgba(255,255,255,.55)}
 /* specular rim: bright top-left and bottom-right edges, like light caught in thick glass */
 .icon-btn,.flame-chip,.es-mode,.next-btn,.sheet,.ask-card{position:relative}
 .icon-btn,.flame-chip,.es-mode,.tabbar,.toast,.next-btn,.sheet,.ask-card,.dict{isolation:isolate}
-.icon-btn::after,.flame-chip::after,.es-mode::after,.tabbar::after,.toast::after,.next-btn::after,.sheet::after,.ask-card::after,.dict::after{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;padding:1.2px;
-  background:linear-gradient(140deg,rgba(255,255,255,.98),rgba(255,255,255,.2) 32%,rgba(255,255,255,0) 50%,rgba(255,255,255,.18) 68%,rgba(255,255,255,.85));
+.icon-btn::after,.flame-chip::after,.es-mode::after,.tabbar::after,.toast::after,.next-btn::after,.sheet::after,.ask-card::after,.dict::after{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;padding:1.6px;
+  background:linear-gradient(135deg,#fff,rgba(255,255,255,.35) 22%,rgba(255,255,255,0) 45%,rgba(255,255,255,0) 58%,rgba(255,255,255,.4) 80%,#fff);
   -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask:linear-gradient(#000 0 0) content-box exclude,linear-gradient(#000 0 0)}
 /* round glass buttons in the top bars */
 .icon-btn{width:42px;height:42px;border-radius:50%;background:var(--lg-fill);-webkit-backdrop-filter:var(--lg-blur);backdrop-filter:var(--lg-blur);box-shadow:var(--lg-shadow);color:#4b5a70;transition:transform .35s var(--lg-ease),box-shadow .2s}
 .icon-btn svg{width:22px;height:22px;filter:none}
 .icon-btn:active{transform:scale(.9)}
 .flame-chip{height:38px;padding:0 13px 0 9px;background:var(--lg-fill);-webkit-backdrop-filter:var(--lg-blur);backdrop-filter:var(--lg-blur);box-shadow:var(--lg-shadow);color:#7c8ca2;transition:transform .35s var(--lg-ease)}
-.flame-chip.on{background:linear-gradient(180deg,rgba(255,255,255,.92),rgba(255,255,255,.66));color:#ff8a00}
+.flame-chip.on{background:linear-gradient(180deg,rgba(255,255,255,.7),rgba(255,255,255,.35));color:#ff8a00}
 .flame-chip:active{transform:scale(.92)}
 .es-mode{background:var(--lg-fill);-webkit-backdrop-filter:var(--lg-blur);backdrop-filter:var(--lg-blur);box-shadow:var(--lg-shadow);padding:7px 13px}
 /* tab bar: thicker, brighter glass */
-.tabbar{background:linear-gradient(180deg,rgba(255,255,255,.6),rgba(255,255,255,.32));-webkit-backdrop-filter:blur(20px) saturate(2) brightness(1.05);backdrop-filter:blur(20px) saturate(2) brightness(1.05);border:none;
-  box-shadow:0 16px 40px rgba(30,70,130,.2),0 3px 8px rgba(30,70,130,.08),inset 0 1px 0 #fff,inset 0 -2px 2px rgba(255,255,255,.45),inset 0 0 16px rgba(255,255,255,.3)}
-.tab-pill{box-shadow:0 4px 14px rgba(38,54,94,.2),inset 0 1px 0 #fff,inset 0 -1px 1px rgba(160,180,220,.25),inset 0 0 0 1px rgba(255,255,255,.9)}
+.tabbar{background:linear-gradient(180deg,rgba(255,255,255,.34),rgba(255,255,255,.12) 55%,rgba(255,255,255,.22));-webkit-backdrop-filter:blur(10px) saturate(1.6) brightness(1.08);backdrop-filter:blur(10px) saturate(1.6) brightness(1.08);border:none;
+  box-shadow:0 18px 44px rgba(20,50,100,.24),0 3px 8px rgba(20,50,100,.1),inset 0 1.5px 1px #fff,inset 0 -2px 2px rgba(255,255,255,.7),inset 0 0 26px rgba(255,255,255,.25),inset 0 -14px 22px -14px rgba(255,255,255,.7)}
+.tab-pill{background:linear-gradient(180deg,rgba(255,255,255,.85),rgba(255,255,255,.55));box-shadow:0 6px 16px rgba(20,50,100,.18),inset 0 1.5px 1px #fff,inset 0 -1.5px 2px rgba(150,175,215,.35),inset 0 0 0 1px rgba(255,255,255,.95)}
 .tab:active svg{transform:scale(.84)}
 /* bottom action: the bar disappears and the button floats as tinted violet glass */
 .nextbar{background:transparent;box-shadow:none;padding-block:10px calc(14px + env(safe-area-inset-bottom,0px))}
@@ -773,7 +781,7 @@ details.panel:not([open]){gap:0}
 .next-btn::before{content:"";position:absolute;inset:0;border-radius:inherit;background:linear-gradient(180deg,rgba(255,255,255,.1),rgba(255,255,255,0) 50%);pointer-events:none}
 .next-btn:active{transform:scale(.96)}
 /* toast: dark smoked glass */
-.toast{background:rgba(24,32,46,.62);-webkit-backdrop-filter:blur(18px) saturate(1.8);backdrop-filter:blur(18px) saturate(1.8);box-shadow:0 12px 30px rgba(10,20,40,.28),inset 0 1px 0 rgba(255,255,255,.22)}
+.toast{background:rgba(24,32,46,.5);-webkit-backdrop-filter:blur(14px) saturate(2);backdrop-filter:blur(14px) saturate(2);box-shadow:0 12px 30px rgba(10,20,40,.28),inset 0 1px 0 rgba(255,255,255,.22)}
 .toast::after{opacity:.35}
 /* sheets and pop-ups float off the edges; mostly opaque so text stays crisp */
 .overlay,.ask{align-items:flex-end;padding:0 8px calc(8px + env(safe-area-inset-bottom,0px));box-sizing:border-box}
@@ -782,6 +790,9 @@ details.panel:not([open]){gap:0}
 .ask-card{padding-bottom:22px}
 .dict{background:rgba(255,255,255,.95);-webkit-backdrop-filter:blur(20px) saturate(1.8);backdrop-filter:blur(20px) saturate(1.8)}
 .dict::after{z-index:2}
+/* Chromium only: content bends at the glass edges like through a thick lens */
+html.lg-lens .tabbar{-webkit-backdrop-filter:url(#lg-tab) blur(7px) saturate(1.6) brightness(1.08);backdrop-filter:url(#lg-tab) blur(7px) saturate(1.6) brightness(1.08)}
+html.lg-lens .icon-btn{-webkit-backdrop-filter:url(#lg-btn) blur(6px) saturate(2.3) brightness(1.08);backdrop-filter:url(#lg-btn) blur(6px) saturate(2.3) brightness(1.08)}
 /* content slides softly under the top bar instead of being cut */
 .screen > .scroll{padding-top:10px;-webkit-mask-image:linear-gradient(180deg,transparent 0,#000 10px);mask-image:linear-gradient(180deg,transparent 0,#000 10px)}
 @media (prefers-reduced-transparency:reduce){.icon-btn,.flame-chip,.es-mode,.tabbar,.sheet,.ask-card,.dict{background:#fff;-webkit-backdrop-filter:none;backdrop-filter:none}.toast{background:rgba(22,26,34,.92)}}
@@ -1191,6 +1202,47 @@ let lkey = LKEY, account = null;
 const $ = id => document.getElementById(id);
 const mk = (tag, cls, text) => { const e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; };
 const reduced = (() => { try { return matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (e) { return false; } })();
+/* ---------- liquid glass lens (Chromium) ----------
+  A displacement map pushes the backdrop inward near the rounded edges, so what is behind the glass bends there.
+  Safari and Firefox ignore url() backdrop filters, so they keep the plain frosted glass. */
+const LENS_OK = (() => { try {
+  const ua = navigator.userAgentData; const chromium = ua && ua.brands && ua.brands.some(b => /Chromium/.test(b.brand));
+  return !!chromium && !matchMedia('(prefers-reduced-transparency: reduce)').matches && (navigator.hardwareConcurrency || 4) >= 4;
+} catch (e) { return false; } })();
+function lensMap(w, h, r, band){
+  const c = document.createElement('canvas'); c.width = w; c.height = h;
+  const g = c.getContext('2d'), img = g.createImageData(w, h), d = img.data;
+  for (let y = 0; y < h; y++) for (let x = 0; x < w; x++){
+    // distance from the rounded-rect edge and the inward direction
+    const cx = Math.min(Math.max(x + .5, r), w - r), cy = Math.min(Math.max(y + .5, r), h - r);
+    let nx = cx - (x + .5), ny = cy - (y + .5), dist;
+    const inCorner = nx !== 0 && ny !== 0;
+    if (inCorner){ const L = Math.hypot(nx, ny) || 1; dist = r - L; nx /= L; ny /= L; }
+    else { const dl = x + .5, dr = w - x - .5, dt = y + .5, db = h - y - .5, m = Math.min(dl, dr, dt, db); dist = m;
+      nx = m === dl ? 1 : m === dr ? -1 : 0; ny = nx ? 0 : (m === dt ? 1 : -1); }
+    const k = dist < band ? Math.pow(1 - Math.max(dist, 0) / band, 2) : 0, i = (y * w + x) * 4;
+    d[i] = 128 + nx * k * 127; d[i + 1] = 128 + ny * k * 127; d[i + 2] = 128; d[i + 3] = 255;
+  }
+  g.putImageData(img, 0, 0); return c.toDataURL();
+}
+function lensFilter(id, w, h, r, band, scale){
+  let svg = document.getElementById('lg-defs');
+  if (!svg){ svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg'); svg.id = 'lg-defs'; svg.setAttribute('width', '0'); svg.setAttribute('height', '0'); svg.style.position = 'absolute'; document.body.appendChild(svg); }
+  let f = document.getElementById(id); if (f) f.remove();
+  svg.insertAdjacentHTML('beforeend', '<filter id="' + id + '" x="0" y="0" width="' + w + '" height="' + h + '" filterUnits="userSpaceOnUse" primitiveUnits="userSpaceOnUse" color-interpolation-filters="sRGB">'
+    + '<feImage href="' + lensMap(w, h, r, band) + '" x="0" y="0" width="' + w + '" height="' + h + '" preserveAspectRatio="none" result="m"/>'
+    + '<feDisplacementMap in="SourceGraphic" in2="m" scale="' + scale + '" xChannelSelector="R" yChannelSelector="G"/></filter>');
+}
+function setupLens(){
+  if (!LENS_OK) return;
+  try {
+    lensFilter('lg-btn', 42, 42, 21, 12, 22);
+    const tb = document.querySelector('.tabbar'); let lastW = 0;
+    const fit = () => { const w = Math.round(tb.offsetWidth), h = Math.round(tb.offsetHeight); if (!w || w === lastW) return; lastW = w; lensFilter('lg-tab', w, h, 28, 18, 30); };
+    fit(); if (window.ResizeObserver) new ResizeObserver(fit).observe(tb);
+    document.documentElement.classList.add('lg-lens');
+  } catch (e) {}
+}
 function anim(el, frames, opts){ if (!el.animate || reduced) return Promise.resolve(); try { return el.animate(frames, opts).finished.catch(() => {}); } catch (e) { return Promise.resolve(); } }
 
 /* ---------- dates ---------- */
@@ -3420,7 +3472,43 @@ function closeSettings(){
 function leaveStudy(){ clearTimeout(advTimer); closeDict(); if (state.sess.cur && state.sess.cur.solved){ finishCard(); pickNext(); save(); } busy = false; }
 $('h-start').onclick = start;
 $('h-more').onclick = () => { if (addMore(10)){ if (!state.sess.cur) pickNext(); save(); openStudy(); } };
-document.querySelectorAll('#tabbar .tab').forEach(b => b.onclick = () => goTab(b.dataset.tab));
+let tabScrubbed = 0;
+document.querySelectorAll('#tabbar .tab').forEach(b => b.onclick = () => { if (Date.now() - tabScrubbed < 400) return; goTab(b.dataset.tab); });
+/* press and slide on the tab bar like iOS: the glass pill lifts, follows the finger, and the tab under it opens on release */
+(() => {
+  const bar = $('tabbar'), pill = $('tab-pill'), tabs = [...bar.querySelectorAll('.tab')];
+  let st = null;
+  const slot = x => { const r = bar.getBoundingClientRect(), w = (r.width - 12) / tabs.length; return { i: Math.max(0, Math.min(tabs.length - 1, Math.floor((x - r.left - 6) / w))), w, r }; };
+  const move = x => {
+    const { i, w, r } = slot(x);
+    const px = Math.max(0, Math.min(r.width - 12 - w, x - r.left - 6 - w / 2));
+    pill.style.transform = 'translateX(' + px + 'px) scale(1.12,1.2)';
+    if (i !== st.hov){ st.hov = i; tabs.forEach((t, k) => t.classList.toggle('hov', k === i)); try { navigator.vibrate && navigator.vibrate(6); } catch (e) {} }
+  };
+  const begin = () => { if (!st || st.on) return; st.on = true; bar.classList.add('scrub'); move(st.x); };
+  bar.addEventListener('pointerdown', e => {
+    if (e.button > 0) return;
+    st = { x: e.clientX, x0: e.clientX, id: e.pointerId, on: false, hov: -1 };
+    st.t = setTimeout(begin, 240);
+  });
+  bar.addEventListener('pointermove', e => {
+    if (!st || e.pointerId !== st.id) return;
+    st.x = e.clientX;
+    if (!st.on && Math.abs(st.x - st.x0) > 8){ clearTimeout(st.t); begin(); }
+    if (st.on){ try { bar.setPointerCapture(st.id); } catch (x) {} move(st.x); }
+  });
+  const end = e => {
+    if (!st) return; clearTimeout(st.t);
+    const was = st.on, i = st.hov; st = null;
+    if (!was) return;
+    bar.classList.remove('scrub'); tabs.forEach(t => t.classList.remove('hov'));
+    pill.style.transform = '';
+    tabScrubbed = Date.now();
+    if (e.type === 'pointerup' && i >= 0) goTab(tabs[i].dataset.tab); else paintTabbar(current);
+  };
+  bar.addEventListener('pointerup', end); bar.addEventListener('pointercancel', end);
+  bar.addEventListener('contextmenu', e => e.preventDefault());
+})();
 $('a-back').onclick = () => { if (statsFrom === 'done'){ show('done'); renderDone(); } else goHome(); };
 $('s-back').onclick = () => { leaveStudy(); goHome(); };
 $('s-set').onclick = openSettings;
@@ -3588,6 +3676,7 @@ $('ph-num').addEventListener('input', e => { const d = e.target.value.replace(/\
 $('ph-form').addEventListener('submit', e => { e.preventDefault(); if (phConf) phConfirm(); else phSend(); });
 if (FB) bootFirebase();
 else { $('home').classList.add('enter'); goHome(); initSync(); }
+setupLens();
 })();
 </script>
 <script>if("serviceWorker" in navigator && location.protocol === "https:")addEventListener("load", function(){ var had = !!navigator.serviceWorker.controller, done = false;navigator.serviceWorker.addEventListener("controllerchange", function(){ if (had && !done){ done = true; location.reload(); } });navigator.serviceWorker.register("sw.js", { updateViaCache: "none" }).then(function(r){ r.update(); }).catch(function(){}); });</script></body></html>
