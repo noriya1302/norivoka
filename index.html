@@ -199,6 +199,12 @@ details.panel:not([open]){gap:0}
 .list-top{display:flex;align-items:center;gap:6px;padding-block:12px 8px}
 .list-title{font-weight:800;font-size:18px;flex:1;color:var(--white);text-shadow:0 1px 2px rgba(30,80,150,.25)}
 .list-title span{font-size:14px;font-weight:600;opacity:.85}
+.cats{display:flex;gap:18px;overflow-x:auto;scrollbar-width:none;padding:2px 2px 0;margin-bottom:10px;border-bottom:1.5px solid rgba(255,255,255,.55)}
+.cats::-webkit-scrollbar{display:none}
+.cat{flex:none;position:relative;border:none;background:none;font:inherit;font-size:15px;font-weight:700;color:rgba(30,50,80,.5);padding:8px 0 10px;display:flex;align-items:baseline;gap:4px;transition:color .2s}
+.cat small{font-size:11.5px;font-weight:700;opacity:.75}
+.cat[aria-selected="true"]{color:var(--ink)}
+.cat[aria-selected="true"]::after{content:"";position:absolute;left:0;right:0;bottom:-1.5px;height:3px;border-radius:3px;background:var(--violet)}
 .seg{display:flex;gap:6px;overflow-x:auto;padding-block:2px 10px;scrollbar-width:none}
 .seg::-webkit-scrollbar{display:none}
 .seg button{flex:none;border:none;background:rgba(255,255,255,.6);color:var(--ink-2);font-size:13px;font-weight:700;padding:8px 13px;border-radius:999px;transition:background .2s,color .2s}
@@ -955,6 +961,7 @@ details.panel:not([open]){gap:0}
       <div class="list-title"><b id="l-title" style="font-weight:inherit">단어장 </b><span id="l-count"></span></div>
     </div>
     <div class="gutter">
+      <div class="cats" id="l-cats" role="tablist" aria-label="교재"></div>
       <div class="seg" id="l-seg" role="group" aria-label="상태 필터">
         <button data-f="all" aria-pressed="true">전체</button>
         <button data-f="ng" aria-pressed="false">오답</button>
@@ -1687,7 +1694,10 @@ function pickNext(){
   s.cur = { n: pick.n, mode: pick.mode, wrongs: 0, hint: false, solved: false };
   return s.cur;
 }
-function markWrong(r, t){ r.f = 'ng'; r.s = 1; r.due = t + 1; r.wr = (r.wr || 0) + 1; }
+function markWrong(r, t){ if (r.f !== 'ng') r.pre = r.s || 0; r.f = 'ng'; r.s = 1; r.due = t + 1; r.wr = (r.wr || 0) + 1; }
+/* a slip on a well-known word costs one level, not everything: fix it the next day and it goes back near where it was */
+const LONG = 3; // passed the 1-day and 3-day checks in a row
+function relearn(r){ return Math.max(2, Math.min((r.pre || 0) - 1, MAXS)); }
 function isClean(cur){ return cur.wrongs === 0 && !(cur.hint && state.settings.hintIsWrong); }
 function finishCard(){
   const s = state.sess, cur = s.cur; if (!cur) return;
@@ -1705,7 +1715,7 @@ function finishCard(){
     if (ok){
       s.firstOk++;
       if (s.kinds[n] === 'mix'){ r.f = 'ok'; }
-      else { r.s = !r.s ? 1 : r.f === 'ng' ? 2 : Math.min(r.s + 1, MAXS); r.f = 'ok'; r.due = t + IV[r.s]; }
+      else { r.s = !r.s ? 1 : r.f === 'ng' ? relearn(r) : Math.min(r.s + 1, MAXS); r.f = 'ok'; delete r.pre; r.due = t + IV[r.s]; }
     } else { s.firstNg++; markWrong(r, t); s.retry.push({ n, wait: gap }); }
   } else {
     if (ok) s.cleared++;
@@ -1720,7 +1730,7 @@ function nextLabel(){
   if (cur.mode === 'retry') return '내일 복습';
   let days;
   if (kind === 'mix') days = r ? Math.max(1, r.due - today()) : 1;
-  else days = IV[(!r || !r.s) ? 1 : r.f === 'ng' ? 2 : Math.min(r.s + 1, MAXS)];
+  else days = IV[(!r || !r.s) ? 1 : r.f === 'ng' ? relearn(r) : Math.min(r.s + 1, MAXS)];
   return days === 1 ? '내일 복습' : days + '일 뒤 복습';
 }
 function logDay(){
@@ -1736,14 +1746,14 @@ function doneOn(d){ const g = streakGoal(); return !!state.days[d] || (g > 0 && 
 function streak(){ const t = today(); let d = doneOn(t) ? t : t - 1, c = 0; while (doneOn(d)){ c++; d--; } return c; }
 function wordCounts(){
   const c = { unseen: 0, ng: 0, learn: 0, long: 0 };
-  for (const d of DATA){ const r = state.w[d.n]; if (!r) c.unseen++; else if (r.f === 'ng') c.ng++; else if (r.s >= 4) c.long++; else c.learn++; }
+  for (const d of DATA){ const r = state.w[d.n]; if (!r) c.unseen++; else if (r.f === 'ng') c.ng++; else if (r.s >= LONG) c.long++; else c.learn++; }
   return c;
 }
 function statusOf(n){
   const r = state.w[n];
   if (!r) return { key: 'new', label: '안 본 단어', cls: 'plain' };
   if (r.f === 'ng') return { key: 'ng', label: '오답', cls: 'red' };
-  if (r.s >= 4) return { key: 'long', label: '레벨 ' + r.s, cls: 'green' };
+  if (r.s >= LONG) return { key: 'long', label: '레벨 ' + r.s, cls: 'green' };
   return { key: 'learn', label: '레벨 ' + r.s, cls: '' };
 }
 
@@ -2770,7 +2780,7 @@ function applyExtra(batches){
   for (const b of extraBatches){
     if (b.hidden) continue;
     let items = []; try { items = JSON.parse(b.items || '[]'); } catch (e) {}
-    for (const it of items){ if (BY.has(it.n)) continue; const d = prepWord(Object.assign({}, it, { x: b.id })); DATA.push(d); BY.set(d.n, d); }
+    for (const it of items){ if (BY.has(it.n)) continue; const d = prepWord(Object.assign({}, it, { x: b.id }, (!it.src || it.src === '출처 미분류') && b.title ? { src: b.title } : {})); DATA.push(d); BY.set(d.n, d); }
   }
 }
 try { applyExtra(JSON.parse(localStorage.getItem(EXTRA_LS) || '[]')); } catch (e) {}
@@ -2852,7 +2862,9 @@ function srcOf(file, ident){
   if (/수능특강|수특/.test(file)){ const m = ident.match(/L(\d+)/); return m ? ['수특 ' + (+m[1]) + '강', '수특 ' + (+m[1]) + '강 ' + ident] : ['수특', '수특 ' + ident]; }
   if (/모의고사/.test(file)){ const m = ident.match(/Q(\d+)/); return ['10월 모의고사', '10월 모의고사' + (m ? ' ' + (+m[1]) + '번' : '')]; }
   if (/생각의 지도/.test(file)){ const m = ident.match(/WS(\d+)/); return ['생각의 지도', m ? '생각의 지도 학습지 ' + (+m[1]) : '생각의 지도 ' + ident.replace('TGT-', '')]; }
-  return ['출처 미분류', ident || '추가 단어'];
+  if (/불변의 ?법칙|same ?as ?ever/i.test(file)) return ['불변의 법칙', '불변의 법칙' + (ident ? ' ' + ident : '')];
+  const stem = String(file || '').replace(/^.*[\\/]/, '').replace(/\.[a-z0-9]+$/i, '').trim();
+  return [stem || '출처 미분류', ident || stem || '추가 단어'];
 }
 function guessSpan(m, ko){
   const SUF = ['하게 하다','시키다','되다','하다','스럽다','적인','적으로','하게','하는','한','된','인','의','히','이','게','다','는','은','을','를'];
@@ -3171,11 +3183,24 @@ function essDone(){
 }
 
 /* ---------- analysis by source ---------- */
-const GROUPS = ['수능특강', '모의고사', '생각의 지도', '기타'];
-function grp(d){ return /^수특/.test(d.src) ? '수능특강' : /모의고사/.test(d.src) ? '모의고사' : d.src === '생각의 지도' ? '생각의 지도' : '기타'; }
+const GROUP_ORDER = ['수능특강', '모의고사', '생각의 지도', '불변의 법칙'];
+function grp(d){
+  const s = d.src || '';
+  if (/^수특|수능특강/.test(s)) return '수능특강';
+  if (/모의고사/.test(s)) return '모의고사';
+  if (/생각의 ?지도/.test(s)) return '생각의 지도';
+  if (/불변의 ?법칙|same as ever/i.test(s)) return '불변의 법칙';
+  return s && s !== '출처 미분류' ? s : '기타';
+}
+let GROUPS = [];
+function refreshGroups(){
+  const seen = new Set(DATA.map(grp));
+  GROUPS = GROUP_ORDER.filter(g => seen.has(g)).concat([...seen].filter(g => !GROUP_ORDER.includes(g) && g !== '기타').sort(), seen.has('기타') ? ['기타'] : []);
+}
 function groupStats(){
   ensureSession();
   const s = state.sess, per = state.settings.newPerDay;
+  refreshGroups();
   const G = GROUPS.map(name => ({ name, n: 0, ng: 0, learn: 0, long: 0, unseen: 0, rp: 0, wr: 0, rank: 0, todayNew: 0 }));
   let rank = 0;
   for (const d of DATA){
@@ -3183,7 +3208,7 @@ function groupStats(){
     const r = state.w[d.n];
     if (!r){ g.unseen++; if (s && d.n in s.kinds) g.todayNew++; else { rank++; g.rank = rank; } continue; }
     g.rp += r.rp || 0; g.wr += r.wr || 0;
-    if (r.f === 'ng') g.ng++; else if (r.s >= 4) g.long++; else g.learn++;
+    if (r.f === 'ng') g.ng++; else if (r.s >= LONG) g.long++; else g.learn++;
   }
   G.forEach(g => { g.seen = g.n - g.unseen; g.acc = g.rp ? (g.rp - g.wr) / g.rp : null; g.days = g.rank ? Math.ceil(rank / per) : 0; });
   return { G, rank, per, days: rank ? Math.ceil(rank / per) : 0 };
@@ -3270,6 +3295,17 @@ function openStats(){ $('a-back').hidden = false; statsFrom = current; show('sta
 /* list */
 let filter = 'all', srcFilter = null;
 const openRows = new Set();
+function renderCats(){
+  refreshGroups();
+  const box = $('l-cats'), cnt = {}; DATA.forEach(d => { const g = grp(d); cnt[g] = (cnt[g] || 0) + 1; });
+  box.replaceChildren();
+  [[null, '전체', DATA.length]].concat(GROUPS.map(g => [g, g, cnt[g]])).forEach(([key, label, n]) => {
+    const b = mk('button', 'cat'); b.type = 'button'; b.setAttribute('role', 'tab'); b.setAttribute('aria-selected', String(srcFilter === key));
+    b.append(label); b.appendChild(mk('small', null, String(n)));
+    b.onclick = () => { srcFilter = key; openRows.clear(); renderCats(); renderList(); $('list').querySelector('.scroll').scrollTop = 0; b.scrollIntoView({ inline: 'nearest', block: 'nearest', behavior: 'smooth' }); };
+    box.appendChild(b);
+  });
+}
 function renderList(){
   const raw = $('l-q').value || '', q = norm(raw);
   const box = $('l-list'); box.replaceChildren();
@@ -3302,7 +3338,7 @@ function renderList(){
     it.onclick = () => { openRows.has(d.n) ? openRows.delete(d.n) : openRows.add(d.n); renderList(); };
     box.appendChild(it);
   }
-  $('l-title').textContent = srcFilter ? srcFilter + ' ' : '단어장 ';
+  $('l-title').textContent = '단어장 ';
   $('l-count').textContent = shown + '개';
   if (!shown) box.appendChild(mk('div', 'empty', filter === 'ng' ? '오답 단어가 없어요.' : '해당하는 단어가 없어요.'));
 }
@@ -3312,7 +3348,7 @@ function openList(src, f){
   $('l-back').hidden = false;
   listFrom = current; srcFilter = typeof src === 'string' ? src : null;
   setFilter(typeof f === 'string' ? f : 'all'); $('l-q').value = ''; openRows.clear();
-  show('list'); $('list').querySelector('.scroll').scrollTop = 0; renderList();
+  show('list'); $('list').querySelector('.scroll').scrollTop = 0; renderCats(); renderList();
 }
 
 /* settings */
