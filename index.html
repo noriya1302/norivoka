@@ -638,6 +638,7 @@ details.panel:not([open]){gap:0}
 .tok.hl{background:var(--green-soft);color:var(--green-ink);font-weight:700}
 .adm-meta{font-size:12px;color:var(--muted)}
 .adm-meta.warn{color:var(--red);font-weight:600}
+.adm-uid{font-family:ui-monospace,Menlo,monospace;letter-spacing:.02em}
 .adm-btns{display:flex;gap:10px;flex:none;align-items:center}
 .adm-sum{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-bottom:6px}
 .adm-v{display:flex;flex-direction:column;align-items:flex-end;flex:none}
@@ -2999,6 +3000,7 @@ async function renderAdmUsers(){
     rows.sort((a, b) => (b.last || 0) - (a.last || 0)).forEach(r => {
       const row = mk('div', 'set-row adm-user');
       const lab = mk('div', 'lab'); lab.append((r.nick || '').trim() || '이름 없는 노리');
+      lab.appendChild(mk('small', 'adm-uid', 'UID ' + r.id.slice(0, 8)));
       lab.appendChild(mk('small', null, (r.last == null ? '아직 목표 달성 없음' : t - r.last === 0 ? '오늘 달성' : (t - r.last) + '일 전 달성') + ' · 본 단어 ' + (r.seen || 0) + '개'));
       const v = mk('div', 'adm-v'); v.append(mk('b', null, (r.wk === wk ? r.wc || 0 : 0) + '단어'), mk('small', null, (r.last != null && t - r.last <= 1 ? r.streak || 0 : 0) + '일 연속'));
       const me = fbAuth && fbAuth.currentUser && fbAuth.currentUser.uid === r.id;
