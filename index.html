@@ -1177,7 +1177,7 @@ details.panel:not([open]){gap:0}
   <nav class="tabbar" id="tabbar" aria-label="메뉴"><span class="tab-pill" id="tab-pill"></span><button type="button" class="tab" id="t-home" data-tab="home"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M3.5 11.2 12 4l8.5 7.2V19a1.5 1.5 0 0 1-1.5 1.5h-4.2v-5.3H9.2v5.3H5A1.5 1.5 0 0 1 3.5 19z"/></svg><span>홈</span></button><button type="button" class="tab" id="h-list" data-tab="list"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M4 5.6C4 4.7 4.7 4 5.6 4H11v16H5.6c-.9 0-1.6-.7-1.6-1.6zM13 4h5.4c.9 0 1.6.7 1.6 1.6v12.8c0 .9-.7 1.6-1.6 1.6H13z"/></svg><span>단어장</span></button><button type="button" class="tab" id="t-rank" data-tab="rank"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 3h10v2h3a1 1 0 0 1 1 1v2a5 5 0 0 1-4.6 5A5 5 0 0 1 13 15.9V18h3v3H8v-3h3v-2.1A5 5 0 0 1 7.6 13 5 5 0 0 1 3 8V6a1 1 0 0 1 1-1h3zm10 4v3.9A3 3 0 0 0 19 8V7zM5 7v1a3 3 0 0 0 2 2.9V7z"/></svg><span>랭킹</span></button><button type="button" class="tab" id="h-stats" data-tab="stats"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="3.5" y="12" width="4.6" height="8.5" rx="1.6"/><rect x="9.7" y="4" width="4.6" height="16.5" rx="1.6"/><rect x="15.9" y="8.5" width="4.6" height="12" rx="1.6"/></svg><span>분석</span></button><button type="button" class="tab" id="h-set" data-tab="settings"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M13.9 2.6l.4 2.3c.6.2 1.2.5 1.7.9l2.2-.8 1.9 3.3-1.8 1.5c.1.6.1 1.3 0 1.9l1.8 1.5-1.9 3.3-2.2-.8c-.5.4-1.1.7-1.7.9l-.4 2.3h-3.8l-.4-2.3c-.6-.2-1.2-.5-1.7-.9l-2.2.8-1.9-3.3 1.8-1.5c-.1-.6-.1-1.3 0-1.9L3.9 8.3l1.9-3.3 2.2.8c.5-.4 1.1-.7 1.7-.9l.4-2.3zM12 8.6a3.4 3.4 0 1 0 0 6.8 3.4 3.4 0 0 0 0-6.8z"/></svg><span>설정</span></button></nav>
 </div>
 
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script><script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script><script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script><script src="data.cacb6cbbd1.js"></script><script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script><script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script><script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script><script src="data.5379a00522.js"></script><script>
 (function(){
 'use strict';
 const DATA = window.__NORI_DATA__;
@@ -1668,6 +1668,18 @@ function ensureSession(){
   const t = today();
   /* building today's list is not a learner change: keep the clock so a newer copy from another device still wins */
   if (!state.sess || state.sess.day !== t || (state.sess.v !== 2 && untouched(state.sess))){ buildSession(t); persistLocal(); }
+  pruneSession();
+}
+/* words taken out of the base list (not in the source texts) must not linger in today's queue.
+   Base words are numbered 1..575; uploaded words come later and may still be loading, so leave those alone. */
+function pruneSession(){
+  const s = state.sess; if (!s) return;
+  const gone = n => n <= 575 && !BY.has(n);
+  const before = s.queue.length + s.retry.length + (s.cur ? 1 : 0);
+  s.queue = s.queue.filter(n => !gone(n)); s.retry = s.retry.filter(x => !gone(x.n));
+  if (s.cur && gone(s.cur.n)) s.cur = null;
+  const removed = before - (s.queue.length + s.retry.length + (s.cur ? 1 : 0));
+  if (removed){ s.total = Math.max(0, s.total - removed); persistLocal(); }
 }
 function addMore(k){
   const s = state.sess; const add = [];
