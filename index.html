@@ -1,4 +1,4 @@
-<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#b6daf6"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="노리보카"><style>:root{color-scheme:light;padding-top:env(safe-area-inset-top);padding-bottom:env(safe-area-inset-bottom)}body{margin:0;font:14px system-ui}img{max-width:100%}[hidden]{display:none!important}</style><link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="apple-touch-icon.png"><link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><link rel="preload" href="pretendard.03e1319fd0.woff2" as="font" type="font/woff2" crossorigin></head><body><title>노리보카</title>
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#7fb8eb"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="노리보카"><style>:root{color-scheme:light;padding-top:env(safe-area-inset-top);padding-bottom:env(safe-area-inset-bottom)}body{margin:0;font:14px system-ui}img{max-width:100%}[hidden]{display:none!important}</style><link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="apple-touch-icon.png"><link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><link rel="preload" href="pretendard.03e1319fd0.woff2" as="font" type="font/woff2" crossorigin></head><body><title>노리보카</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <style>
 @font-face{font-family:"Pretendard";font-style:normal;font-weight:45 920;font-display:swap;src:url(pretendard.03e1319fd0.woff2) format("woff2")}
@@ -13,18 +13,18 @@
   --ink:#161a22; --ink-2:#4a5263; --muted:#9aa4b2; --line:#e6ebf2;
   --green:#18a058; --green-soft:#d3f2df; --green-ink:#0f5e35; --green-line:#8fdcb0;
   --red:#f04a5d; --red-soft:#fbd3d8; --red-ink:#7a1f2a;
-  --blank:#dbeafb; --blank-ink:#2c6cb4; --caret:#2f7df0;
-  --violet:#26365e; --violet-2:#3a4c7a; --violet-soft:#93a0bd; --violet-tint:#e7ecf5;
+  --blank:#dde8fc; --blank-ink:#2459c4; --caret:#2f6fed;
+  --violet:#2f6fed; --violet-2:#5a8ff2; --violet-soft:#9fbdf6; --violet-tint:#e5eefe;
   --teal:#43a9b7;
   --tab:#c2d9f3;
-  --prog:#4f9cf0; --prog-2:#7cbcf8; --track:rgba(255,255,255,.5); --prog-ring:#5ba5ee;
+  --prog:#2f6fed; --prog-2:#6b9bf3; --track:rgba(255,255,255,.5); --prog-ring:#2f6fed;
   --white:#ffffff;
   --shadow:0 10px 30px rgba(40,95,160,.14);
   --ease:cubic-bezier(.22,.9,.3,1);
   --font:"Pretendard",-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif;
 }
 html,body{height:100%}
-body{margin:0;background:#b6daf6;color:var(--ink);font-family:var(--font);font-size:15px;-webkit-tap-highlight-color:transparent;overflow:hidden;-webkit-font-smoothing:antialiased}
+body{margin:0;background:#7fb8eb;color:var(--ink);font-family:var(--font);font-size:15px;-webkit-tap-highlight-color:transparent;overflow:hidden;-webkit-font-smoothing:antialiased}
 button{font:inherit;color:inherit;cursor:pointer}
 button:focus-visible,input:focus-visible,summary:focus-visible{outline:2px solid var(--violet);outline-offset:2px}
 #app{position:fixed;left:0;right:0;margin:0 auto;max-width:480px;top:calc(var(--vvt,0px) + env(safe-area-inset-top,0px));height:calc(var(--vvh,100dvh) - env(safe-area-inset-top,0px) - env(safe-area-inset-bottom,0px));display:flex;flex-direction:column}
@@ -107,7 +107,7 @@ button:focus-visible,input:focus-visible,summary:focus-visible{outline:2px solid
 .stamp.still .tick{stroke-dashoffset:0}
 .nextbar{background:var(--white);padding-block:14px 16px;box-shadow:0 -1px 0 var(--line);animation:barUp .38s var(--ease) both}
 @keyframes barUp{from{transform:translateY(100%);opacity:.4}to{transform:none;opacity:1}}
-.next-btn{width:100%;height:76px;border:none;border-radius:26px;background:var(--violet);color:var(--white);display:flex;align-items:center;justify-content:center;gap:12px;font-size:21px;font-weight:800;letter-spacing:-.02em;box-shadow:0 8px 20px rgba(38,54,94,.3);transition:transform .15s var(--ease)}
+.next-btn{width:100%;height:76px;border:none;border-radius:26px;background:var(--violet);color:var(--white);display:flex;align-items:center;justify-content:center;gap:12px;font-size:21px;font-weight:800;letter-spacing:-.02em;box-shadow:0 8px 20px rgba(47,111,237,.3);transition:transform .15s var(--ease)}
 .next-btn svg{width:30px;height:30px}
 .next-btn:active{transform:scale(.97)}
 /* in-app keyboard, modelled on the iOS light keyboard */
@@ -143,10 +143,10 @@ button:focus-visible,input:focus-visible,summary:focus-visible{outline:2px solid
 
 /* ===== home ===== */
 .home-top{display:flex;align-items:center;justify-content:space-between;padding-block:16px 10px}
-.brand{font-weight:800;font-size:21px;letter-spacing:-.03em;color:var(--white);display:flex;align-items:center;gap:8px;text-shadow:0 1px 2px rgba(30,80,150,.25)}
+.brand{font-weight:800;font-size:21px;letter-spacing:-.03em;color:var(--white);display:flex;align-items:center;gap:8px;text-shadow:0 1px 3px rgba(15,55,115,.35)}
 .brand-mark{width:32px;height:32px;border-radius:11px;background:#fff;overflow:hidden;box-shadow:0 2px 6px rgba(40,95,160,.18);color:var(--white);display:grid;place-items:center;font-size:15px;font-weight:900;text-shadow:none}
 .home-top .right{display:flex;align-items:center;gap:2px}
-.date{font-size:13.5px;color:var(--white);font-weight:600;margin-right:4px;text-shadow:0 1px 2px rgba(30,80,150,.25)}
+.date{font-size:13.5px;color:var(--white);font-weight:600;margin-right:4px;text-shadow:0 1px 3px rgba(15,55,115,.35)}
 .stack{display:flex;flex-direction:column;gap:12px;padding-block:4px 22px}
 .panel{background:var(--card);border-radius:24px;box-shadow:var(--shadow);padding:20px;display:flex;flex-direction:column;gap:14px}
 .panel h2{margin:0;font-size:14px;font-weight:700;color:var(--ink-2)}
@@ -167,7 +167,7 @@ button:focus-visible,input:focus-visible,summary:focus-visible{outline:2px solid
 .lg b{margin-left:auto;font-size:15px;font-weight:800;color:var(--ink);font-variant-numeric:tabular-nums}
 .facts{display:flex;flex-direction:column;gap:6px;font-size:13.5px;color:var(--ink-2);line-height:1.5}
 .facts b{color:var(--ink);font-variant-numeric:tabular-nums}
-.go{background:var(--violet);color:var(--white);border:none;border-radius:16px;height:54px;font-weight:800;font-size:17px;padding:0 24px;transition:transform .15s var(--ease),filter .15s;box-shadow:0 6px 16px rgba(38,54,94,.28)}
+.go{background:var(--violet);color:var(--white);border:none;border-radius:16px;height:54px;font-weight:800;font-size:17px;padding:0 24px;transition:transform .15s var(--ease),filter .15s;box-shadow:0 6px 16px rgba(47,111,237,.28)}
 .go:active{transform:scale(.97)}
 .go:disabled{filter:grayscale(.6) opacity(.6);box-shadow:none}
 /* keep button labels white on every phone browser */
@@ -197,7 +197,7 @@ details.panel:not([open]){gap:0}
 
 /* ===== list ===== */
 .list-top{display:flex;align-items:center;gap:6px;padding-block:12px 8px}
-.list-title{font-weight:800;font-size:28px;letter-spacing:-.02em;line-height:1.2;flex:1;color:var(--white);text-shadow:0 1px 2px rgba(30,80,150,.25)}
+.list-title{font-weight:800;font-size:28px;letter-spacing:-.02em;line-height:1.2;flex:1;color:var(--white);text-shadow:0 1px 3px rgba(15,55,115,.35)}
 .list-title span{font-size:15px;letter-spacing:0;font-weight:600;opacity:.85}
 .cats{display:flex;gap:18px;overflow-x:auto;scrollbar-width:none;padding:2px 2px 0;margin-bottom:10px;border-bottom:1.5px solid rgba(255,255,255,.55)}
 .cats::-webkit-scrollbar{display:none}
@@ -258,8 +258,8 @@ details.panel:not([open]){gap:0}
 .screen.enter .hstack>*:nth-child(n+5){animation-delay:.2s}
 @keyframes rise{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
 .hello{padding:4px 4px 0;color:var(--white)}
-.hello-date{font-size:14px;font-weight:600;opacity:.95;text-shadow:0 1px 2px rgba(30,80,150,.25)}
-.hello-title{word-break:keep-all;margin:4px 0 0;font-size:26px;font-weight:800;letter-spacing:-.035em;line-height:1.3;text-shadow:0 1px 3px rgba(30,80,150,.25);text-wrap:balance}
+.hello-date{font-size:15px;font-weight:600;opacity:.95;text-shadow:0 1px 3px rgba(15,55,115,.35)}
+.hello-title{word-break:keep-all;margin:6px 0 0;font-size:31px;font-weight:800;letter-spacing:-.035em;line-height:1.25;text-shadow:0 1px 3px rgba(15,55,115,.35);text-wrap:balance}
 .today-wrap{position:relative;padding-top:30px}
 .lv-tab.static{cursor:default;padding:0 16px}
 .today{border-radius:0 30px 30px 30px}
@@ -295,10 +295,10 @@ details.panel:not([open]){gap:0}
 .mini small{font-size:12.5px;color:var(--muted);font-weight:600}
 .mini b{font-size:28px;font-weight:800;letter-spacing:-.03em;font-variant-numeric:tabular-nums}
 .mini span{word-break:keep-all;font-size:12.5px;color:var(--ink-2);line-height:1.45}
-@media (max-width:360px){.mix-row,.stat4{grid-template-columns:repeat(2,minmax(0,1fr))}.hello-title{font-size:23px}}
+@media (max-width:360px){.mix-row,.stat4{grid-template-columns:repeat(2,minmax(0,1fr))}.hello-title{font-size:27px}}
 /* ===== home (v3, dynamic) ===== */
 /* two-line greeting headline */
-.hello-title .l1{display:block;font-size:20px;font-weight:700;opacity:.95;margin-bottom:2px}
+.hello-title .l1{display:block;font-size:21px;font-weight:700;opacity:.95;margin-bottom:4px}
 .hello-title .l2{display:block}
 .nick-cta{align-self:flex-start;margin-top:10px;border:none;background:rgba(255,255,255,.75);color:var(--violet);font-weight:800;font-size:13px;border-radius:999px;height:32px;padding:0 13px;box-shadow:0 3px 10px rgba(40,95,160,.12)}
 /* wrong-answer bubble with an x badge */
@@ -384,7 +384,7 @@ details.panel:not([open]){gap:0}
 .ph-links button:disabled{color:var(--muted)}
 .grecaptcha-badge{visibility:hidden}
 .g-btn:active{transform:scale(.97);background:var(--soft)}
-.lg-note{margin:0;text-align:center;font-size:13px;color:var(--white);font-weight:600;text-shadow:0 1px 2px rgba(30,80,150,.25)}
+.lg-note{margin:0;text-align:center;font-size:13px;color:var(--white);font-weight:600;text-shadow:0 1px 3px rgba(15,55,115,.35)}
 .lg-wait{text-align:center;color:var(--white);font-weight:700;font-size:15px}
 .lg-wait::before{content:"";display:block;width:28px;height:28px;margin:0 auto 12px;border-radius:50%;border:3px solid rgba(255,255,255,.45);border-top-color:var(--white);animation:spin .8s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
@@ -485,7 +485,7 @@ details.panel:not([open]){gap:0}
 .stk .go{margin-top:22px;min-width:220px;background:#ff8a00;box-shadow:0 6px 16px rgba(255,122,0,.35);animation:rise .5s var(--ease) both .7s}
 .stk-badge{display:none;font-size:14px;font-weight:900;letter-spacing:.02em;color:#3a2410;background:linear-gradient(135deg,#ffe58a,#ffbf2e);border-radius:999px;padding:7px 14px;animation:streakIn .7s cubic-bezier(.2,1.5,.4,1) both .6s;box-shadow:0 4px 14px rgba(255,191,46,.5)}
 /* milestones: night sky, gold, fireworks */
-.stk.big{background:radial-gradient(circle at 50% 35%,#4b3bd6,#1b1446 75%)}
+.stk.big{background:radial-gradient(circle at 50% 35%,#2f6fed,#0e2350 75%)}
 .stk.big .stk-num{color:#ffd54a;text-shadow:0 0 30px rgba(255,213,74,.55)}
 .stk.big h2{color:#fff}
 .stk.big p{color:#c9c2ff}
@@ -496,7 +496,7 @@ details.panel:not([open]){gap:0}
 @keyframes fw{0%{transform:translate(0,0) scale(1);opacity:1}100%{transform:translate(var(--dx),var(--dy)) scale(.4);opacity:0}}
 /* ===== settings page ===== */
 .set-page{display:flex;flex-direction:column;gap:8px;padding-block:4px 30px}
-.set-cap{font-size:13px;font-weight:800;color:var(--white);margin:12px 6px 0;text-shadow:0 1px 2px rgba(30,80,150,.25)}
+.set-cap{font-size:13px;font-weight:800;color:var(--white);margin:12px 6px 0;text-shadow:0 1px 3px rgba(15,55,115,.35)}
 .set-card{background:var(--card);border-radius:20px;box-shadow:var(--shadow);padding:0 16px}
 .set-card .set-row{min-height:58px;padding:8px 0;box-sizing:border-box}
 .set-card .set-row+.set-row{border-top:1px solid var(--line)}
@@ -529,7 +529,7 @@ details.panel:not([open]){gap:0}
 .tabbar[hidden]{display:none}
 .tab-pill{position:absolute;top:6px;bottom:6px;left:6px;width:calc((100% - 12px) / 5);border-radius:22px;pointer-events:none;
   background:linear-gradient(180deg,rgba(255,255,255,.95),rgba(255,255,255,.7));
-  box-shadow:0 4px 12px rgba(38,54,94,.18),inset 0 1px 0 #fff,inset 0 0 0 1px rgba(255,255,255,.9);
+  box-shadow:0 4px 12px rgba(47,111,237,.18),inset 0 1px 0 #fff,inset 0 0 0 1px rgba(255,255,255,.9);
   transform:translateX(calc(var(--ti,0) * 100%));transition:transform .45s cubic-bezier(.3,1.35,.45,1)}
 .tab{position:relative;z-index:1;border:none;background:none;display:flex;flex-direction:column;align-items:center;gap:2px;padding:7px 0 5px;color:#7d8a9c;font-size:11px;font-weight:700;transition:color .25s}
 .tab svg{width:24px;height:24px;transition:transform .3s var(--ease)}
@@ -556,7 +556,7 @@ details.panel:not([open]){gap:0}
 .rank-me .ghost{height:38px;font-size:13.5px;flex:none}
 .rank-list{display:flex;flex-direction:column;gap:8px}
 .rk{display:flex;align-items:center;gap:12px;background:var(--card);border-radius:18px;padding:10px 14px;box-shadow:0 4px 14px rgba(40,95,160,.08);animation:rise .45s var(--ease) both}
-.rk.me{box-shadow:0 0 0 2.5px var(--violet),0 6px 18px rgba(38,54,94,.18)}
+.rk.me{box-shadow:0 0 0 2.5px var(--violet),0 6px 18px rgba(47,111,237,.18)}
 .rk-n{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;font-weight:900;font-size:14px;color:var(--ink-2);flex:none;font-variant-numeric:tabular-nums}
 .rk-n.g1{background:linear-gradient(135deg,#ffe27a,#f5b400);color:#5a3d00}
 .rk-n.g2{background:linear-gradient(135deg,#eef2f7,#b9c3d0);color:#3d4655}
@@ -575,7 +575,7 @@ details.panel:not([open]){gap:0}
 .fld.step{max-height:0;opacity:0;overflow:hidden;margin-top:-14px;transform:translateY(-10px) scale(.98);transition:max-height .5s var(--ease),opacity .35s ease,transform .5s var(--ease),margin-top .5s var(--ease);pointer-events:none}
 .fld.step.show{max-height:96px;opacity:1;margin-top:0;transform:none;pointer-events:auto}
 .fld input{transition:border-color .2s,background .2s,box-shadow .25s}
-.fld input:focus{box-shadow:0 0 0 4px rgba(38,54,94,.12)}
+.fld input:focus{box-shadow:0 0 0 4px rgba(47,111,237,.12)}
 .fld.ok-id input{border-color:var(--green-line)}
 .login-brand .brand-mark{animation:brandIn .9s cubic-bezier(.2,1.5,.4,1) both,floaty 3.4s ease-in-out 1s infinite}
 @keyframes brandIn{0%{transform:translateY(-40px) scale(.4) rotate(-12deg);opacity:0}60%{transform:translateY(6px) scale(1.08) rotate(4deg);opacity:1}100%{transform:none}}
@@ -620,7 +620,7 @@ details.panel:not([open]){gap:0}
 .lk-form .go{height:44px;font-size:15px}
 .lk-form .lk-err{font-size:12.5px;color:var(--red);font-weight:600;min-height:0;margin:0}
 .lk-form .lk-err:empty{display:none}
-.set-help{margin:2px 8px 0;font-size:12.5px;line-height:1.55;color:var(--white);font-weight:600;word-break:keep-all;text-shadow:0 1px 2px rgba(30,80,150,.25)}
+.set-help{margin:2px 8px 0;font-size:12.5px;line-height:1.55;color:var(--white);font-weight:600;word-break:keep-all;text-shadow:0 1px 3px rgba(15,55,115,.35)}
 .set-help.warn{background:var(--red-soft);color:var(--red-ink);text-shadow:none;border-radius:14px;padding:10px 12px;margin:4px 0 0}
 /* ===== admin ===== */
 .adm-wrap{display:flex;flex-direction:column;gap:10px;padding-block:2px 30px}
@@ -652,11 +652,11 @@ details.panel:not([open]){gap:0}
 .adm-v{display:flex;flex-direction:column;align-items:flex-end;flex:none}
 .adm-v b{font-size:15px;font-variant-numeric:tabular-nums}
 .adm-v small{font-size:12px;color:var(--muted)}
-.adm-pubbar{position:sticky;bottom:0;display:flex;flex-direction:column;gap:6px;background:linear-gradient(transparent,#b6daf6 30%);padding:16px 0 8px}
+.adm-pubbar{position:sticky;bottom:0;display:flex;flex-direction:column;gap:6px;background:linear-gradient(transparent,#7fb8eb 30%);padding:16px 0 8px}
 .adm-pubbar[hidden]{display:none}
-.err-tip{background:var(--red-soft);border-radius:14px;padding:11px 13px;display:flex;flex-direction:column;gap:3px;word-break:keep-all}
-.err-tip b{color:var(--red);font-size:15px}
-.err-tip span{font-size:13px;color:var(--red-ink);line-height:1.5}
+.err-tip{background:var(--violet-tint);border-radius:14px;padding:11px 13px;display:flex;flex-direction:column;gap:3px;word-break:keep-all}
+.err-tip b{color:var(--violet);font-size:15px}
+.err-tip span{font-size:13px;color:var(--ink-2);line-height:1.5}
 /* ===== 서술형 ===== */
 .ess-card{gap:8px}
 .ess-sub{margin:-2px 0 4px;font-size:13.5px;color:var(--ink-2);word-break:keep-all}
@@ -742,6 +742,16 @@ details.panel:not([open]){gap:0}
 .an-legend{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:12.5px;color:var(--ink-2);font-weight:600}
 .an-legend span{display:inline-flex;align-items:center;gap:5px}
 .an-legend i{width:8px;height:8px;border-radius:3px;display:inline-block}
+.err-list{display:flex;flex-direction:column;gap:9px;margin-top:4px}
+.err-row{display:grid;grid-template-columns:76px 1fr 40px;align-items:center;gap:10px;font-size:14px}
+.err-row.more{display:none}.err-list.open .err-row.more{display:grid}
+.err-name{font-weight:700;color:var(--ink-2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.err-row.top .err-name{color:var(--ink)}
+.err-bar{height:8px;border-radius:8px;background:var(--line);overflow:hidden}
+.err-bar i{display:block;height:100%;border-radius:8px;background:var(--violet-soft);transition:width .6s var(--ease)}
+.err-row.top .err-bar i{background:var(--violet)}
+.err-val{text-align:right;font-weight:800;font-variant-numeric:tabular-nums;color:var(--ink-2)}
+.err-more{align-self:flex-start;border:none;background:none;color:var(--violet);font:inherit;font-size:13px;font-weight:700;padding:4px 0}
 .an-note{font-size:12.5px;color:var(--muted);margin:-6px 0 0}
 .an-left{display:flex;align-items:center;justify-content:space-between;gap:12px}
 .an-left .an-val{font-size:20px;letter-spacing:-.02em}
@@ -776,8 +786,8 @@ details.panel:not([open]){gap:0}
 .tab:active svg{transform:scale(.84)}
 /* bottom action: the bar disappears and the button floats as tinted violet glass */
 .nextbar{background:transparent;box-shadow:none;padding-block:10px calc(14px + env(safe-area-inset-bottom,0px))}
-.next-btn{background:linear-gradient(135deg,rgba(139,123,248,.94),rgba(38,54,94,.94));-webkit-backdrop-filter:blur(12px) saturate(1.6);backdrop-filter:blur(12px) saturate(1.6);
-  box-shadow:0 14px 30px rgba(38,54,94,.34),0 3px 8px rgba(20,30,60,.18),inset 0 1.5px 0 rgba(255,255,255,.55),inset 0 -2px 3px rgba(10,18,40,.25);transition:transform .35s var(--lg-ease)}
+.next-btn{background:var(--violet);-webkit-backdrop-filter:blur(12px) saturate(1.6);backdrop-filter:blur(12px) saturate(1.6);
+  box-shadow:0 14px 30px rgba(47,111,237,.34),0 3px 8px rgba(20,30,60,.18),inset 0 1.5px 0 rgba(255,255,255,.55),inset 0 -2px 3px rgba(10,18,40,.25);transition:transform .35s var(--lg-ease)}
 .next-btn::before{content:"";position:absolute;inset:0;border-radius:inherit;background:linear-gradient(180deg,rgba(255,255,255,.1),rgba(255,255,255,0) 50%);pointer-events:none}
 .next-btn:active{transform:scale(.96)}
 /* toast: dark smoked glass */
@@ -861,7 +871,7 @@ html.lg-lens .icon-btn{-webkit-backdrop-filter:url(#lg-btn) blur(6px) saturate(2
             <div class="today-top">
               <div class="ring-box">
                 <svg class="ring" viewBox="0 0 120 120" aria-hidden="true">
-                  <defs><linearGradient id="ring-grad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#7cbcf8"/><stop offset="1" stop-color="#26365e"/></linearGradient></defs>
+                  <defs><linearGradient id="ring-grad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#6b9bf3"/><stop offset="1" stop-color="#2f6fed"/></linearGradient></defs>
                   <circle class="ring-bg" cx="60" cy="60" r="50"/>
                   <circle class="ring-fg" id="h-ring" cx="60" cy="60" r="50"/>
                 </svg>
@@ -1189,7 +1199,7 @@ html.lg-lens .icon-btn{-webkit-backdrop-filter:url(#lg-btn) blur(6px) saturate(2
   <nav class="tabbar" id="tabbar" aria-label="메뉴"><span class="tab-pill" id="tab-pill"></span><button type="button" class="tab" id="t-home" data-tab="home"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M3.5 11.2 12 4l8.5 7.2V19a1.5 1.5 0 0 1-1.5 1.5h-4.2v-5.3H9.2v5.3H5A1.5 1.5 0 0 1 3.5 19z"/></svg><span>홈</span></button><button type="button" class="tab" id="h-list" data-tab="list"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M4 5.6C4 4.7 4.7 4 5.6 4H11v16H5.6c-.9 0-1.6-.7-1.6-1.6zM13 4h5.4c.9 0 1.6.7 1.6 1.6v12.8c0 .9-.7 1.6-1.6 1.6H13z"/></svg><span>단어장</span></button><button type="button" class="tab" id="t-rank" data-tab="rank"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 3h10v2h3a1 1 0 0 1 1 1v2a5 5 0 0 1-4.6 5A5 5 0 0 1 13 15.9V18h3v3H8v-3h3v-2.1A5 5 0 0 1 7.6 13 5 5 0 0 1 3 8V6a1 1 0 0 1 1-1h3zm10 4v3.9A3 3 0 0 0 19 8V7zM5 7v1a3 3 0 0 0 2 2.9V7z"/></svg><span>랭킹</span></button><button type="button" class="tab" id="h-stats" data-tab="stats"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="3.5" y="12" width="4.6" height="8.5" rx="1.6"/><rect x="9.7" y="4" width="4.6" height="16.5" rx="1.6"/><rect x="15.9" y="8.5" width="4.6" height="12" rx="1.6"/></svg><span>분석</span></button><button type="button" class="tab" id="h-set" data-tab="settings"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M13.9 2.6l.4 2.3c.6.2 1.2.5 1.7.9l2.2-.8 1.9 3.3-1.8 1.5c.1.6.1 1.3 0 1.9l1.8 1.5-1.9 3.3-2.2-.8c-.5.4-1.1.7-1.7.9l-.4 2.3h-3.8l-.4-2.3c-.6-.2-1.2-.5-1.7-.9l-2.2.8-1.9-3.3 1.8-1.5c-.1-.6-.1-1.3 0-1.9L3.9 8.3l1.9-3.3 2.2.8c.5-.4 1.1-.7 1.7-.9l.4-2.3zM12 8.6a3.4 3.4 0 1 0 0 6.8 3.4 3.4 0 0 0 0-6.8z"/></svg><span>설정</span></button></nav>
 </div>
 
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script><script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script><script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script><script src="data.5379a00522.js"></script><script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script><script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script><script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script><script src="data.659335c499.js"></script><script>
 (function(){
 'use strict';
 const DATA = window.__NORI_DATA__;
@@ -2241,12 +2251,12 @@ function submit(){
     if (c && c.kind === 'syn') c.guide = guideOf(d, +i.dataset.i);
     i.classList.remove('bad', 'near'); i.classList.add(c ? 'near' : 'bad');
     if (!c || c.kind === 'near' || c.kind === 'oneword' || c.kind === 'left' || c.trap) counts = true;
-    fb.push(c || { kind: 'wrong' });
+    fb.push(Object.assign(c || { kind: 'wrong' }, { typed: i.value, ans: answerOf(i)[0] }));
     if (!firstBad) firstBad = i;
   });
   if (!firstBad){ solved(false); return; }
   if (counts) cur.wrongs++;
-  fb.forEach(c => logErr(c.kind === 'syn' ? (c.trap ? 'trap' : 'syn') : c.kind === 'form' ? 'form' : (c.kind === 'near' || c.kind === 'left' || c.kind === 'oneword') ? 'spell' : 'wrong'));
+  fb.forEach(c => logErr(errKind(c, d)));
   cur.fb = fb; save();
   wobble();
   showFeedback(fb, true);
@@ -2685,7 +2695,7 @@ function cheer(){
   $('cheer-streak').replaceChildren(); $('cheer-streak').insertAdjacentHTML('beforeend', $('h-fire').querySelector('svg').outerHTML); $('cheer-streak').append(sk + '일 연속');
   const box = $('cheer');
   box.querySelectorAll('.cf').forEach(e => e.remove());
-  const cols = ['#26365e', '#ff8a00', '#18a058', '#f04a5d', '#4f9cf0', '#ffd54a'];
+  const cols = ['#2f6fed', '#ff8a00', '#18a058', '#f04a5d', '#4f9cf0', '#ffd54a'];
   if (!reduced) for (let i = 0; i < 46; i++){ const e = mk('i', 'cf'); e.style.left = Math.random() * 100 + '%'; e.style.background = cols[i % cols.length]; e.style.animationDuration = (2.2 + Math.random() * 2) + 's'; e.style.animationDelay = (Math.random() * .8) + 's'; box.appendChild(e); }
   box.hidden = false;
   fanfare();
@@ -3082,34 +3092,58 @@ async function admDeleteUser(id){
 
 /* ---------- what kind of mistakes: counted per answer the learner submits ---------- */
 const ERR = {
-  spell: ['철자', '거의 맞았는데 글자가 틀려요', '단어를 소리 내어 읽으며 한 글자씩 써 보세요'],
-  form: ['형태', '단어는 맞는데 시제나 수, 품사가 달라요', '빈칸 앞뒤를 보고 품사와 시제부터 정하세요'],
+  spell: ['철자', '한두 글자가 틀려요', '소리 내어 읽으며 한 글자씩 써 보세요'],
+  cut: ['끝부분', '앞부분만 떠올리고 끝을 못 채워요', '단어 끝까지 한 번에 소리 내어 외우세요'],
+  verb: ['동사 형태', '시제나 3인칭 s를 놓쳐요', '빈칸 앞의 주어와 시제부터 확인하세요'],
+  number: ['단수와 복수', '명사 끝의 s를 놓쳐요', '앞에 a나 many, these가 있는지 보세요'],
+  pos: ['품사', '같은 뿌리의 다른 품사를 써요', '빈칸이 명사 자리인지 형용사 자리인지 정하세요'],
+  phrase: ['숙어', '숙어 가운데 한 단어가 틀려요', '숙어는 한 덩어리로 소리 내어 외우세요'],
   syn: ['유의어', '뜻은 맞는데 배운 단어 대신 비슷한 말을 써요', '맞힌 뒤 사전에서 목표 단어를 한 번 더 보세요'],
-  trap: ['혼동·반대말', '헷갈리는 단어나 반대 뜻을 골라요', '한국어 문장의 초록 글씨 뜻을 먼저 확인하고 답하세요'],
-  essay: ['서술형', '서술형 문장에서 빠뜨리거나 틀린 부분이 있어요', '모범 답안을 두 번 소리 내어 읽으세요'],
-  wrong: ['기억 안 남', '전혀 다른 단어를 써요', '틀린 단어는 단어장 오답 목록에서 예문과 함께 다시 보세요'],
-  hint: ['힌트 사용', '힌트를 보고 풀어요', '힌트 전에 첫 글자라도 먼저 떠올려 보세요'],
-  reveal: ['정답 보기', '정답을 바로 봐요', '모르겠어도 한 번은 써 보세요']
+  trap: ['혼동어', '생김새가 비슷한 단어나 반대말을 써요', '초록 글씨 뜻을 먼저 보고 답하세요'],
+  wrong: ['기억 안 남', '전혀 다른 단어를 써요', '단어장 오답 목록에서 예문과 함께 다시 보세요'],
+  essay: ['서술형', '서술형 문장에서 핵심 표현을 빠뜨려요', '모범 답안을 두 번 소리 내어 읽으세요'],
+  form: ['형태', '단어는 맞는데 형태가 달라요', '빈칸 앞뒤를 보고 품사와 시제부터 정하세요']
 };
+const HABIT = { hint: '힌트', reveal: '정답 보기' };
+/* which kind of mistake a wrong answer is */
+function errKind(c, d){
+  if (c.kind === 'syn') return c.trap ? 'trap' : 'syn';
+  if (c.kind === 'left') return 'cut';
+  if (c.kind === 'oneword') return 'phrase';
+  if (c.kind === 'near') return 'spell';
+  if (c.kind === 'form'){
+    const ta = norm(c.typed || '').split(' '), aa = norm(c.ans || '').split(' ');
+    const i = aa.findIndex((w, k) => w !== ta[k]); const t = ta[i] || '', a = aa[i] || '';
+    const stem = w => (IRR[w] || w).replace(/(ies|ied|ing|es|ed|s|d)$/, '').replace(/e$/, '');
+    if (stem(t) === stem(a) || (IRR[t] || t) === (IRR[a] || a)) return /명사/.test(d.pos || '') && !/동사/.test(d.pos || '') ? 'number' : 'verb';
+    return 'pos';
+  }
+  return 'wrong';
+}
 function logErr(k){ if (!state.err) state.err = {}; state.err[k] = (state.err[k] || 0) + 1; }
 function renderErr(){
   const box = $('an-err'); box.replaceChildren();
-  const e = state.err || {}, tot = Object.values(e).reduce((a, b) => a + b, 0), MIN = 10;
+  const e = state.err || {}, tot = Object.keys(ERR).reduce((a, k) => a + (e[k] || 0), 0), MIN = 10;
   const head = mk('div', 'pp-head'); head.append(mk('h2', null, '자주 하는 실수'), mk('b', null, tot ? tot + '번' : '-')); box.appendChild(head);
-  if (tot < MIN){ box.appendChild(mk('p', 'an-note', '틀린 답이 ' + MIN + '번 쌓이면 보여요' + (tot ? '. 지금 ' + tot + '번' : ''))); return; }
+  const habits = Object.keys(HABIT).filter(k => e[k]).map(k => HABIT[k] + ' ' + e[k] + '번');
+  const foot = () => { if (habits.length) box.appendChild(mk('p', 'an-note', habits.join(', ') + '은 실수와 따로 셌어요')); };
+  if (tot < MIN){ box.appendChild(mk('p', 'an-note', '틀린 답이 ' + MIN + '번 쌓이면 보여요' + (tot ? '. 지금 ' + tot + '번' : ''))); foot(); return; }
   const rows = Object.keys(ERR).map(k => [k, e[k] || 0]).filter(r => r[1] > 0).sort((a, b) => b[1] - a[1]);
   const top = ERR[rows[0][0]];
   const tip = mk('div', 'err-tip'); tip.append(mk('b', null, top[0] + ' 실수가 가장 많아요'), mk('span', null, top[1] + '. ' + top[2] + '.')); box.appendChild(tip);
-  const list = mk('div', 'an-rows');
+  // one compact line per kind: name, bar, share. Only the top three show until the card is opened.
+  const list = mk('div', 'err-list' + (errOpen ? ' open' : ''));
   rows.forEach(([k, v], i) => {
-    const r = mk('div', 'an-row'); const t = mk('div', 'an-top');
-    const nm = mk('div', 'an-name'); nm.append(ERR[k][0]); const val = mk('div', 'an-val', Math.round(v / tot * 100) + '%'); val.appendChild(mk('small', null, v + '번'));
-    t.append(nm, val); r.appendChild(t);
-    const bar = mk('div', 'an-bar one' + (i === 0 ? ' weak' : '')); const f = mk('i'); f.dataset.w = v / rows[0][1] * 100; bar.appendChild(f); r.appendChild(bar);
+    const r = mk('div', 'err-row' + (i === 0 ? ' top' : '') + (i >= 3 ? ' more' : ''));
+    const bar = mk('div', 'err-bar'); const f = mk('i'); f.style.width = Math.max(4, v / rows[0][1] * 100) + '%'; bar.appendChild(f);
+    r.append(mk('span', 'err-name', ERR[k][0]), bar, mk('span', 'err-val', Math.round(v / tot * 100) + '%'));
     list.appendChild(r);
   });
   box.appendChild(list);
+  if (rows.length > 3){ const b = mk('button', 'err-more', errOpen ? '접기' : '나머지 ' + (rows.length - 3) + '개 보기'); b.type = 'button'; b.onclick = () => { errOpen = !errOpen; renderErr(); }; box.appendChild(b); }
+  foot();
 }
+let errOpen = false;
 
 /* 서술형: 플랭스쿨 과제 모범 답안. keys = 꼭 들어가야 하는 표현 (영작 채점과 빈칸에 쓰임) */
 const ESSAY = [
@@ -3270,7 +3304,7 @@ function essDone(){
 }
 
 /* ---------- analysis by source ---------- */
-const GROUP_ORDER = ['수능특강', '모의고사', '생각의 지도', '불변의 법칙'];
+const GROUP_ORDER = ['수능특강', '모의고사', '생각의 지도', '불변의 법칙', '돈으로 살 수 없는 것들'];
 function grp(d){
   const s = d.src || '';
   if (/^수특|수능특강/.test(s)) return '수능특강';
