@@ -1,6 +1,6 @@
 /* 노링 offline support: the app shell is cached so it opens without a connection.
    Account calls (Firebase) always go to the network. Bump CACHE when the shell changes. */
-const CACHE = 'norivoka-v74';
+const CACHE = 'norivoka-v75';
 const CORE = ['./', './index.html', './manifest.webmanifest', './icon-192.png', './icon-512.png', './apple-touch-icon.png', './nori-happy.png'];
 self.addEventListener('install', e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(CORE)).then(() => self.skipWaiting()));
@@ -14,11 +14,19 @@ self.addEventListener('fetch', e => {
   const url = new URL(req.url);
   if (url.hostname.endsWith('googleapis.com') || url.hostname.endsWith('firebaseapp.com')) return;
   // the page itself: newest from the network, cached copy when offline (new words arrive on the next open)
+  // only the app itself is served this way; other pages (privacy.html) go straight to the network
+  const shell = url.origin === self.location.origin && (url.pathname === new URL('./', self.registration.scope).pathname || url.pathname.endsWith('/index.html'));
+  if (req.mode === 'navigate' && !shell) return;
   if (req.mode === 'navigate'){
-    // newest page from the network, but never keep the person waiting more than 2.5s on a slow line
-    const net = fetch(new Request(req.url, { cache: 'no-cache', credentials: 'same-origin' })).then(r => { if (r.ok){ const copy = r.clone(); caches.open(CACHE).then(c => c.put('./index.html', copy)); } return r; });
-    const slow = new Promise(res => setTimeout(res, 2500)).then(() => caches.match('./index.html')).then(hit => hit || net);
-    e.respondWith(Promise.race([net.catch(() => caches.match('./index.html')), slow]));
+    // newest page from the network, but never keep the person waiting more than 2.5s on a slow line.
+    // a server error page (a deploy in progress) never replaces the saved app
+    const saved = () => caches.match('./index.html');
+    const net = fetch(new Request(req.url, { cache: 'no-cache', credentials: 'same-origin' })).then(r => {
+      if (r.ok){ const copy = r.clone(); caches.open(CACHE).then(c => c.put('./index.html', copy)); return r; }
+      return saved().then(hit => hit || r);
+    });
+    const slow = new Promise(res => setTimeout(res, 2500)).then(saved).then(hit => hit || net);
+    e.respondWith(Promise.race([net.catch(() => saved().then(hit => hit || Response.error())), slow]));
     return;
   }
   // icons and the pinned Firebase SDK files: cache first
