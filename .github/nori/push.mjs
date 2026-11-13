@@ -22,7 +22,7 @@ export function message(gap, streak, nick, seed){
   }
   if (gap === 2) return { mood: 'sad', title: '😤 노리 삐짐', body: pick(['어제 안 와서 밥그릇 엎었대요. 오늘은 와요?', '노리가 등 돌리고 누웠어요. 단어로 달래 주세요'], seed) };
   if (gap <= 4) return { mood: 'sick', title: '🤒 노리가 아파요', body: pick(['약은 영어 단어뿐이래요... 빨리 와 주세요', '열이 펄펄 나요. 오늘 분량이 해열제래요'], seed) };
-  if (gap <= 6) return { mood: 'hospital', title: '🏥 노리 입원', body: '면회는 노리보카에서만 돼요. 얼른 와 주세요' };
+  if (gap <= 6) return { mood: 'hospital', title: '🏥 노리 입원', body: '면회는 노링에서만 돼요. 얼른 와 주세요' };
   if (gap <= 9) return { mood: 'hospital', title: '😭 노리가 죽어가고 있어요..', body: 10 - gap === 1 ? '정말 안 오실 건가요? 오늘이 마지막이에요' : `정말 안 오실 건가요? ${10 - gap}일 남았어요` };
   if (gap === 10) return { mood: 'dead', title: '🪦 노리가 죽었어요', body: '기다리다 지쳐서요... 지금 오면 살릴 수 있을지도' };
   if ([13, 17, 24, 30].includes(gap)) return { mood: 'dead', title: '👻 노리 유령 등장', body: '밤마다 단어장을 넘긴대요. 와서 살려 주세요' };

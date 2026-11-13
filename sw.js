@@ -1,6 +1,6 @@
-/* 노리보카 offline support: the app shell is cached so it opens without a connection.
+/* 노링 offline support: the app shell is cached so it opens without a connection.
    Account calls (Firebase) always go to the network. Bump CACHE when the shell changes. */
-const CACHE = 'norivoka-v67';
+const CACHE = 'norivoka-v68';
 const CORE = ['./', './index.html', './manifest.webmanifest', './icon-192.png', './icon-512.png', './apple-touch-icon.png', './nori-happy.png'];
 self.addEventListener('install', e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(CORE)).then(() => self.skipWaiting()));
@@ -33,7 +33,7 @@ self.addEventListener('fetch', e => {
 /* Nori's daily nudge (sent by the scheduled job in .github/workflows) */
 self.addEventListener('push', e => {
   let d = {}; try { d = e.data ? e.data.json() : {}; } catch (x) { d = { body: e.data && e.data.text() }; }
-  e.waitUntil(self.registration.showNotification(d.title || '노리보카', {
+  e.waitUntil(self.registration.showNotification(d.title || '노링', {
     body: d.body || '노리가 기다리고 있어요', icon: d.icon || 'nori-wait.png', badge: 'badge-96.png',
     tag: d.tag || 'nori-daily', renotify: true, data: { url: d.url || './' }
   }));
